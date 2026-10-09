@@ -1,0 +1,78 @@
+---
+import '../styles/store.css';
+import Mark from '../components/store/Mark.astro';
+import { site } from '../data/site';
+import {
+  canonicalUrl,
+  companyHref,
+  productHref,
+  productHosts,
+  type ProductSlug,
+} from '../data/hosts';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Company apex vs product subdomain chrome */
+  siteKind?: 'company' | 'product';
+  productSlug?: ProductSlug;
+}
+
+const {
+  title = 'Tools that help you move fast — and stay free.',
+  description = site.description,
+  siteKind = 'company',
+  productSlug,
+} = Astro.props as Props;
+
+const canonical = canonicalUrl(Astro.url);
+const isProduct = siteKind === 'product';
+const brandHref = isProduct ? companyHref('/') : '/';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>{title} · Quiet Machines</title><meta name="description" content={description}/>
+    <link rel="canonical" href={canonical}/><link rel="icon" href="/favicon.svg" type="image/svg+xml"/>
+    <meta name="theme-color" content="#fafbf8"/>
+    <meta property="og:title" content={`${title} · Quiet Machines`}/><meta property="og:description" content={description}/>
+    <meta property="og:type" content="website"/><meta property="og:url" content={canonical}/><meta property="og:site_name" content="Quiet Machines"/>
+    <meta property="og:image" content={new URL('/social-card.png', Astro.site)}/><meta property="og:image:alt" content="Quiet Machines. Tools that help you move fast — and stay free."/><meta name="twitter:card" content="summary_large_image"/>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header class="header"><nav class="shell nav" aria-label="Main navigation">
+      <a href={brandHref} class="brand"><Mark size={27}/>Quiet Machines.</a>
+      <div class="nav-links">
+        {productHosts.map((product) => (
+          <a
+            href={productHref(product.slug)}
+            aria-current={isProduct && productSlug === product.slug ? 'page' : undefined}
+          >
+            {product.name}{product.availability === 'soon' ? ' · soon' : ''}
+          </a>
+        ))}
+        {!isProduct && <a class="nav-extra" href="/#products">Products</a>}
+        {isProduct && <a class="nav-extra" href={companyHref('/')}>Company</a>}
+      </div>
+      <a class="button small nav-cta light" href={isProduct ? companyHref('/#products') : '/#products'}>
+        {isProduct ? 'All products' : 'Explore products'} <span aria-hidden="true">↗</span>
+      </a>
+    </nav></header>
+    <main id="main"><slot/></main>
+    <footer class="shell footer">
+      <div><a class="brand" href={brandHref}><Mark size={24}/>Quiet Machines.</a><p>Move fast. Keep your freedom.</p></div>
+      <div class="footer-links">
+        {productHosts.map((product) => (
+          <a href={productHref(product.slug)}>{product.name}</a>
+        ))}
+        <a href={`mailto:${site.email}`}>Say hello ↗</a>
+      </div>
+      <div class="footer-bottom">
+        <span>© {new Date().getFullYear()} Quiet Machines · Made by {site.maker.name} in {site.maker.place}</span>
+        <span>Pay once. Get on with it.</span>
+      </div>
+    </footer>
+  </body>
+</html>

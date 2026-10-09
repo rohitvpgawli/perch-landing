@@ -1,0 +1,22 @@
+---
+import TeaserPage from '../../components/TeaserPage.astro';
+import { getApp, type SoonApp } from '../../data/apps';
+import { isProductSlug, productHref } from '../../data/hosts';
+
+export function getStaticPaths() {
+  // Sakana redirects to its subdomain; Handle remains a path-based teaser for now.
+  return [{ params: { slug: 'handle' } }, { params: { slug: 'sakana' } }];
+}
+
+const slug = Astro.params.slug!;
+
+if (isProductSlug(slug)) {
+  return Astro.redirect(productHref(slug), 301);
+}
+
+const app = getApp(slug) as SoonApp | undefined;
+if (!app || app.kind !== 'soon') {
+  return Astro.redirect('/');
+}
+---
+<TeaserPage app={app}/>

@@ -1,0 +1,48 @@
+---
+/**
+ * Minimal coming-soon shell for product subdomains that are not sellable yet.
+ * Reuses the existing Store chrome; no new visual system.
+ */
+import Store from '../layouts/Store.astro';
+import { getProductHost, companyHref, type ProductSlug } from '../data/hosts';
+import { site } from '../data/site';
+import { getApp } from '../data/apps';
+
+interface Props {
+  slug: ProductSlug;
+}
+
+const { slug } = Astro.props;
+const host = getProductHost(slug)!;
+const legacy = getApp(slug);
+const notify = `mailto:${site.email}?subject=${encodeURIComponent(`Tell me when ${host.name} is ready`)}`;
+const tease = legacy && 'tease' in legacy ? legacy.tease : host.pitch;
+const hint = legacy && 'hint' in legacy ? legacy.hint : 'We’re still shaping this one. Check back soon.';
+const eta = legacy && 'eta' in legacy ? legacy.eta : 'Soon';
+---
+<Store
+  title={`${host.name} — coming soon`}
+  description={`${host.name} by Quiet Machines. ${tease}`}
+  siteKind="product"
+  productSlug={slug}
+>
+  <section class="shell soon-shell">
+    <p class="eyebrow">Quiet Machines · {host.status}</p>
+    <h1>{host.name}</h1>
+    <p class="lead">{tease}</p>
+    <p class="hint">{hint}</p>
+    <p class="fine">Expected {eta}.</p>
+    <div class="actions">
+      <a class="button" href={notify}>Tell me when it’s ready <span aria-hidden="true">↗</span></a>
+      <a class="text-link" href={companyHref('/')}>Back to Quiet Machines <span aria-hidden="true">↗</span></a>
+    </div>
+  </section>
+</Store>
+<style>
+.soon-shell{text-align:center;padding:96px 0 120px;max-width:640px;margin:0 auto}
+.soon-shell h1{margin:22px 0 18px;font-size:clamp(48px,8vw,84px);letter-spacing:-3px}
+.soon-shell .lead{font-size:20px;color:var(--muted)}
+.soon-shell .hint{margin-top:18px;font-size:15px;color:var(--muted)}
+.soon-shell .fine{margin-top:14px}
+.soon-shell .actions{justify-content:center;margin-top:34px;gap:22px;flex-wrap:wrap}
+</style>

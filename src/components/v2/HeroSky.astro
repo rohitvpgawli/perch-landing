@@ -1,0 +1,342 @@
+---
+interface Props {
+  banner: string;
+  /** Distinguishes SVG ids when the scene appears more than once on a page. */
+  uid?: string;
+  seed?: number;
+}
+
+const { banner, uid = "sky", seed: start = 7 } = Astro.props;
+const dots = `${uid}-dots`;
+
+const near =
+  "M0 236 L50 214 L96 222 L150 180 L180 192 L226 160 L270 182 L320 170 L360 190 L410 150 L440 132 L476 148 L520 140 L570 172 L620 160 L670 180 L720 146 L760 156 L800 128 L836 114 L870 132 L920 140 L970 170 L1020 154 L1070 120 L1110 132 L1160 150 L1220 138 L1270 166 L1330 150 L1390 172 L1440 160 L1440 400 L0 400Z";
+
+let seed = start;
+const rand = () => ((seed = (seed * 16807) % 2147483647) - 1) / 2147483646;
+
+// Two banks of overlapping puffs, lumpy along the top, thinning towards the edges.
+const puffs = [
+  ...Array.from({ length: 18 }, (_, i) => {
+    const w = 6 + rand() * 7;
+    return { x: i * 6 - 4 + rand() * 3, y: 46 + rand() * 22, w, h: w * (2.1 + rand() * 0.8), b: 10 + rand() * 8, t: 0.5 + rand() * 0.2 };
+  }),
+  ...Array.from({ length: 10 }, (_, i) => {
+    const w = 14 + rand() * 8;
+    return { x: i * 11 - 6 + rand() * 4, y: 70 + rand() * 12, w, h: w * 1.8, b: 18 + rand() * 8, t: 0.52 + rand() * 0.14 };
+  }),
+  { x: 24, y: 30, w: 4, h: 9, b: 8, t: 0.6 },
+  { x: 71, y: 26, w: 3, h: 7, b: 6, t: 0.56 },
+];
+
+const gulls = [
+  { x: 72, y: 14, s: 1, d: 0 },
+  { x: 77, y: 18, s: 0.8, d: -0.4 },
+  { x: 81, y: 12, s: 0.9, d: -0.9 },
+  { x: 69, y: 20, s: 0.7, d: -0.2 },
+  { x: 85, y: 17, s: 0.75, d: -0.6 },
+];
+---
+
+<div class="sky" aria-hidden="true">
+  <div class="tone"></div>
+
+  <ul class="gulls">
+    {
+      gulls.map((g) => (
+        <li style={`left:${g.x}%;top:${g.y}%;--s:${g.s};--d:${g.d}s`}>
+          <svg viewBox="0 0 20 8">
+            <path d="M1 6.5C3.5 2.5 7 2 10 5.5 13 2 16.5 2.5 19 6.5" />
+          </svg>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="flight">
+    <div class="bob">
+      <svg class="plane" viewBox="0 0 124 52">
+        <path class="prop" d="M5.2 13.5v17" />
+        <path class="body" d="M7 22.4c0-3.6 4.2-6.2 11-6.4l14-.6 40 1.2 34 3.4 4.6-11.4h6.4l-2.6 15.6-40 4.6-42 1.6C12.4 30 7 26.8 7 22.4Z" />
+        <path class="fin" d="M106 20.6 110.6 9.2h6.4l-1 6.4Z" />
+        <path class="stripe" d="M9 24.6h40l62-2.2-.4 2.2-61.6 3.4H12.4Z" />
+        <path class="glass" d="M21.6 17.4 34 16.8l1.4 5.4H18.6Z" />
+        <path class="glass" d="M38 16.8h11.6v5.4H39Z" />
+        <rect class="wing" x="26" y="11.6" width="40" height="3.8" rx="1.9" />
+        <path class="strut" d="M34 15.4 30 22M58 15.4l3 6.6M26 29.4l-2 10M54 28.8l2 10.6" />
+        <path class="float" d="M14.6 39.4h56.8c3 0 4.6 1.4 4.6 2.6s-1.6 2-4.6 2H18c-2.6 0-4.8-1.6-6-3.4l-1.2-1.8Z" />
+      </svg>
+      <span class="line"></span>
+      <span class="banner">{banner}</span>
+    </div>
+  </div>
+
+  <svg class="ridge" viewBox="0 0 1440 400" preserveAspectRatio="xMidYMax slice">
+    <defs>
+      <pattern id={dots} width="5" height="5" patternUnits="userSpaceOnUse">
+        <circle cx="2.5" cy="2.5" r="1.1" fill="#173f6a"></circle>
+      </pattern>
+    </defs>
+    <path
+      d="M0 170 L60 150 L110 158 L170 112 L205 124 L250 92 L290 108 L330 84 L372 100 L430 70 L470 90 L520 82 L560 104 L620 76 L650 60 L690 78 L740 72 L800 98 L850 80 L900 52 L940 66 L990 58 L1040 86 L1090 74 L1140 96 L1200 70 L1250 88 L1310 80 L1370 104 L1440 92 L1440 400 L0 400Z"
+      fill="#3672ad"
+    ></path>
+    <path d={near} fill="#2b5f97"></path>
+    <path d={near} fill={`url(#${dots})`} opacity="0.5"></path>
+  </svg>
+
+  <div class="clouds">
+    {
+      puffs.map((p) => (
+        <i style={`left:${p.x.toFixed(1)}%;top:${p.y.toFixed(1)}%;width:${p.w.toFixed(1)}%;height:${p.h.toFixed(1)}%;--b:${p.b.toFixed(0)}px;--t:${p.t.toFixed(2)}`} />
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .sky {
+    position: absolute;
+    inset: 0;
+    container-type: inline-size;
+    overflow: hidden;
+    background:
+      radial-gradient(60% 40% at 20% 30%, rgb(255 255 255 / 0.05), transparent 70%),
+      radial-gradient(50% 35% at 80% 45%, rgb(0 0 0 / 0.06), transparent 70%),
+      linear-gradient(180deg, #275f9b 0%, #2d6aa6 45%, #3b7ab4 78%, #5b93c4 100%);
+  }
+
+  .tone {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(rgb(255 255 255 / 0.07) 0.7px, transparent 1.1px) 0 0 / 4px 4px,
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .6 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+    opacity: 0.32;
+  }
+
+  /* Halftone clouds: blurred white puffs, multiplied by a dot screen, then thresholded. */
+  .clouds {
+    position: absolute;
+    left: -4%;
+    right: -4%;
+    bottom: -6%;
+    height: 44%;
+    background: #000;
+    filter: contrast(26);
+    mix-blend-mode: screen;
+    opacity: 0.92;
+    -webkit-mask: linear-gradient(transparent, #000 18%);
+    mask: linear-gradient(transparent, #000 18%);
+  }
+
+  .clouds i {
+    position: absolute;
+    border-radius: 50%;
+    background: rgb(255 255 255 / var(--t));
+    filter: blur(var(--b));
+    animation: drift 26s ease-in-out infinite alternate;
+  }
+
+  .clouds i:nth-child(2n) {
+    animation-duration: 34s;
+    animation-direction: alternate-reverse;
+  }
+
+  @keyframes drift {
+    to {
+      transform: translateX(3%);
+    }
+  }
+
+  .clouds::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(closest-side, #6b6b6b, #fff) 0 0 / 5px 5px;
+    mix-blend-mode: multiply;
+  }
+
+  .ridge {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 34%;
+  }
+
+  .flight {
+    position: absolute;
+    top: var(--flight-top, 21%);
+    left: 0;
+    animation: fly 46s linear -15s infinite;
+  }
+
+  @keyframes fly {
+    from {
+      transform: translateX(100cqw);
+    }
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+  .bob {
+    display: flex;
+    align-items: center;
+    animation: bob 5s ease-in-out infinite;
+  }
+
+  @keyframes bob {
+    50% {
+      transform: translateY(-6px) rotate(-0.6deg);
+    }
+  }
+
+  .plane {
+    width: clamp(92px, 9cqw, 136px);
+    flex: none;
+    overflow: visible;
+    filter: drop-shadow(0 2px 2px rgb(0 0 0 / 0.18));
+  }
+
+  .body {
+    fill: #f3f1ea;
+  }
+
+  .fin {
+    fill: #c83a2e;
+  }
+
+  .stripe {
+    fill: #c83a2e;
+  }
+
+  .glass {
+    fill: #29384a;
+    opacity: 0.85;
+  }
+
+  .wing {
+    fill: #e7e4da;
+  }
+
+  .strut {
+    fill: none;
+    stroke: #8d8d92;
+    stroke-width: 1.2;
+    stroke-linecap: round;
+  }
+
+  .float {
+    fill: #dedbd1;
+  }
+
+  .prop {
+    fill: none;
+    stroke: rgb(30 30 30 / 0.45);
+    stroke-width: 2.4;
+    stroke-linecap: round;
+    transform-origin: 5.2px 22px;
+    animation: prop 0.12s linear infinite alternate;
+  }
+
+  @keyframes prop {
+    to {
+      transform: scaleY(0.35);
+    }
+  }
+
+  .line {
+    width: clamp(36px, 5cqw, 70px);
+    height: 1px;
+    margin-left: -6px;
+    background: rgb(255 255 255 / 0.7);
+    flex: none;
+  }
+
+  .banner {
+    flex: none;
+    padding: 0.55em 1.3em 0.6em;
+    font-size: clamp(13px, 1.25cqw, 17px);
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    color: #1c1c1e;
+    white-space: nowrap;
+    background: linear-gradient(90deg, #fbfaf6 0%, #e8e6de 14%, #fbfaf6 30%, #e4e2d9 52%, #fbfaf6 70%, #e9e7df 88%, #f6f5ef 100%);
+    clip-path: polygon(0 6%, 25% 0, 50% 7%, 75% 1%, 100% 6%, 100% 96%, 75% 100%, 50% 93%, 25% 99%, 0 94%);
+    transform-origin: left center;
+    animation: flap 1.6s ease-in-out infinite alternate;
+  }
+
+  @keyframes flap {
+    from {
+      transform: perspective(500px) rotateY(-10deg) skewY(-1.4deg);
+    }
+    to {
+      transform: perspective(500px) rotateY(6deg) skewY(1deg);
+    }
+  }
+
+  .gulls {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    animation: glide 60s linear infinite alternate;
+  }
+
+  @keyframes glide {
+    to {
+      transform: translate(-6cqw, 2cqw);
+    }
+  }
+
+  .gulls li {
+    position: absolute;
+    width: calc(22px * var(--s));
+  }
+
+  .gulls svg {
+    width: 100%;
+    overflow: visible;
+    animation: flapwing 1.4s ease-in-out var(--d) infinite;
+  }
+
+  .gulls path {
+    fill: none;
+    stroke: #16324f;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  @keyframes flapwing {
+    50% {
+      transform: scaleY(0.45);
+    }
+  }
+
+  @media (max-width: 759px) {
+    .flight {
+      top: var(--flight-top-sm, 13%);
+    }
+
+    .clouds {
+      left: -70%;
+      right: -70%;
+      height: 34%;
+    }
+
+    .ridge {
+      height: 26%;
+    }
+
+    .gulls li:nth-child(n + 4) {
+      display: none;
+    }
+  }
+</style>

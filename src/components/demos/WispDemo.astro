@@ -1,0 +1,677 @@
+---
+/**
+ * Wisp demo: hold to "dictate", release to see the cleanup.
+ * No microphone is used. A scripted transcript streams in while the key is held,
+ * and the finished text is assembled from what was "heard" when you let go.
+ */
+const tones = [
+  { id: "messages", label: "Messages", note: "casual" },
+  { id: "mail", label: "Mail", note: "professional" },
+  { id: "notes", label: "Notes", note: "neutral" },
+] as const;
+---
+
+<div class="wisp" data-wisp tabindex="0" aria-label="Wisp dictation demo. Hold the button or the space bar to dictate.">
+  <div class="hud" data-hud>
+    <span class="wave" aria-hidden="true">
+      {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((i) => <i style={`--i:${i}`} />)}
+    </span>
+    <span class="raw" data-raw aria-live="polite">Hold to talk</span>
+    <kbd>␣</kbd>
+  </div>
+
+  <div class="stage">
+    <div class="tones" role="tablist" aria-label="Where the text lands">
+      {
+        tones.map((t, i) => (
+          <button type="button" role="tab" aria-selected={i === 0 ? "true" : "false"} data-tone={t.id} class={i === 0 ? "on" : ""}>
+            {t.label}
+            <small>{t.note}</small>
+          </button>
+        ))
+      }
+    </div>
+
+    <div class="target" data-target="messages">
+      <div class="chrome">
+        <i></i><i></i><i></i>
+        <span data-chrome>Aoife Byrne</span>
+      </div>
+      <div class="body">
+        <div class="msg-in" data-only="messages">Does Friday still work for the kickoff?</div>
+        <div class="mail-head" data-only="mail">
+          <span><b>To:</b> Aoife Byrne</span>
+          <span><b>Subject:</b> Kickoff</span>
+        </div>
+        <div class="notes-head" data-only="notes">Wednesday 9:41 AM</div>
+        <div class="field" data-field>
+          <span class="out" data-out></span>
+          <span class="caret" data-caret></span>
+          <span class="placeholder" data-ph>Your text lands here.</span>
+        </div>
+      </div>
+      <div class="landed" data-landed hidden>
+        <b data-ms>0.7s</b> after you let go <span class="sep"></span> <span data-note></span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button type="button" class="talk" data-talk aria-pressed="false">
+        <span class="ring"></span>
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true">
+          <path d="M5 10.5v3M8.5 8v8M12 5v14M15.5 8v8M19 10.5v3" />
+        </svg>
+        <span data-talk-label>Hold to talk</span>
+      </button>
+      <p class="hint muted" data-hint>Hold the button, or hold <kbd>space</kbd> while this demo is focused.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  type Tok = { raw: string; clean?: string; filler?: boolean; scratch?: boolean };
+  type Script = { toks: Tok[]; full: Record<string, string>; note: string };
+
+  const scripts: Script[] = [
+    {
+      toks: [
+        { raw: "um", filler: true },
+        { raw: "so", filler: true },
+        { raw: "can we", clean: "can we" },
+        { raw: "uh", filler: true },
+        { raw: "meet at", clean: "meet at" },
+        { raw: "ten thirty AM", clean: "10:30 AM" },
+        { raw: "on,", filler: true },
+        { raw: "on friday", clean: "on Friday" },
+      ],
+      full: {
+        messages: "can we meet at 10:30 AM on Friday?",
+        mail: "Could we meet at 10:30 AM on Friday?",
+        notes: "Can we meet at 10:30 AM on Friday?",
+      },
+      note: "Fillers dropped. Time written by rule.",
+    },
+    {
+      toks: [
+        { raw: "send it by", clean: "send it by" },
+        { raw: "friday", clean: "Friday" },
+        { raw: "scratch that", scratch: true },
+        { raw: "thursday", clean: "Thursday" },
+        { raw: "and", clean: "and" },
+        { raw: "cc the design team", clean: "CC the design team" },
+      ],
+      full: {
+        messages: "send it by Thursday and cc the design team",
+        mail: "Please send it by Thursday and CC the design team.",
+        notes: "Send it by Thursday and CC the design team.",
+      },
+      note: "\u201cScratch that\u201d kept only the correction.",
+    },
+    {
+      toks: [
+        { raw: "the budget is", clean: "the budget is" },
+        { raw: "uh", filler: true },
+        { raw: "three hundred dollars", clean: "$300" },
+        { raw: "final", clean: "final" },
+        { raw: "ship it", clean: "ship it" },
+        { raw: "rocket emoji", clean: "\u{1F680}" },
+      ],
+      full: {
+        messages: "the budget is $300, final. ship it \u{1F680}",
+        mail: "The budget is $300, final. Let\u2019s ship it. \u{1F680}",
+        notes: "The budget is $300, final. Ship it \u{1F680}",
+      },
+      note: "Money by rule. Emoji by name.",
+    },
+  ];
+
+  document.querySelectorAll<HTMLElement>("[data-wisp]").forEach((root) => {
+    const hud = root.querySelector<HTMLElement>("[data-hud]")!;
+    const raw = root.querySelector<HTMLElement>("[data-raw]")!;
+    const out = root.querySelector<HTMLElement>("[data-out]")!;
+    const ph = root.querySelector<HTMLElement>("[data-ph]")!;
+    const landed = root.querySelector<HTMLElement>("[data-landed]")!;
+    const note = root.querySelector<HTMLElement>("[data-note]")!;
+    const talk = root.querySelector<HTMLButtonElement>("[data-talk]")!;
+    const talkLabel = root.querySelector<HTMLElement>("[data-talk-label]")!;
+    const hint = root.querySelector<HTMLElement>("[data-hint]")!;
+    const target = root.querySelector<HTMLElement>("[data-target]")!;
+    const chrome = root.querySelector<HTMLElement>("[data-chrome]")!;
+    const toneBtns = [...root.querySelectorAll<HTMLButtonElement>("[data-tone]")];
+
+    let tone = "messages";
+    let si = 0;
+    let heard: Tok[] = [];
+    let holding = false;
+    let feed = 0;
+    let landTimer = 0;
+    let lastFull: Script | null = null;
+
+    const chromeFor: Record<string, string> = { messages: "Aoife Byrne", mail: "New Message", notes: "Kickoff" };
+
+    const setTone = (t: string) => {
+      tone = t;
+      target.dataset.target = t;
+      chrome.textContent = chromeFor[t];
+      toneBtns.forEach((b) => {
+        const on = b.dataset.tone === t;
+        b.classList.toggle("on", on);
+        b.setAttribute("aria-selected", String(on));
+      });
+      if (lastFull && !holding) out.textContent = lastFull.full[t];
+    };
+    toneBtns.forEach((b) => b.addEventListener("click", () => setTone(b.dataset.tone!)));
+
+    const renderRaw = () => {
+      raw.innerHTML = heard.map((t) => (t.filler ? `<em>${t.raw}</em>` : t.scratch ? `<s>${t.raw}</s>` : t.raw)).join(" ") || "Listening\u2026";
+    };
+
+    const assemble = (toks: Tok[]) => {
+      const parts: string[] = [];
+      for (const t of toks) {
+        if (t.scratch) parts.pop();
+        else if (t.clean) parts.push(t.clean);
+      }
+      const s = parts.join(" ");
+      return s ? s[0].toUpperCase() + s.slice(1) + (/[.?!]$/.test(s) ? "" : ".") : "";
+    };
+
+    const start = () => {
+      if (holding) return;
+      holding = true;
+      heard = [];
+      lastFull = null;
+      clearTimeout(landTimer);
+      landed.hidden = true;
+      out.textContent = "";
+      ph.hidden = true;
+      root.classList.add("live");
+      root.classList.remove("landed-state");
+      talk.setAttribute("aria-pressed", "true");
+      talkLabel.textContent = "Listening\u2026";
+      renderRaw();
+      const toks = scripts[si].toks;
+      let i = 0;
+      const tick = () => {
+        if (!holding || i >= toks.length) return;
+        heard.push(toks[i++]);
+        renderRaw();
+        feed = window.setTimeout(tick, 380 + Math.random() * 260);
+      };
+      feed = window.setTimeout(tick, 260);
+    };
+
+    const stop = () => {
+      if (!holding) return;
+      holding = false;
+      clearTimeout(feed);
+      root.classList.remove("live");
+      talk.setAttribute("aria-pressed", "false");
+      talkLabel.textContent = "Hold to talk";
+
+      if (heard.length === 0) {
+        raw.textContent = "Hold a little longer.";
+        ph.hidden = false;
+        return;
+      }
+
+      const script = scripts[si];
+      const complete = heard.length === script.toks.length;
+      raw.textContent = "\u2026";
+      root.classList.add("thinking");
+      landTimer = window.setTimeout(() => {
+        root.classList.remove("thinking");
+        root.classList.add("landed-state");
+        if (complete) {
+          lastFull = script;
+          out.textContent = script.full[tone];
+          note.textContent = script.note;
+        } else {
+          out.textContent = assemble(heard);
+          note.textContent = "You let go early. Hold longer to hear the whole thing.";
+        }
+        landed.hidden = false;
+        raw.textContent = "Hold to talk";
+        si = (si + 1) % scripts.length;
+        hint.textContent = "Hold again for a different sentence.";
+      }, 700);
+    };
+
+    // Pointer: press and hold.
+    talk.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      talk.setPointerCapture(e.pointerId);
+      root.focus({ preventScroll: true });
+      start();
+    });
+    ["pointerup", "pointercancel", "lostpointercapture"].forEach((ev) => talk.addEventListener(ev, stop));
+    talk.addEventListener("contextmenu", (e) => e.preventDefault());
+
+    // Keyboard: hold space while the demo (or the button) has focus.
+    root.addEventListener("keydown", (e) => {
+      if (e.code === "Space" && !e.repeat) {
+        e.preventDefault();
+        start();
+      }
+    });
+    root.addEventListener("keyup", (e) => {
+      if (e.code === "Space") {
+        e.preventDefault();
+        stop();
+      }
+    });
+    root.addEventListener("blur", stop);
+    addEventListener("blur", stop);
+  });
+</script>
+
+<style>
+  .wisp {
+    position: relative;
+    display: grid;
+    gap: 18px;
+    padding: 22px 18px 26px;
+    background:
+      radial-gradient(80% 50% at 50% 0%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%),
+      linear-gradient(180deg, #0f1420, #0a0d14);
+    color: #f5f5f7;
+    min-height: 460px;
+    outline: none;
+  }
+
+  .wisp:focus-visible {
+    box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--accent) 70%, #fff);
+  }
+
+  /* HUD pill */
+  .hud {
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 100%;
+    padding: 8px 10px 8px 14px;
+    border-radius: 999px;
+    background: rgb(20 20 24 / 0.9);
+    box-shadow:
+      inset 0 0 0 0.5px rgb(255 255 255 / 0.14),
+      0 14px 30px -10px rgb(0 0 0 / 0.6);
+    font-size: 14px;
+    transition: box-shadow 0.3s;
+  }
+
+  .live .hud {
+    box-shadow:
+      inset 0 0 0 0.5px color-mix(in srgb, var(--accent) 60%, transparent),
+      0 0 0 6px color-mix(in srgb, var(--accent) 16%, transparent),
+      0 14px 30px -10px rgb(0 0 0 / 0.6);
+  }
+
+  .wave {
+    display: flex;
+    align-items: center;
+    gap: 2.5px;
+    height: 16px;
+    flex: none;
+  }
+
+  .wave i {
+    width: 3px;
+    height: 100%;
+    border-radius: 3px;
+    background: var(--accent);
+    transform: scaleY(0.18);
+    transform-origin: center;
+    transition: transform 0.3s;
+  }
+
+  .live .wave i {
+    animation: bar 0.7s ease-in-out calc(var(--i) * -0.09s) infinite alternate;
+  }
+
+  .thinking .wave i {
+    animation: think 0.7s ease-in-out infinite alternate;
+    transform: scaleY(0.5);
+  }
+
+  @keyframes bar {
+    from {
+      transform: scaleY(0.2);
+    }
+    to {
+      transform: scaleY(1);
+    }
+  }
+
+  @keyframes think {
+    to {
+      opacity: 0.3;
+    }
+  }
+
+  .raw {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: rgb(255 255 255 / 0.85);
+  }
+
+  .raw :global(em) {
+    font-style: normal;
+    color: rgb(255 255 255 / 0.35);
+  }
+
+  .raw :global(s) {
+    color: #ff6b6b;
+    text-decoration-thickness: 1.5px;
+  }
+
+  .hud kbd {
+    flex: none;
+    font: 600 12px var(--sans);
+    padding: 2px 8px;
+    border-radius: 6px;
+    background: rgb(255 255 255 / 0.12);
+    color: rgb(255 255 255 / 0.8);
+  }
+
+  .stage {
+    display: grid;
+    gap: 16px;
+    width: min(100%, 560px);
+    margin-inline: auto;
+  }
+
+  /* Tone picker */
+  .tones {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 4px;
+    padding: 4px;
+    border-radius: 12px;
+    background: rgb(255 255 255 / 0.08);
+  }
+
+  .tones button {
+    display: grid;
+    gap: 1px;
+    padding: 8px 6px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    color: rgb(255 255 255 / 0.7);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+  }
+
+  .tones button small {
+    font-size: 11px;
+    font-weight: 500;
+    opacity: 0.6;
+  }
+
+  .tones button.on {
+    background: rgb(255 255 255 / 0.14);
+    color: #fff;
+  }
+
+  /* Target app */
+  .target {
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+    color: #1d1d1f;
+    box-shadow: 0 0 0 0.5px rgb(0 0 0 / 0.2), 0 20px 50px -20px rgb(0 0 0 / 0.6);
+    transition: background 0.3s;
+  }
+
+  .target[data-target="notes"] {
+    background: #fffcf1;
+  }
+
+  .chrome {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 12px;
+    background: #f2f2f5;
+    border-bottom: 0.5px solid rgb(0 0 0 / 0.1);
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+
+  .target[data-target="notes"] .chrome {
+    background: #f6f1dc;
+  }
+
+  .chrome i {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #ff5f57;
+  }
+
+  .chrome i:nth-child(2) {
+    background: #febc2e;
+  }
+
+  .chrome i:nth-child(3) {
+    background: #28c840;
+  }
+
+  .chrome span {
+    margin-left: 8px;
+  }
+
+  .body {
+    display: grid;
+    gap: 12px;
+    padding: 16px 14px;
+    min-height: 150px;
+    align-content: end;
+  }
+
+  [data-only] {
+    display: none;
+  }
+
+  .target[data-target="messages"] [data-only="messages"],
+  .target[data-target="mail"] [data-only="mail"],
+  .target[data-target="notes"] [data-only="notes"] {
+    display: grid;
+  }
+
+  .msg-in {
+    justify-self: start;
+    max-width: 75%;
+    padding: 8px 12px;
+    border-radius: 16px 16px 16px 5px;
+    background: #e9e9eb;
+    font-size: 14.5px;
+  }
+
+  .mail-head {
+    gap: 6px;
+    padding-bottom: 8px;
+    border-bottom: 0.5px solid rgb(0 0 0 / 0.1);
+    font-size: 13px;
+    color: #6e6e73;
+  }
+
+  .mail-head b {
+    color: #1d1d1f;
+    font-weight: 500;
+  }
+
+  .notes-head {
+    font-size: 12px;
+    color: #86868b;
+    text-align: center;
+  }
+
+  .field {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 2px;
+    min-height: 40px;
+    padding: 9px 14px;
+    border-radius: 20px;
+    border: 0.5px solid rgb(0 0 0 / 0.2);
+    font-size: 15px;
+    line-height: 1.35;
+  }
+
+  .target[data-target="mail"] .field,
+  .target[data-target="notes"] .field {
+    border: 0;
+    border-radius: 0;
+    padding: 4px 0;
+    font-size: 16px;
+  }
+
+  .out {
+    animation: land 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .out:empty {
+    animation: none;
+  }
+
+  @keyframes land {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+  }
+
+  .caret {
+    display: inline-block;
+    width: 1.5px;
+    height: 1.1em;
+    margin-left: 1px;
+    background: var(--accent);
+    animation: blink 1.1s steps(1) infinite;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .placeholder {
+    position: absolute;
+    left: 14px;
+    color: #a1a1a6;
+    pointer-events: none;
+  }
+
+  .target[data-target="mail"] .placeholder,
+  .target[data-target="notes"] .placeholder {
+    left: 0;
+  }
+
+  .landed {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-top: 0.5px solid rgb(0 0 0 / 0.08);
+    background: color-mix(in srgb, var(--accent) 8%, #fff);
+    font-size: 12.5px;
+    color: #3a3a3c;
+    animation: land 0.4s ease;
+  }
+
+  .landed b {
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .landed .sep {
+    width: 1px;
+    height: 12px;
+    background: rgb(0 0 0 / 0.15);
+  }
+
+  /* Controls */
+  .controls {
+    display: grid;
+    justify-items: center;
+    gap: 12px;
+    margin-top: 4px;
+  }
+
+  .talk {
+    position: relative;
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    gap: 10px;
+    min-height: 56px;
+    padding: 0 26px 0 20px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--accent);
+    color: #fff;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.15s;
+  }
+
+  .talk:active,
+  .live .talk {
+    transform: scale(0.97);
+  }
+
+  .ring {
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+
+  .live .ring {
+    animation: ring 1.2s ease-out infinite;
+  }
+
+  @keyframes ring {
+    from {
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 60%, transparent);
+    }
+    to {
+      box-shadow: 0 0 0 18px transparent;
+    }
+  }
+
+  .hint {
+    font-size: 13px;
+    color: rgb(255 255 255 / 0.55);
+    text-align: center;
+  }
+
+  .hint kbd {
+    font: 600 12px var(--sans);
+    padding: 1px 6px;
+    border-radius: 5px;
+    background: rgb(255 255 255 / 0.12);
+    color: rgb(255 255 255 / 0.85);
+  }
+
+  @media (min-width: 735px) {
+    .wisp {
+      padding: 28px 32px 32px;
+    }
+  }
+</style>

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "has": [{ "type": "host", "value": "wisp.quietmachines.xyz" }],
+      "source": "/((?!sites/|products/|fonts/|favicon\\.svg|social-card\\.).*)",
+      "destination": "/sites/wisp/$1"
+    },
+    {
+      "has": [{ "type": "host", "value": "wisp.quietmachines.xyz" }],
+      "source": "/",
+      "destination": "/sites/wisp/"
+    },
+    {
+      "has": [{ "type": "host", "value": "perch.quietmachines.xyz" }],
+      "source": "/((?!sites/|products/|fonts/|favicon\\.svg|social-card\\.).*)",
+      "destination": "/sites/perch/$1"
+    },
+    {
+      "has": [{ "type": "host", "value": "perch.quietmachines.xyz" }],
+      "source": "/",
+      "destination": "/sites/perch/"
+    },
+    {
+      "has": [{ "type": "host", "value": "sakana.quietmachines.xyz" }],
+      "source": "/((?!sites/|products/|fonts/|favicon\\.svg|social-card\\.).*)",
+      "destination": "/sites/sakana/$1"
+    },
+    {
+      "has": [{ "type": "host", "value": "sakana.quietmachines.xyz" }],
+      "source": "/",
+      "destination": "/sites/sakana/"
+    }
+  ]
+}

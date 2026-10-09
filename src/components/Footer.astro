@@ -1,0 +1,157 @@
+---
+import { site } from "../data/site";
+import { apps, ready, soon } from "../data/apps";
+
+interface Props {
+  crumb?: string;
+  notes?: string[];
+}
+
+const { crumb, notes = [] } = Astro.props;
+const year = new Date().getFullYear();
+const list = (xs: { name: string }[]) => xs.map((a) => a.name).join(" and ");
+---
+
+<footer id="footer" class="ft">
+  <div class="content">
+    <ol class="notes">
+      <li>{list(ready)} are available now. {list(soon)} are in development; names, features and timing may change.</li>
+      {notes.map((n) => <li>{n}</li>)}
+    </ol>
+
+    <div class="crumbs">
+      <a href="/" aria-label="Home">{site.short}</a>
+      {crumb && <span>{crumb}</span>}
+    </div>
+
+    <div class="dir">
+      <div>
+        <h3>Apps</h3>
+        <ul>
+          {
+            apps.map((a) => (
+              <li>
+                <a href={`/apps/${a.slug}`}>
+                  {a.name}
+                  {a.kind === "soon" && <small> Soon</small>}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div>
+        <h3>Studio</h3>
+        <ul>
+          <li><a href="/#about">About Riley</a></li>
+          <li><a href="/#why">How we build</a></li>
+          <li><a href={`mailto:${site.email}`}>Say hello</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Help</h3>
+        <ul>
+          <li><a href={`mailto:${site.support}`}>Support</a></li>
+          <li><a href={`mailto:${site.support}?subject=Refund`}>Refunds</a></li>
+          <li><a href="/#privacy">Privacy</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Elsewhere</h3>
+        <ul>{site.links.map((l) => <li><a href={l.href} rel="me noopener" target="_blank">{l.label}</a></li>)}</ul>
+      </div>
+    </div>
+
+    <div class="legal">
+      <p>Copyright © {year} {site.studio}. All rights reserved.</p>
+      <p>Designed in Vancouver, Canada.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .ft {
+    background: var(--bg-2);
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.33;
+    letter-spacing: -0.01em;
+    padding: 17px 0 calc(21px + env(safe-area-inset-bottom));
+  }
+
+  .notes {
+    margin: 0;
+    padding: 0 0 0 14px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .notes li {
+    margin-bottom: 8px;
+    padding-left: 2px;
+  }
+
+  .crumbs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 0;
+    color: var(--ink);
+  }
+
+  .crumbs a {
+    font-weight: 700;
+  }
+
+  .crumbs span::before {
+    content: "›";
+    margin-right: 8px;
+    color: var(--muted-2);
+  }
+
+  .dir {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px 20px;
+    padding: 6px 0 20px;
+  }
+
+  h3 {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+  }
+
+  ul a:hover {
+    text-decoration: underline;
+    color: var(--ink);
+  }
+
+  small {
+    color: var(--orange);
+    font-size: 10px;
+  }
+
+  .legal {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 20px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+  }
+
+  @media (min-width: 735px) {
+    .dir {
+      grid-template-columns: repeat(4, 180px);
+    }
+  }
+</style>

@@ -1,0 +1,343 @@
+---
+import Base from "../layouts/Base.astro";
+import AppIcon from "./AppIcon.astro";
+import Motif from "./Motif.astro";
+import { apps, type SoonApp } from "../data/apps";
+import { site } from "../data/site";
+
+interface Props {
+  app: SoonApp;
+}
+
+const { app } = Astro.props;
+const others = apps.filter((a) => a.slug !== app.slug);
+const vars = `--g1:${app.grad[0]};--g2:${app.grad[1]};--accent:${app.accent}`;
+const notify = `mailto:${site.email}?subject=${encodeURIComponent(`Tell me when ${app.name} is ready`)}`;
+---
+
+<Base title={app.name} description={`${app.name}. ${app.tease} Coming ${app.eta}.`} crumb={app.name} theme="dark">
+  <div class="teaser" style={vars}>
+    <section class="stage">
+      <Motif slug={app.slug} class="backdrop" big />
+      <div class="content center stage-text">
+        <AppIcon app={app} size={112} morph class="big-icon" />
+        <p class="eyebrow">Coming {app.eta}<sup>1</sup></p>
+        <h1 class="name">{app.name}</h1>
+        <p class="tease">{app.tease}</p>
+        <p class="whisper" data-whispers={JSON.stringify(app.whispers)} aria-live="polite">
+          <span data-whisper>{app.whispers[0]}</span>
+        </p>
+        <div class="ctas">
+          <a class="btn" href={notify}>Tell me when it's ready</a>
+        </div>
+      </div>
+      <a class="down" href="#more" aria-label="Scroll for more">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6" /></svg>
+      </a>
+    </section>
+
+    <section id="more" class="section more">
+      <div class="content">
+        <p class="hint reveal">{app.hint}</p>
+        <div class="cols">
+          <div class="col reveal">
+            <h2>What we can say.</h2>
+            <ul>
+              <li>It's a Mac app, with a companion where it makes sense.</li>
+              <li>It will not need an account to work.</li>
+              <li>It runs on Apple's on-device models. Nothing it learns about you leaves your devices.</li>
+              <li>It will be priced like the others: once, for life. No subscription.</li>
+            </ul>
+          </div>
+          <div class="col reveal" style="transition-delay:90ms">
+            <h2>What we can't. Yet.</h2>
+            <ul>
+              <li>What it does.</li>
+              <li>What it looks like.</li>
+              <li>Why it's called {app.name}.</li>
+              <li>The exact day. We'd rather it be right than early.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section lineup">
+      <div class="content">
+        <h2 class="h2 center reveal">Meanwhile, two you can use today.</h2>
+        <ul class="others">
+          {
+            others.map((o) => (
+              <li class="reveal" style={`--g1:${o.grad[0]};--g2:${o.grad[1]}`}>
+                <a href={`/apps/${o.slug}`}>
+                  <AppIcon app={o} size={72} />
+                  <span class="o-tag">{o.tag}</span>
+                  <b>{o.name}</b>
+                  <span class="o-pitch">{o.pitch}</span>
+                  <span class="more-link">{o.kind === "ready" ? "Learn more" : "Take a peek"}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-whispers]").forEach((p) => {
+    const lines: string[] = JSON.parse(p.dataset.whispers!);
+    const el = p.querySelector<HTMLElement>("[data-whisper]")!;
+    if (lines.length < 2 || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let i = 0;
+    setInterval(() => {
+      el.classList.add("out");
+      setTimeout(() => {
+        i = (i + 1) % lines.length;
+        el.textContent = lines[i];
+        el.classList.remove("out");
+      }, 600);
+    }, 4200);
+  });
+</script>
+
+<style>
+  .teaser {
+    background: #000;
+    color: #f5f5f7;
+  }
+
+  .stage {
+    position: relative;
+    min-height: calc(100svh - var(--nav));
+    display: grid;
+    align-content: center;
+    padding-block: clamp(64px, 10vw, 120px);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .stage :global(.backdrop) {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .stage::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: radial-gradient(70% 60% at 50% 55%, rgb(0 0 0 / 0.55), transparent 70%);
+    pointer-events: none;
+  }
+
+  .stage-text {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    justify-items: center;
+    gap: 14px;
+  }
+
+  .stage-text :global(.big-icon) {
+    margin-bottom: 18px;
+    animation: breathe 6s ease-in-out infinite;
+  }
+
+  @keyframes breathe {
+    50% {
+      transform: translateY(-6px);
+    }
+  }
+
+  .stage .eyebrow {
+    color: #ff9f5a;
+  }
+
+  .name {
+    font-size: clamp(64px, 15vw, 128px);
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+  }
+
+  .tease {
+    max-width: 16em;
+    font-size: clamp(24px, 4vw, 36px);
+    line-height: 1.12;
+    font-weight: 600;
+    letter-spacing: 0.002em;
+    color: rgb(255 255 255 / 0.9);
+  }
+
+  .whisper {
+    min-height: 1.5em;
+    margin-top: 8px;
+    font-size: clamp(17px, 2.2vw, 21px);
+    color: rgb(255 255 255 / 0.55);
+  }
+
+  .whisper span {
+    display: inline-block;
+    transition: opacity 0.6s, transform 0.6s;
+  }
+
+  .whisper :global(.out) {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+
+  .stage .ctas {
+    margin-top: 18px;
+  }
+
+  .stage .btn {
+    background: #fff;
+    border-color: #fff;
+    color: #000;
+  }
+
+  .stage .btn:hover {
+    background: #e8e8ed;
+  }
+
+  .down {
+    position: absolute;
+    left: 50%;
+    bottom: 20px;
+    z-index: 2;
+    transform: translateX(-50%);
+    color: rgb(255 255 255 / 0.5);
+    animation: bob 2.4s ease-in-out infinite;
+  }
+
+  @keyframes bob {
+    50% {
+      transform: translate(-50%, 6px);
+    }
+  }
+
+  .more {
+    background: #000;
+  }
+
+  .hint {
+    max-width: 30em;
+    margin: 0 auto 64px;
+    text-align: center;
+    font-size: clamp(21px, 3vw, 28px);
+    line-height: 1.2;
+    color: #a1a1a6;
+  }
+
+  .cols {
+    display: grid;
+    gap: 16px;
+  }
+
+  .col {
+    padding: 32px 28px;
+    border-radius: 24px;
+    background: #141416;
+  }
+
+  .col h2 {
+    font-size: 24px;
+    margin-bottom: 18px;
+    letter-spacing: 0.009em;
+  }
+
+  .col ul {
+    display: grid;
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: #a1a1a6;
+    font-size: 17px;
+    line-height: 1.4;
+  }
+
+  .col li {
+    display: flex;
+    gap: 12px;
+  }
+
+  .col li::before {
+    content: "";
+    flex: none;
+    width: 6px;
+    height: 6px;
+    margin-top: 0.55em;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .lineup {
+    background: #000;
+    padding-top: 0;
+  }
+
+  .others {
+    display: grid;
+    gap: 48px;
+    margin: 56px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .others a {
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+    text-align: center;
+  }
+
+  .others :global(.icon) {
+    margin-bottom: 14px;
+  }
+
+  .o-tag {
+    font-size: 12px;
+    color: #ff9f5a;
+  }
+
+  .others b {
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  .o-pitch {
+    color: #a1a1a6;
+  }
+
+  .more-link {
+    margin-top: 8px;
+    color: #2997ff;
+    font-size: 17px;
+  }
+
+  .more-link::after {
+    content: "";
+    display: inline-block;
+    width: 0.42em;
+    height: 0.42em;
+    margin-left: 0.35em;
+    border: solid currentColor;
+    border-width: 1.5px 1.5px 0 0;
+    transform: translateY(-0.1em) rotate(45deg);
+  }
+
+  @media (min-width: 735px) {
+    .cols,
+    .others {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .others {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+    }
+  }
+</style>
