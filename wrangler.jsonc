@@ -1,6 +1,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "perchwebsite",
+  "account_id": "9162db11ae335d803082e2df44534a88",
   "compatibility_date": "2026-10-14",
   "assets": {
     "directory": "./dist",
