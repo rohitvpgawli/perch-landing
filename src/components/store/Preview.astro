@@ -1,8 +1,21 @@
 <div class="perch-demo" data-perch-demo>
-  <div class="demo-top"><span class="demo-label">A place at the edge</span><span class="local-label"><span/> Local activity</span></div>
-  <div class="perch-capture"><img src="/products/perch-agents.webp" width="972" height="970" alt="Perch’s native shelf groups sample agent sessions by Needs you, Working, and Recent." data-perch-image loading="lazy"/></div>
-  <div class="demo-options" aria-label="Perch preview"><button type="button" data-view="agents" aria-pressed="true">Agent activity</button><button type="button" data-view="notes" aria-pressed="false">Sticky notes</button></div>
-  <p class="demo-caption" data-perch-caption aria-live="polite">Native app capture · sample activity, not live agent verification</p>
+  <div class="window">
+    <div class="window-bar">
+      <span class="traffic" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="window-title">Perch</span>
+      <span class="local-label"><span aria-hidden="true"></span>Local activity</span>
+    </div>
+    <div class="window-body">
+      <img src="/products/perch-agents.webp" width="972" height="970" alt="Perch’s native shelf groups sample agent sessions by Needs you, Working, and Recent." data-perch-image/>
+    </div>
+  </div>
+  <div class="demo-controls">
+    <div class="segmented" role="group" aria-label="Choose a Perch preview">
+      <button type="button" data-view="agents" aria-pressed="true">Agent activity</button>
+      <button type="button" data-view="notes" aria-pressed="false">Sticky notes</button>
+    </div>
+    <p class="demo-caption" data-perch-caption aria-live="polite">Native app capture · sample activity, not live agent verification</p>
+  </div>
 </div>
 <script>
   document.querySelectorAll<HTMLElement>('[data-perch-demo]').forEach(root => {
@@ -19,6 +32,29 @@
   });
 </script>
 <style>
-.wisp-demo,.perch-demo{border:1px solid #e6e0ef;border-radius:18px;padding:22px;background:radial-gradient(ellipse at 50% 40%,#fefeff 0,#eee9f5 90%);min-width:0;overflow:hidden}.demo-top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:35px}.demo-label{font:9px var(--mono);color:#716582;letter-spacing:1px;text-transform:uppercase}.local-label{font-size:10px;color:#665d72;display:flex;gap:6px;align-items:center}.local-label>span,.green-dot{display:inline-block;width:5px;height:5px;border-radius:50%;background:#668662}.dictation-pill{position:relative;z-index:1;display:flex;align-items:center;justify-content:center;gap:13px;background:#272232;color:#f5efff;border:1px solid #645d72;width:max-content;max-width:100%;margin:0 auto -6px;padding:13px 18px;border-radius:17px;box-shadow:0 8px 22px #4b37572b;font-size:12px}.dictation-pill kbd{font-size:10px;color:#c9bedb;padding-left:8px}.wave{display:flex;align-items:center;gap:3px;height:32px}.wave i{display:block;width:3px;border-radius:4px;background:#d0b4ff}.editor{background:#fffefd;border:1px solid #e2dce8;border-radius:12px;box-shadow:0 16px 35px -17px #47315840;overflow:hidden;max-width:640px;margin:auto}.editor-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:15px 17px;border-bottom:1px solid #ede9ef;color:#77717b;font:10px var(--mono)}.traffic{font-size:10px;letter-spacing:2px;color:#c9c4ce}.editor-type{font-size:9px}.editor-body{padding:28px;min-height:235px}.editor-comment{font:10px var(--mono);color:#8a8293;margin-bottom:22px}.spoken{font-size:17px;line-height:1.5;color:#77717f;min-height:52px}.cleanup-line{font-size:10px;display:flex;align-items:center;gap:10px;color:#827689;margin:20px 0}.cleanup-line>span{font-size:18px}.output{font-size:20px;line-height:1.5;letter-spacing:-.5px;color:#4c386b;min-height:60px}.caret{display:inline-block;border-right:2px solid #9c83c7;height:21px;vertical-align:middle;margin-left:4px}.editor-foot{display:flex;justify-content:space-between;gap:12px;padding:12px 17px;background:#fbfafc;border-top:1px solid #ede9ef;font-size:9px;color:#756c7c}.editor-foot .green-dot{margin-right:5px}.demo-options{display:flex;justify-content:center;gap:5px;margin:22px auto 0}.demo-options button{border:1px solid transparent;border-radius:6px;padding:8px 12px;min-height:40px;background:transparent;color:#766980;font-size:11px}.demo-options button[aria-pressed=true]{background:#fff;border-color:#dfd8e5;color:#493c57;box-shadow:0 2px 4px #35204005}.demo-options button:hover{background:#ffffff80}.demo-caption{font-size:9px;color:#746c7a;text-align:center;margin-top:13px}.perch-demo{border-color:#e7e0d1;background:radial-gradient(ellipse at 50% 40%,#fffdf6,#efe9dc)}.perch-demo .demo-top{margin-bottom:16px}.perch-demo .demo-label,.perch-demo .local-label{color:#726957}.perch-capture{max-width:400px;margin:auto;border-radius:12px;overflow:hidden;box-shadow:0 12px 28px #40332116}.perch-capture img{width:100%;height:auto;aspect-ratio:1;object-fit:cover;object-position:top}.perch-demo .demo-options{margin-top:15px}.perch-demo .demo-caption{color:#726957}
-@media(max-width:760px){.wisp-demo,.perch-demo{padding:16px}.demo-top{margin-bottom:25px}.editor-body{padding:22px 18px;min-height:250px}.dictation-pill{padding:10px;gap:9px;font-size:11px}.dictation-pill kbd{font-size:9px;padding-left:0}.wave{gap:2px}.spoken{font-size:15px}.output{font-size:18px}.editor-type{display:none}.editor-foot>span:last-child{display:none}.demo-options{gap:0}.demo-options button{font-size:10px;padding:8px 10px}.demo-label{font-size:8px}.local-label{font-size:9px}.demo-caption{font-size:9px}}
+.perch-demo{width:100%}
+.window{max-width:760px;margin:0 auto;border-radius:20px;overflow:hidden;background:#131415;border:1px solid rgba(255,255,255,.1);box-shadow:0 70px 120px -40px rgba(0,0,0,.75),0 0 0 1px rgba(0,0,0,.5)}
+.window-bar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;height:46px;padding:0 18px;background:linear-gradient(#2a2c2e,#202224);border-bottom:1px solid rgba(255,255,255,.07);font-size:13px}
+.traffic{display:flex;gap:8px}
+.traffic i{display:block;width:12px;height:12px;border-radius:50%}
+.traffic i:nth-child(1){background:#ff5f57}
+.traffic i:nth-child(2){background:#febc2e}
+.traffic i:nth-child(3){background:#28c840}
+.window-title{font-weight:550;color:rgba(245,245,242,.82);letter-spacing:-.01em}
+.local-label{justify-self:end;display:flex;align-items:center;gap:7px;font-size:12px;color:rgba(245,245,242,.6)}
+.local-label span{width:6px;height:6px;border-radius:50%;background:#7fb08f}
+.window-body{background:#000}
+.window-body img{width:100%;height:auto}
+.demo-controls{display:flex;flex-direction:column;align-items:center;gap:16px;margin-top:30px}
+.segmented{display:inline-flex;padding:4px;border-radius:999px;background:rgba(255,255,255,.07);border:1px solid var(--on-dark-line)}
+.segmented button{border:0;border-radius:999px;padding:9px 20px;min-height:40px;background:transparent;color:var(--on-dark-muted);font-size:14px;transition:background .2s ease,color .2s ease}
+.segmented button:hover{color:var(--on-dark)}
+.segmented button[aria-pressed=true]{background:var(--on-dark);color:#0b0c0c}
+.demo-caption{font-size:13px;color:var(--on-dark-muted);text-align:center}
+@media(max-width:760px){
+  .window{border-radius:16px}
+  .window-bar{padding:0 12px;height:40px}
+  .local-label{font-size:11px}
+  .segmented button{padding:8px 14px;font-size:13px}
+}
 </style>

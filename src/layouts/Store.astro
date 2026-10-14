@@ -3,7 +3,7 @@ import '../styles/store.css';
 import Mark from '../components/store/Mark.astro';
 import { perch, analyticsToken } from '../data/perch';
 interface Props { title?: string; description?: string; noindex?: boolean }
-const { title = 'Perch — A little less agent babysitting.', description = perch.description, noindex = false } = Astro.props;
+const { title = 'Perch — Stop checking on your agents.', description = perch.description, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, perch.origin).href;
 ---
 <!doctype html>
@@ -14,7 +14,7 @@ const canonical = new URL(Astro.url.pathname, perch.origin).href;
     <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'}/>
     <link rel="canonical" href={canonical}/><link rel="icon" href="/products/perch-icon.webp" type="image/webp"/>
     <link rel="apple-touch-icon" href="/apple-touch-icon.png"/><link rel="manifest" href="/site.webmanifest"/>
-    <meta name="theme-color" content="#fafbf8"/>
+    <meta name="theme-color" content="#08090a"/>
     <meta property="og:title" content={title}/><meta property="og:description" content={description}/>
     <meta property="og:type" content="website"/><meta property="og:url" content={canonical}/><meta property="og:site_name" content="Perch"/>
     <meta property="og:locale" content="en_US"/><meta property="og:image" content={`${perch.origin}/social-card.png`}/>
@@ -26,11 +26,12 @@ const canonical = new URL(Astro.url.pathname, perch.origin).href;
     {analyticsToken && <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: analyticsToken })}></script>}
   </head>
   <body>
+    <script is:inline>document.documentElement.classList.add('js')</script>
     <a class="skip" href="#main">Skip to content</a>
     <header class="header"><nav class="shell nav" aria-label="Main navigation">
       <a href="/" class="brand"><Mark product="perch" size={32}/>Perch.</a>
       <div class="nav-links"><a href="/#how">How it works</a><a href="/#pricing">Pricing</a><a href="/#questions">FAQ</a></div>
-      <a class="button small nav-cta" href="/checkout/">Perch · $29 <span aria-hidden="true">↗</span></a>
+      <a class="button small nav-cta" href="/checkout/">Get Perch · $29</a>
     </nav></header>
     <main id="main"><slot/></main>
     <footer class="shell footer">
