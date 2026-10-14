@@ -17,3 +17,8 @@ if (configured) {
 }
 export const checkoutReady = Boolean(paymentLink);
 export const purchaseHref = '/checkout/';
+// Cloudflare Web Analytics site token; the beacon is omitted when unset.
+export const analyticsToken = import.meta.env.CF_WEB_ANALYTICS_TOKEN?.trim() ?? '';
+if (analyticsToken && !/^[0-9a-f]{32}$/.test(analyticsToken)) {
+  throw new Error('CF_WEB_ANALYTICS_TOKEN must be a 32-character Cloudflare Web Analytics site token.');
+}

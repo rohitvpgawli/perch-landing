@@ -1,7 +1,7 @@
 ---
 import '../styles/store.css';
 import Mark from '../components/store/Mark.astro';
-import { perch } from '../data/perch';
+import { perch, analyticsToken } from '../data/perch';
 interface Props { title?: string; description?: string; noindex?: boolean }
 const { title = 'Perch — A little less agent babysitting.', description = perch.description, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, perch.origin).href;
@@ -23,6 +23,7 @@ const canonical = new URL(Astro.url.pathname, perch.origin).href;
     <meta name="twitter:card" content="summary_large_image"/><meta name="twitter:title" content={title}/>
     <meta name="twitter:description" content={description}/><meta name="twitter:image" content={`${perch.origin}/social-card.png`}/>
     <link rel="alternate" type="text/plain" href="/llms.txt" title="Perch information for language models"/>
+    {analyticsToken && <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: analyticsToken })}></script>}
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>

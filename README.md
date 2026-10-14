@@ -32,6 +32,10 @@ Product copy is in `src/data/product.ts`; site/checkout settings are in `src/dat
 
 Deployed to https://perched.fyi through Cloudflare MCP on October 14, 2026. HTTPS, all 23 served files, 301 redirects, custom 404, security headers, and closed checkout were verified. See `docs/HOSTING.md` for deployment IDs and DNS propagation notes.
 
+## Analytics
+
+Page-level analytics use Cloudflare Web Analytics (cookieless). Add `perched.fyi` under Analytics & Logs → Web Analytics with automatic setup **off**, copy the site token, and set `CF_WEB_ANALYTICS_TOKEN` in the build environment (or `.env`) before `npm run deploy`. The beacon is omitted when the token is empty; the CSP in `public/_headers` already allows it.
+
 ## Opening purchases later
 
 1. Finish app signing/notarization, private distribution, verified payment fulfillment, and final purchase terms.
