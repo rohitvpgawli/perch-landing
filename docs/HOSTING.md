@@ -2,7 +2,7 @@
 
 Production origin: `https://perched.fyi`.
 Repository: `https://github.com/rohitvpgawli/perch-landing`.
-Worker: `perch-landing` (Workers Builds deploys every push to `main`).
+Worker: `perch-landing`, connected to this repository in Workers Builds on October 14, 2026; every push to `main` builds and deploys. The `name` in `wrangler.jsonc` must stay `perch-landing` to match the connected Worker.
 Canonical host: `worker/index.js` 301-redirects `http://` and `www.` to `https://perched.fyi`.
 Build: `npm ci && npm run build`.
 Assets: `dist/`.
