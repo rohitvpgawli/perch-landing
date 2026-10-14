@@ -1,0 +1,19 @@
+export const perch = {
+  name: 'Perch', origin: 'https://perched.fyi', price: 29, currency: 'USD',
+  description: 'Agent activity and sticky notes at the edge of your Mac. Keep an eye on Claude Code, Cursor, and Codex without losing your flow.',
+  support: 'https://github.com/rohitvpgawli/perch-landing/issues',
+  requirements: 'macOS 14+ · Native SwiftUI + AppKit',
+};
+// A live link alone must never open sales before delivery is ready.
+const configured = import.meta.env.STRIPE_PERCH_PAYMENT_LINK?.trim();
+export const deliveryReady = import.meta.env.PERCH_DELIVERY_READY === 'true';
+export let paymentLink = '';
+if (configured) {
+  const url = new URL(configured);
+  if (url.protocol !== 'https:' || url.hostname !== 'buy.stripe.com' || url.username || url.password || url.pathname.startsWith('/test_')) {
+    throw new Error('STRIPE_PERCH_PAYMENT_LINK must be a live https://buy.stripe.com Payment Link.');
+  }
+  if (deliveryReady) paymentLink = url.href;
+}
+export const checkoutReady = Boolean(paymentLink);
+export const purchaseHref = '/checkout/';

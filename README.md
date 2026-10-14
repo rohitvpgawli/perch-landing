@@ -1,56 +1,44 @@
-# Quiet Machines
+# Perchwebsite
 
-Multi-host Astro site for the Quiet Machines company and its products.
+Standalone Perch landing page for **https://perched.fyi**, built with Astro and deployed as Cloudflare Workers static assets.
 
-- **Company:** [quietmachines.xyz](https://quietmachines.xyz) — studio story, mission, product directory
-- **Products:** `wisp.`, `perch.`, and `sakana.` subdomains — each product’s own landing page
+Perch is a native macOS 14+ utility for local coding-agent activity and sticky notes. The offer is **$29 USD, one time**, plus applicable taxes. App license only; source code is not included.
 
-Architecture details: [`docs/HOSTING.md`](docs/HOSTING.md).
+**Purchases are deliberately closed until delivery is ready.** The purchase page collects no payment. Final license, update, support, device, and refund terms must be published before launch.
 
-## Run
+## Development
 
-- `npm install`
-- `npm run dev`
-- `npm run build`
-- `npm run preview`
+```sh
+npm ci
+npm run dev
+npm run build
+npm run preview
+```
 
-Local product previews (no DNS required):
+## Pages and discovery
 
-- `/` — company
-- `/sites/wisp/` — Wisp
-- `/sites/perch/` — Perch
-- `/sites/sakana/` — Sakana (coming soon)
+- `/`: Perch features, interactive agent/notes preview, integrations, pricing, FAQ.
+- `/checkout/`: Availability and purchase details; noindex.
+- `/privacy/`, `/terms/`: Current privacy and purchase information.
+- `/robots.txt`, `/sitemap.xml`: Search discovery.
+- `/llms.txt`, `/llms-full.txt`: Plain-text product information for assistants.
+- Social metadata, SoftwareApplication JSON-LD, icons, web manifest, custom 404, security headers, and redirects for previous Perch paths are included.
 
-## Routes and offers
+Product copy is in `src/data/product.ts`; site/checkout settings are in `src/data/perch.ts`. Existing Perch screenshots and responsive styling are preserved. Other studio/product routes have been retired.
 
-| Offer | USD, one time | Product host path | Payment Link variable |
-| --- | --- | --- | --- |
-| Wisp app | $9 | `wisp…/checkout` | `STRIPE_WISP_PAYMENT_LINK` |
-| Wisp app + source | $19 | `wisp…/checkout/source` | `STRIPE_WISP_SOURCE_PAYMENT_LINK` |
-| Perch app | $39 | `perch…/checkout` | `STRIPE_PERCH_PAYMENT_LINK` |
-| Perch app + source | $69 | `perch…/checkout/source` | `STRIPE_PERCH_SOURCE_PAYMENT_LINK` |
+## Cloudflare deployment
 
-Legacy `/apps/{product}` and `/checkout/{product}` paths 301 to the product hosts.
+`wrangler.jsonc` names the Worker `perchwebsite`, serves `dist/`, enables a real 404 page, and requests the `perched.fyi` custom domain. The domain must exist in the connected Cloudflare account. Use the Cloudflare MCP to select the account/zone and deploy the exact built assets when it is connected. CLI deployment is also configured as `npm run deploy`, but this task requests MCP deployment.
 
-Source prices include the app. Prices and availability flags live in `src/data/store.ts`. Hosts and subdomain mapping live in `src/data/hosts.ts`. Offers stay unavailable until `appAvailable` / `sourceAvailable` are enabled and Stripe links are set.
+No DNS or deployment has been performed merely by adding this configuration. Confirm the custom domain, HTTPS, redirects, headers, and discovery files after deployment.
 
-## Opening purchases
+## Opening purchases later
 
-1. Finish distribution, source packaging, and published terms; update status/availability together.
-2. Configure four distinct one-time Stripe Payment Links; test in sandbox first.
-3. Fulfill outside this static site (verify webhooks; never deliver from an unverified success URL).
-4. Copy `.env.example` → `.env`, set links, enable flags, rebuild.
-5. Keep source archives private — anything in `public/` is downloadable.
+1. Finish app signing/notarization, private distribution, verified payment fulfillment, and final purchase terms.
+2. Enable the intended Stripe product/price and create a Payment Link for exactly $29 USD, one time. Configure Stripe Tax and required tax registrations, billing address and tax-ID collection as appropriate. Product tax category and price tax behavior must match the offer.
+3. Verify payment and delivery in sandbox; never deliver based only on a success-page URL.
+4. Set `STRIPE_PERCH_PAYMENT_LINK` and `PERCH_DELIVERY_READY=true` in the build environment, update availability in the plain-text discovery files, rebuild, and deploy.
 
-## Main implementation
+The code requires both a live `buy.stripe.com` link and delivery readiness. Test links and unexpected checkout hosts fail the build. Keep app archives out of `public/`.
 
-- `src/data/hosts.ts` — subdomain registry + URL helpers
-- `src/middleware.ts` — host → `/sites/{slug}` rewrite in dev
-- `vercel.json` / `functions/_middleware.js` — production host rewrites
-- `src/pages/index.astro` — company apex
-- `src/pages/sites/[slug]/` — product sites (landing + checkout)
-- `src/layouts/Store.astro` — shared shell (company vs product chrome)
-- `src/components/ProductPage.astro` — Wisp / Perch landings (visuals unchanged)
-- `src/components/ProductComingSoon.astro` — Sakana shell
-
-`REBUILD-PLAN.md` remains the product-page research brief for a later visual pass.
+Support currently uses the repository’s public GitHub Issues. Do not post private customer or payment data there.

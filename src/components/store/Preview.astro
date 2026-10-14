@@ -1,35 +1,10 @@
----
-const { product = 'wisp' } = Astro.props;
----
-{product === 'wisp' ? <div class="wisp-demo" data-wisp-demo>
-  <div class="demo-top"><span class="demo-label">A little less typing</span><span class="local-label"><span/> On your Mac</span></div>
-  <div class="dictation-pill"><div class="wave" aria-hidden="true">{[12,22,16,30,21,35,15,25,12].map(height => <i style={`height:${height}px`}/>)}</div><span>Thinking out loud…</span><kbd>⌃ ⌥ Space</kbd></div>
-  <div class="editor"><div class="editor-bar"><span class="traffic" aria-hidden="true">● ● ●</span><span data-demo-title>next-feature.md</span><span class="editor-type">Markdown</span></div><div class="editor-body"><p class="editor-comment">// a thought, without the typing</p><p class="spoken" data-spoken>“Um, let’s move the authentication to, uh, Next.js.”</p><div class="cleanup-line"><span aria-hidden="true">↓</span> A little cleanup. Still your thought.</div><p class="output" data-output aria-live="polite">Let’s move the authentication to Next.js.<span class="caret" aria-hidden="true"/></p></div><div class="editor-foot"><span><span class="green-dot"/> Inserted at your cursor</span><span>Listening for the next sentence</span></div></div>
-  <div class="demo-options" aria-label="Dictation examples"><button type="button" data-example="0" aria-pressed="true">A prompt</button><button type="button" data-example="1" aria-pressed="false">A bug report</button><button type="button" data-example="2" aria-pressed="false">A project note</button></div>
-  <p class="demo-caption">Interactive illustration · example text, not a live recording</p>
-</div> : <div class="perch-demo" data-perch-demo>
+<div class="perch-demo" data-perch-demo>
   <div class="demo-top"><span class="demo-label">A place at the edge</span><span class="local-label"><span/> Local activity</span></div>
   <div class="perch-capture"><img src="/products/perch-agents.webp" width="972" height="970" alt="Perch’s native shelf groups sample agent sessions by Needs you, Working, and Recent." data-perch-image loading="lazy"/></div>
   <div class="demo-options" aria-label="Perch preview"><button type="button" data-view="agents" aria-pressed="true">Agent activity</button><button type="button" data-view="notes" aria-pressed="false">Sticky notes</button></div>
   <p class="demo-caption" data-perch-caption aria-live="polite">Native app capture · sample activity, not live agent verification</p>
-</div>}
+</div>
 <script>
-  const examples = [
-    { title: 'next-feature.md', spoken: '“Um, let’s move the authentication to, uh, Next.js.”', output: 'Let’s move the authentication to Next.js.' },
-    { title: 'bug-report.md', spoken: '“The settings panel, the settings panel closes, but focus doesn’t return to the button.”', output: 'The settings panel closes, but focus doesn’t return to the button.' },
-    { title: 'project-notes.md', spoken: '“We need, um, three more tests for the GitHub integration.”', output: 'We need 3 more tests for the GitHub integration.' },
-  ];
-  document.querySelectorAll<HTMLElement>('[data-wisp-demo]').forEach(root => {
-    root.querySelectorAll<HTMLButtonElement>('[data-example]').forEach(button => {
-      button.addEventListener('click', () => {
-        const example = examples[Number(button.dataset.example)];
-        root.querySelector('[data-demo-title]')!.textContent = example.title;
-        root.querySelector('[data-spoken]')!.textContent = example.spoken;
-        root.querySelector('[data-output]')!.textContent = example.output;
-        root.querySelectorAll('[data-example]').forEach(option => option.setAttribute('aria-pressed', String(option === button)));
-      });
-    });
-  });
   document.querySelectorAll<HTMLElement>('[data-perch-demo]').forEach(root => {
     root.querySelectorAll<HTMLButtonElement>('[data-view]').forEach(button => {
       button.addEventListener('click', () => {

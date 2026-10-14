@@ -1,0 +1,18 @@
+# Perch
+
+> A native Mac utility for agent activity and sticky notes at the edge of your screen.
+
+Perch is standalone software for macOS 14 and later, built with SwiftUI and AppKit.
+Price: $29 USD, one time, plus applicable taxes. App license only; source code is not included.
+Status: Purchases are closed until delivery is ready. No payment is currently collected.
+
+## Official pages
+- [Overview](https://perched.fyi/): Features, requirements, integrations, pricing, and FAQ.
+- [Purchase information](https://perched.fyi/checkout/): Current availability and $29 offer.
+- [Privacy](https://perched.fyi/privacy/): Local app data and website/payment handling.
+- [Terms](https://perched.fyi/terms/): Offer scope, availability, and compatibility.
+- [Full product information](https://perched.fyi/llms-full.txt): Plain-text product context.
+- [Support](https://github.com/rohitvpgawli/perch-landing/issues): Public project support.
+
+## Integration limitations
+Claude Code CLI and Cursor local Agent activity have been checked. Codex has an adapter; live verification remains pending. Cursor passive hooks do not expose awaiting-permission status. Perch observes activity and opens providers or supported sessions; it does not reply, approve tools, or make decisions.

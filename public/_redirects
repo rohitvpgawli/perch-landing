@@ -1,0 +1,6 @@
+/sites/perch/ / 301
+/sites/perch/checkout/ /checkout/ 301
+/sites/perch/checkout/source/ /checkout/ 301
+/apps/perch/ / 301
+/checkout/perch/ /checkout/ 301
+/checkout/perch/source/ /checkout/ 301

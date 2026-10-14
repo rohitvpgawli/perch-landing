@@ -1,15 +1,3 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="#fafbf8"/>
-  <path d="M72 91V69a6 6 0 0 1 12 0v15a6 6 0 0 0 12 0V69a5 5 0 0 1 10 0v22" fill="none" stroke="#315843" stroke-width="4" stroke-linecap="round"/>
-  <g font-family="Arial,sans-serif" fill="#25352d">
-    <text x="125" y="86" font-size="25" font-weight="600">Quiet Machines.</text>
-    <text x="70" y="194" font-size="13" letter-spacing="3" fill="#647068">SMALL MAC TOOLS FOR INDIE BUILDERS</text>
-    <text x="66" y="284" font-size="72" letter-spacing="-3">You could build this.</text>
-    <text x="70" y="372" font-size="67" font-family="Georgia,serif" font-style="italic" fill="#667b5d">Or get back to your project.</text>
-    <rect x="70" y="435" width="510" height="102" rx="12" fill="#f2eff7" stroke="#e1ddeb"/>
-    <rect x="600" y="435" width="530" height="102" rx="12" fill="#f4f0e6" stroke="#e7e0d2"/>
-    <text x="96" y="480" font-size="25">Wisp</text><text x="96" y="510" font-size="15" fill="#647068">App $9 · App + source $19</text>
-    <text x="626" y="480" font-size="25">Perch</text><text x="626" y="510" font-size="15" fill="#647068">App $39 · App + source $69</text>
-    <text x="70" y="582" font-size="14" fill="#647068">Planned lifetime prices. One payment. No subscriptions.</text>
-  </g>
-</svg>
+<rect width="1200" height="630" fill="#fafbf8"/><circle cx="1080" cy="100" r="310" fill="#f0eadc"/><circle cx="1140" cy="600" r="210" fill="#e5ebdf"/>
+<g font-family="Arial,sans-serif" fill="#25352d"><text x="72" y="105" font-size="34" font-weight="600">Perch.</text><text x="74" y="185" font-size="15" letter-spacing="3" fill="#786b50">YOUR AGENTS. YOUR NOTES. A PLACE AT THE EDGE.</text><text x="68" y="295" font-size="67" letter-spacing="-3">Keep an eye on the work.</text><text x="72" y="380" font-size="66" font-family="Georgia,serif" font-style="italic" fill="#8b7750">Keep your head in yours.</text><rect x="72" y="455" width="306" height="65" rx="12" fill="#315843"/><text x="100" y="497" fill="#fff" font-size="25">$29 USD · one time</text><text x="74" y="565" font-size="19" fill="#647068">Native Mac app · Local activity · No subscription</text><text x="940" y="565" font-size="22" fill="#786b50">perched.fyi</text></g></svg>
