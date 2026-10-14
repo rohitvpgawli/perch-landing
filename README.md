@@ -28,7 +28,9 @@ Product copy is in `src/data/product.ts`; site/checkout settings are in `src/dat
 
 ## Cloudflare deployment
 
-`wrangler.jsonc` names the Worker `perchwebsite`, serves `dist/`, enables a real 404 page, and requests the `perched.fyi` custom domain. The domain must exist in the connected Cloudflare account. Use the Cloudflare MCP to select the account/zone and deploy the exact built assets when it is connected. CLI deployment is also configured as `npm run deploy`, but this task requests MCP deployment.
+`wrangler.jsonc` names the Worker `perch-landing`, serves `dist/`, enables a real 404 page, and attaches the `perched.fyi` and `www.perched.fyi` custom domains. `worker/index.js` runs before assets and 301-redirects `http://` and `www.` requests to `https://perched.fyi`.
+
+Pushes to `main` deploy automatically through Cloudflare Workers Builds (connected to the `perch-landing` Worker). Manual deployment: `npm run deploy`.
 
 Deployed to https://perched.fyi through Cloudflare MCP on October 14, 2026. HTTPS, all 23 served files, 301 redirects, custom 404, security headers, and closed checkout were verified. See `docs/HOSTING.md` for deployment IDs and DNS propagation notes.
 

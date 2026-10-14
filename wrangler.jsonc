@@ -1,13 +1,18 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "perchwebsite",
+  "name": "perch-landing",
   "account_id": "9162db11ae335d803082e2df44534a88",
   "compatibility_date": "2026-10-14",
+  "main": "./worker/index.js",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": true,
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "404-page"
   },
+  "workers_dev": false,
+  "preview_urls": false,
   "routes": [
     { "pattern": "perched.fyi", "custom_domain": true },
     { "pattern": "www.perched.fyi", "custom_domain": true }

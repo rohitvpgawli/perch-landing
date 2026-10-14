@@ -2,12 +2,13 @@
 
 Production origin: `https://perched.fyi`.
 Repository: `https://github.com/rohitvpgawli/perch-landing`.
-Worker: `perchwebsite`.
+Worker: `perch-landing` (Workers Builds deploys every push to `main`).
+Canonical host: `worker/index.js` 301-redirects `http://` and `www.` to `https://perched.fyi`.
 Build: `npm ci && npm run build`.
 Assets: `dist/`.
 Configuration: `wrangler.jsonc`.
 
-This is a standalone static site. There is no studio apex, product-subdomain middleware, Vercel configuration, payment API, or public app download. `_headers` adds browser security headers; `_redirects` preserves previous Perch paths. Unknown URLs use `404.html` with an HTTP 404.
+This is a static site with a minimal canonical-host Worker. There is no studio apex, product-subdomain middleware, Vercel configuration, payment API, or public app download. `_headers` adds browser security headers; `_redirects` preserves previous Perch paths. Unknown URLs use `404.html` with an HTTP 404.
 
 Deployment through Cloudflare MCP requires a connected account with access to the `perched.fyi` zone. Select and inspect the zone before attaching the custom domain; do not replace an unrelated existing service without reviewing it.
 
