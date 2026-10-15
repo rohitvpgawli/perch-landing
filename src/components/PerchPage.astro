@@ -65,7 +65,7 @@ const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication
         <h1 class="rise" style="--d:80ms">Stop babysitting<br/><span class="soft">your coding agents.</span></h1>
         <p class="hero-lead rise" style="--d:160ms">Perch lives on the edge of your Mac and tells you the second Claude Code, Codex or Cursor needs you. Approve, answer or reply in one keystroke, then get back to your own work.</p>
         <div class="hero-actions rise" style="--d:240ms">
-          <a class="button big buy" href={purchaseHref}>Get Perch <s>${perch.regularPrice}</s> ${perch.price}</a>
+          <a class="button big buy" href={purchaseHref} aria-label={`Get Perch for $${perch.price}, launch price, regularly $${perch.regularPrice}`}>Get Perch<span class="cta-price" aria-hidden="true"><s>${perch.regularPrice}</s><b>${perch.price}</b></span></a>
           <a class="button big glass" href="#demo">Watch it work <span aria-hidden="true">↓</span></a>
         </div>
         <p class="hero-meta rise" style="--d:300ms">One payment · No subscription · macOS 14+ · 14-day refund</p>
@@ -253,7 +253,7 @@ const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication
         <h2>Stop checking.<br/><span class="soft">Start shipping.</span></h2>
         <p class="lead">Let Perch keep watch, and answer your agents the moment they need you.</p>
         <div class="hero-actions">
-          <a class="button big buy" href={purchaseHref}>Get Perch <s>${perch.regularPrice}</s> ${perch.price}</a>
+          <a class="button big buy" href={purchaseHref} aria-label={`Get Perch for $${perch.price}, launch price, regularly $${perch.regularPrice}`}>Get Perch<span class="cta-price" aria-hidden="true"><s>${perch.regularPrice}</s><b>${perch.price}</b></span></a>
           <a class="button big glass" href="#demo">See the demo again</a>
         </div>
         <p class="hero-meta">Launch price for the first {seats} customers · macOS 14+</p>
@@ -285,8 +285,11 @@ const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication
 .hero h1{margin-top:30px;font-size:clamp(48px,8vw,112px);letter-spacing:-.06em;line-height:.96;text-shadow:0 10px 40px rgba(0,0,0,.25)}
 .hero-lead{margin:28px auto 0;max-width:640px;text-wrap:balance;font-size:clamp(17px,1.9vw,21px);line-height:1.55;color:rgba(255,255,255,.78)}
 .hero-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:38px}
-.button.buy{box-shadow:0 0 0 1px rgba(255,255,255,.2),0 14px 40px -10px rgba(250,201,97,.5)}
-.button.buy s{opacity:.45;font-weight:500;text-decoration-thickness:1.5px}
+.button.buy{gap:0;padding:8px 8px 8px 26px;font-weight:600;background:linear-gradient(180deg,#fff,#ecebe6);box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(0,0,0,.06),0 0 0 1px rgba(255,255,255,.25),0 16px 40px -12px rgba(250,201,97,.55)}
+.button.buy:hover{background:linear-gradient(180deg,#fff,#f3f2ee);box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(0,0,0,.06),0 0 0 1px rgba(255,255,255,.35),0 20px 48px -12px rgba(250,201,97,.7)}
+.cta-price{display:inline-flex;align-items:baseline;gap:8px;margin-left:16px;padding:9px 15px;border-radius:999px;background:rgba(12,12,14,.06);box-shadow:inset 0 0 0 1px rgba(12,12,14,.05);font-variant-numeric:tabular-nums}
+.cta-price s{font-size:14px;font-weight:500;color:rgba(12,12,14,.4);text-decoration-thickness:1px}
+.cta-price b{font-weight:650;color:#0b0c0c}
 .hero-meta{margin-top:20px;font-size:13px;color:rgba(255,255,255,.55)}
 .works{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 22px;margin-top:44px;font-size:14px;color:rgba(255,255,255,.55)}
 .works-item{display:inline-flex;align-items:center;gap:9px;color:rgba(255,255,255,.88);font-weight:500}
