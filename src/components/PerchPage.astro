@@ -42,12 +42,6 @@ const matrix = [
   { name: 'Codex', icon: P.codex, cells: [true, true, false, true] },
   { name: 'Cursor', icon: P.cursor, cells: [true, false, false, true] },
 ];
-const proof = [
-  ['3', 'agents checked live', 'Claude Code, Codex and Cursor, through their real hooks'],
-  ['0', 'network requests', 'No account, no server, no analytics in the app'],
-  ['2s', 'to change your mind', 'Every answer waits so Esc can take it back'],
-  ['38', 'automated checks', 'Including that prompts and commands never reach disk'],
-];
 const faq = [...product.faq,
   { q: 'How much does Perch cost?', a: `$${perch.price} USD, paid once, for the first ${seats} customers. After that the price is $${perch.regularPrice}. No subscription. Applicable taxes are shown at checkout. Purchases open as soon as the app is ready to deliver.` },
   { q: 'What is included?', a: 'The native Mac app, the screen-edge shelf, agent status and opt-in answering, pinned sticky notes, keyboard shortcuts and local storage, plus a year of updates and email support. Source code is not included.' },
@@ -75,17 +69,6 @@ const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication
         </div>
       </div>
       <div class="shell demo-shell rise" id="demo" style="--d:440ms"><LiveDemo/></div>
-    </section>
-
-    <section class="shell proof" aria-label="Why you can trust Perch">
-      <a class="maker reveal" href="https://macwisper.fyi" rel="noopener">
-        <img src="/products/wisp-icon.png" alt="" width="40" height="40"/>
-        <span><small>From the makers of Wisp</small><b>Private dictation and meeting notes for Mac, paid for once.</b></span>
-        <em aria-hidden="true">↗</em>
-      </a>
-      <div class="stats">
-        {proof.map(([value, label, detail], index) => <div class="stat reveal" style={`transition-delay:${index * 70}ms`}><b>{value}</b><span>{label}</span><small>{detail}</small></div>)}
-      </div>
     </section>
 
     <section class="section carousel" id="inside">
@@ -299,21 +282,6 @@ const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication
 .rise{animation:rise 1s cubic-bezier(.2,.75,.2,1) both;animation-delay:var(--d)}
 @keyframes rise{from{opacity:0;transform:translateY(24px);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
 
-/* Proof */
-.proof{padding-top:110px}
-.maker{display:flex;align-items:center;gap:16px;width:fit-content;max-width:100%;margin:0 auto;padding:12px 20px 12px 12px;border-radius:20px;background:rgba(255,255,255,.04);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);transition:background .2s ease}
-.maker:hover{background:rgba(255,255,255,.07)}
-.maker img{width:40px;height:40px;border-radius:10px}
-.maker small{display:block;font-size:12.5px;color:var(--amber)}
-.maker b{display:block;font-size:15px;font-weight:550}
-.maker em{font-style:normal;color:var(--t3);margin-left:6px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);margin-top:44px;border-top:1px solid rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.08)}
-.stat{padding:30px 26px;text-align:left}
-.stat+.stat{border-left:1px solid rgba(255,255,255,.08)}
-.stat b{display:block;font-size:clamp(40px,4.6vw,58px);font-weight:600;letter-spacing:-.06em;line-height:1;background:linear-gradient(180deg,#fff,rgba(255,255,255,.6));-webkit-background-clip:text;background-clip:text;color:transparent}
-.stat span{display:block;margin-top:10px;font-size:15px;font-weight:600}
-.stat small{display:block;margin-top:6px;font-size:13.5px;line-height:1.5;color:var(--t2)}
-
 /* Carousel */
 .carousel{padding-bottom:40px}
 .carousel-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px}
@@ -491,9 +459,6 @@ const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication
 @media(max-width:1000px){
   .agents{grid-template-columns:1fr;gap:40px}
   .steps{grid-template-columns:1fr;max-width:560px;margin-inline:auto}
-  .stats{grid-template-columns:1fr 1fr}
-  .stat:nth-child(3){border-left:0}
-  .stat:nth-child(n+3){border-top:1px solid rgba(255,255,255,.08)}
   .small-grid{grid-template-columns:1fr 1fr}
 }
 @media(max-width:760px){
@@ -504,9 +469,6 @@ const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication
   .hero-actions .button{width:100%}
   .works{margin-top:34px}
   .demo-shell{width:calc(100% - 32px);margin-top:48px}
-  .proof{padding-top:70px}
-  .maker{align-items:flex-start}
-  .stat{padding:22px 16px}
   .carousel-head{align-items:flex-start;flex-direction:column}
   .arrows{display:none}
   .track{--gutter:20px;margin-top:36px;gap:14px}
