@@ -1,10 +1,15 @@
 ---
 import '../styles/store.css';
 import Mark from '../components/store/Mark.astro';
-import { perch, analyticsToken } from '../data/perch';
-interface Props { title?: string; description?: string; noindex?: boolean; dark?: boolean }
-const { title = 'Perch — Approve, answer and reply to your coding agents', description = perch.description, noindex = false, dark = false } = Astro.props;
+import { perch, analyticsToken, purchaseHref } from '../data/perch';
+interface Props { title?: string; description?: string; noindex?: boolean }
+const { title = 'Perch: stop babysitting your coding agents', description = perch.description, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, perch.origin).href;
+const footer = [
+  { title: 'Product', links: [['Live demo', '/#demo'], ['What’s in Perch', '/#inside'], ['How it works', '/#how'], ['Works with', '/#agents'], ['Privacy', '/#privacy']] },
+  { title: 'Pricing', links: [['Pricing', '/#pricing'], ['Refunds', '/terms/#refunds'], ['FAQ', '/#questions']] },
+  { title: 'Support', links: [['Email support', perch.support], ['Privacy policy', '/privacy/'], ['Terms & refunds', '/terms/']] },
+];
 ---
 <!doctype html>
 <html lang="en">
@@ -25,19 +30,34 @@ const canonical = new URL(Astro.url.pathname, perch.origin).href;
     <link rel="alternate" type="text/plain" href="/llms.txt" title="Perch information for language models"/>
     {analyticsToken && <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: analyticsToken })}></script>}
   </head>
-  <body class:list={[{ dark }]}>
+  <body class="dark">
     <script is:inline>document.documentElement.classList.add('js')</script>
     <a class="skip" href="#main">Skip to content</a>
     <header class="header"><nav class="shell nav" aria-label="Main navigation">
       <a href="/" class="brand"><Mark product="perch" size={32}/>Perch.</a>
-      <div class="nav-links"><a href="/#demo">Demo</a><a href="/#features">Features</a><a href="/#privacy">Privacy</a><a href="/#pricing">Pricing</a><a href="/#questions">FAQ</a></div>
-      <a class="button small nav-cta" href="/checkout/">Get Perch · $29</a>
+      <div class="nav-links"><a href="/#demo">Demo</a><a href="/#inside">Features</a><a href="/#privacy">Privacy</a><a href="/#pricing">Pricing</a><a href="/#questions">FAQ</a></div>
+      <a class="button small nav-cta" href={purchaseHref}>Get Perch · ${perch.price}</a>
     </nav></header>
     <main id="main"><slot/></main>
-    <footer class="shell footer">
-      <div><a class="brand" href="/"><Mark product="perch" size={28}/>Perch.</a><p>Your agents, one glance away.</p></div>
-      <div class="footer-links"><a href={perch.support}>Support ↗</a><a href="/privacy/">Privacy</a><a href="/terms/">Terms</a></div>
-      <div class="footer-bottom"><span>© {new Date().getFullYear()} Perch</span><span>$29 USD · One payment. No subscription.</span></div>
+    <footer class="site-footer">
+      <div class="shell footer-top">
+        <div class="footer-brand">
+          <a class="brand" href="/" aria-label="Perch home"><Mark product="perch" size={30}/>Perch.</a>
+          <p>Your coding agents at the edge of your Mac. Paid for once.</p>
+          <a class="footer-buy" href={purchaseHref}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Get Perch for Mac</a>
+          <small>${perch.price} once for the first {perch.launchSeats.toLocaleString('en-US')} customers, then ${perch.regularPrice}.</small>
+        </div>
+        <nav class="footer-cols" aria-label="Footer">
+          {footer.map(column => <div><b>{column.title}</b>{column.links.map(([label, href]) => <a href={href}>{label}</a>)}</div>)}
+        </nav>
+      </div>
+      <div class="shell footer-bottom">
+        <span>Perch runs on your Mac. Nothing it sees leaves it.</span>
+        <div class="footer-company"><span>© {new Date().getFullYear()} {perch.company}</span><span>Made in Vancouver <span role="img" aria-label="with love">❤️</span></span></div>
+      </div>
+      <div class="footer-wordmark" aria-hidden="true">
+        <svg viewBox="0 0 1000 300" preserveAspectRatio="xMidYMin slice"><defs><pattern id="perch-stripes" width="13" height="10" patternUnits="userSpaceOnUse"><rect width="6" height="10" fill="#ffffff"/></pattern><linearGradient id="perch-fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".2"/><stop offset="1" stop-color="#fff" stop-opacity=".04"/></linearGradient><mask id="perch-mask"><rect width="1000" height="300" fill="url(#perch-fade)"/></mask></defs><text x="500" y="285" text-anchor="middle" font-size="330" font-weight="700" letter-spacing="-6" fill="url(#perch-stripes)" mask="url(#perch-mask)" font-family="Inter Tight, -apple-system, sans-serif">perch</text></svg>
+      </div>
     </footer>
   </body>
 </html>

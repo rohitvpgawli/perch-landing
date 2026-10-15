@@ -47,4 +47,4 @@ Page-level analytics use Cloudflare Web Analytics (cookieless). Add `perched.fyi
 
 The code requires both a live `buy.stripe.com` link and delivery readiness. Test links and unexpected checkout hosts fail the build. Keep app archives out of `public/`.
 
-Support currently uses the repository’s public GitHub Issues. Do not post private customer or payment data there.
+Support is by email at support@trillium.one (One Trinity Consulting Inc.). Launch pricing is $29 for the first 1,000 customers, then $99 (`launchSeats` and `regularPrice` in `src/data/perch.ts`).

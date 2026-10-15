@@ -2,5 +2,54 @@
 import Store from '../layouts/Store.astro';
 import { perch } from '../data/perch';
 ---
-<Store title="Privacy — Perch"><article class="shell section policy"><p class="eyebrow">Perch / Privacy</p><h1>A little less data.</h1><p>Last updated: October 14, 2026.</p><h2>This website</h2><p>This site does not include advertising trackers, account registration, or a mailing-list form. Cloudflare hosts the site and may process technical request information, such as IP addresses, to deliver and protect it. We use Cloudflare Web Analytics to count page views and measure page performance. It does not use cookies or local storage, and does not track visitors across sites. See <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare’s privacy policy</a>.</p><h2>The Mac app</h2><p>Perch is designed to keep agent activity and notes on your Mac. The current build stores events and notes locally, discards prompts, tool contents, and credentials, and makes no network requests. Your agent providers operate separately under their own policies.</p><h2>Payments</h2><p>Purchases are currently closed. When purchases open, checkout will be hosted by Stripe. Payment details will be entered on Stripe’s pages; this website does not receive card numbers. Stripe and the seller may process purchase and billing information needed to complete orders, provide support, and meet applicable recordkeeping obligations. See <a href="https://stripe.com/privacy">Stripe’s privacy policy</a>.</p><h2>Support</h2><p>Support currently links to GitHub Issues. Issues are public: do not post credentials, private agent prompts, payment details, or personal information. GitHub processes information under <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">its privacy policy</a>.</p><h2>Questions</h2><p>For privacy questions, <a href={perch.support}>contact the project maintainers</a>.</p></article></Store>
-<style>.policy{max-width:800px}.policy h1{font-size:clamp(40px,6vw,64px);margin:20px 0 30px}.policy h2{font-size:26px;margin:35px 0 14px}.policy p{color:var(--muted);margin:14px 0}.policy a{text-decoration:underline;text-underline-offset:3px}</style>
+<Store title="Privacy Policy | Perch" description="Perch keeps your agent activity and notes on your Mac. No account, no telemetry, no servers.">
+  <article class="shell policy">
+    <p class="eyebrow">Privacy policy</p>
+    <h1>Your agents’ work stays on your Mac.</h1>
+    <p class="updated">Last updated October 14, 2026</p>
+    <div class="short">
+      <h2>The short version</h2>
+      <ul>
+        <li>Perch keeps agent activity and your notes on your Mac. Prompts, commands, diffs and transcripts are never sent to us or anyone else.</li>
+        <li>The app has no account, no analytics, no telemetry and no servers. It makes no network requests.</li>
+        <li>When you buy, Stripe handles the payment. We receive your email and order details so we can deliver your license and support you.</li>
+      </ul>
+    </div>
+
+    <h2>1. Who we are</h2>
+    <p>This policy covers the Perch app for macOS and this website, both operated by {perch.company} (“we”, “us”). Questions go to <a href={perch.support}>{perch.email}</a>.</p>
+
+    <h2>2. What the app does with your data</h2>
+    <p><b>Agent status.</b> When you connect an agent, Perch adds a small hook to that agent’s settings. Each time the agent starts, finishes or waits on you, the hook passes Perch a compact status: the session ID, project folder, state, times, the app the session runs in, the terminal’s device name (such as <code>ttys003</code>), a tmux pane if there is one, and the name of the tool in use. Prompts, tool inputs and outputs, responses, transcript paths and credentials are dropped before anything is saved.</p>
+    <p><b>Answers.</b> Answering is off by default. If you turn it on, what an agent is asking (a command, a change, a question, a plan or its last message) travels to Perch over a private local socket that only your user account can open. It is shown on the card while it waits and is discarded once you answer. It is never written to disk or logged.</p>
+    <p><b>Recent steps.</b> The step list on each card is built from the same status data: the kind of step, its time and a tool name. It never contains commands, file names or prompts.</p>
+    <p><b>Notes.</b> Your sticky notes are stored in Perch’s folder on your Mac and stay there.</p>
+    <p><b>Session titles.</b> For Claude desktop Code sessions, Perch reads each session’s title from Claude’s local metadata so the card can show it. It reads only the title and session IDs, keeps them in memory and never stores them. It never reads transcripts.</p>
+    <p><b>Stored on your Mac.</b> Status and notes live in <code>~/Library/Application Support/Perch</code>. Preferences are stored in macOS user defaults. You can clear sessions from the shelf, disconnect an agent in Settings, or delete the folder at any time.</p>
+    <p><b>Offline.</b> Perch never needs an internet connection and makes no network requests.</p>
+
+    <h2>3. Permissions</h2>
+    <p>Perch needs no microphone, screen recording or Accessibility access. If you turn on <b>Go to the exact tab</b>, macOS asks once whether Perch may control Terminal or iTerm2, so it can bring the right tab forward. It only selects and focuses tabs; it never types into a terminal or reads what is in it. You can revoke this at any time in System Settings → Privacy &amp; Security → Automation.</p>
+
+    <h2>4. What we collect when you buy</h2>
+    <p>Payments are processed by Stripe. We never see your full card number. Stripe shares your name, email, country and order details with us so we can deliver Perch, send receipts and updates, answer support and handle refunds. Stripe’s use of your data is covered by the <a href="https://stripe.com/privacy">Stripe Privacy Policy</a>. We keep purchase records as long as tax and accounting law requires.</p>
+
+    <h2>5. This website</h2>
+    <p>This site sets no tracking cookies and runs no advertising scripts. We use Cloudflare Web Analytics to count page views and measure page speed; it uses no cookies or local storage and does not follow you across sites. Our hosting provider, Cloudflare, may keep standard server logs, such as IP address and browser type, for security and reliability. See <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare’s privacy policy</a>.</p>
+
+    <h2>6. Email</h2>
+    <p>If you write to us, we use your message only to help you. We don’t send marketing email unless you ask for it, and we never sell or share your information.</p>
+
+    <h2>7. Your rights</h2>
+    <p>Wherever you live, you can ask us for a copy of the purchase data we hold about you, ask us to correct it, or ask us to delete it where the law allows. Email <a href={perch.support}>{perch.email}</a>. Everything the app stores is already on your Mac and under your control.</p>
+
+    <h2>8. Your agents</h2>
+    <p>Claude Code, Codex, Cursor and the services behind them are run by other companies under their own privacy policies. Perch doesn’t change what those agents send to their providers.</p>
+
+    <h2>9. Children</h2>
+    <p>Perch is not directed at children under 13, and we don’t knowingly collect their data.</p>
+
+    <h2>10. Changes</h2>
+    <p>If a future version of Perch ever needs to connect to the internet, for example to check for updates, we will say so here and in the release notes before it ships. We’ll update the date at the top when this policy changes.</p>
+  </article>
+</Store>

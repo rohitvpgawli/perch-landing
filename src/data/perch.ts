@@ -1,7 +1,10 @@
 export const perch = {
   name: 'Perch', origin: 'https://perched.fyi', price: 29, currency: 'USD',
   description: 'See every Claude Code, Codex and Cursor session from the edge of your Mac, then approve, answer and reply in a keystroke. No account, no server. Nothing leaves your Mac.',
-  support: 'https://github.com/rohitvpgawli/perch-landing/issues',
+  regularPrice: 99, launchSeats: 1000,
+  company: 'One Trinity Consulting Inc.',
+  email: 'support@trillium.one',
+  support: 'mailto:support@trillium.one',
   requirements: 'macOS 14+ · Native SwiftUI + AppKit',
 };
 // A live link alone must never open sales before delivery is ready.

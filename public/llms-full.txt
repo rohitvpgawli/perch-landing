@@ -1,4 +1,4 @@
-# Perch — product information
+# Perch: product information
 
 Canonical website: https://perched.fyi/
 Perch is an independent native Mac utility built with SwiftUI and AppKit. It requires macOS 14 or later. It keeps agent activity and pinned sticky notes at the edge of the screen.
@@ -13,11 +13,11 @@ Adapters exist for Claude Code, Cursor, and Codex. Claude Code CLI and Cursor lo
 The current app keeps events and notes local, discards prompts, tool contents, and credentials, and makes no network requests. No Perch account or server is required. Agent providers remain separate. The website is intended for Cloudflare hosting and has no advertising or analytics scripts. Future purchases use Stripe-hosted checkout.
 
 ## Pricing and availability
-$29 USD as a one-time app purchase, plus applicable taxes shown at checkout. Source code is not included. Coding-agent subscriptions and API usage are separate. Purchases are closed until delivery is ready. No payment is collected. No delivery date is promised. Final license, update coverage, device limits, support, and refund details will be published before sales open.
+$29 USD as a one-time app purchase for the first 1,000 customers, then $99, plus applicable taxes shown at checkout. Includes a year of updates and email support, and a full refund within 14 days. Source code is not included. Coding-agent subscriptions and API usage are separate. Purchases are closed until delivery is ready. No payment is collected. No delivery date is promised. Final license, update coverage, device limits, support, and refund details will be published before sales open.
 
 ## Official links
 Overview: https://perched.fyi/
 Purchase information: https://perched.fyi/checkout/
 Privacy: https://perched.fyi/privacy/
 Terms: https://perched.fyi/terms/
-Support: https://github.com/rohitvpgawli/perch-landing/issues
+Support: support@trillium.one (One Trinity Consulting Inc., Vancouver)

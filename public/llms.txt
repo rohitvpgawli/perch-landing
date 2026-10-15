@@ -3,7 +3,7 @@
 > A native Mac utility for agent activity and sticky notes at the edge of your screen.
 
 Perch is standalone software for macOS 14 and later, built with SwiftUI and AppKit.
-Price: $29 USD, one time, plus applicable taxes. App license only; source code is not included.
+Price: $29 USD, one time, for the first 1,000 customers, then $99. Plus applicable taxes. Includes a year of updates and email support; full refund within 14 days. App license only; source code is not included.
 Status: Purchases are closed until delivery is ready. No payment is currently collected.
 
 ## Official pages
@@ -12,7 +12,7 @@ Status: Purchases are closed until delivery is ready. No payment is currently co
 - [Privacy](https://perched.fyi/privacy/): Local app data and website/payment handling.
 - [Terms](https://perched.fyi/terms/): Offer scope, availability, and compatibility.
 - [Full product information](https://perched.fyi/llms-full.txt): Plain-text product context.
-- [Support](https://github.com/rohitvpgawli/perch-landing/issues): Public project support.
+- [Support](mailto:support@trillium.one): Email support from One Trinity Consulting Inc.
 
 ## Integration limitations
 Claude Code CLI and Cursor local Agent activity have been checked live, and Codex CLI answering was checked live; the Codex desktop app is not verified yet. Cursor passive hooks do not expose awaiting-permission status. Answering is opt-in and off by default: for Claude Code, Perch can allow or deny tools, answer questions, approve or revise plans, and reply when a turn ends; Codex supports allow, deny and replies; Cursor supports a reply when a turn finishes. Every answer has a two-second undo, and Perch never answers on its own.

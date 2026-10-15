@@ -2,5 +2,52 @@
 import Store from '../layouts/Store.astro';
 import { perch } from '../data/perch';
 ---
-<Store title="Terms & purchase information — Perch"><article class="shell section policy"><p class="eyebrow">Perch / Terms</p><h1>Before you perch.</h1><p>Last updated: October 14, 2026.</p><h2>Current availability</h2><p>Perch is being prepared for distribution. Purchases are closed. This website does not currently accept payment or promise a delivery date. Product previews show sample activity, not a connection to your agents.</p><h2>Price and offer</h2><p>The Perch app will cost $29 USD as a one-time purchase, plus applicable taxes shown at checkout. The offer is for the native Mac app, including the agent-activity shelf and sticky notes. Source code, coding-agent subscriptions, and API usage are not included.</p><h2>License and purchase terms</h2><p>The intended purchase grants a non-expiring license to use the purchased version. Final license terms, device limits, update coverage, support, delivery, cancellation, and refund details will be published before purchases open. This page does not grant a software license or authorize redistribution.</p><h2>Compatibility</h2><p>Perch requires macOS 14 or later. Provider integrations depend on third-party behavior and may change. Claude Code CLI and Cursor local Agent activity have been checked; live Codex coverage remains under verification. Cursor’s passive hooks do not expose permission-waiting status. Perch does not reply to agents or approve their actions.</p><h2>Seller and contact</h2><p>The Stripe account selected for the upcoming offer is One Trinity Consulting Inc. For availability and product questions, <a href={perch.support}>contact the project maintainers</a>.</p></article></Store>
-<style>.policy{max-width:800px}.policy h1{font-size:clamp(40px,6vw,64px);margin:20px 0 30px}.policy h2{font-size:26px;margin:35px 0 14px}.policy p{color:var(--muted);margin:14px 0}.policy a{text-decoration:underline;text-underline-offset:3px}</style>
+<Store title="Terms & Refunds | Perch" description="Plain terms for Perch: pay once, keep it, and get a full refund within 14 days.">
+  <article class="shell policy">
+    <p class="eyebrow">Terms of sale and use</p>
+    <h1>Plain terms for a simple purchase.</h1>
+    <p class="updated">Last updated October 14, 2026</p>
+    <div class="short">
+      <h2>The short version</h2>
+      <ul>
+        <li>You pay ${perch.price} once and can use Perch for as long as you like.</li>
+        <li>Updates and email support are included for one year from purchase.</li>
+        <li>Not happy within 14 days? Email us for a full refund.</li>
+      </ul>
+    </div>
+
+    <h2>1. Agreement</h2>
+    <p>These terms are between you and {perch.company}, which makes Perch. By buying or using Perch you agree to them. If you don’t agree, please don’t use Perch.</p>
+
+    <h2>2. Your license</h2>
+    <p>Your purchase gives you a perpetual, non-exclusive, non-transferable license to use Perch for your own personal or work use on Macs you own or control. It is a one-time payment, not a subscription, and it never renews or charges you again. Source code is not included.</p>
+    <p>You may not resell, rent, share license keys publicly, or redistribute Perch, and you may not reverse engineer it except where the law allows it.</p>
+
+    <h2>3. Updates and support</h2>
+    <p>Your purchase includes all updates we release, and email support, for one year from the date of purchase. After that, the version you have keeps working for good. We may offer later versions or extended updates separately, but you are never required to buy them.</p>
+
+    <h2>4. Requirements</h2>
+    <p>Perch needs macOS 14 or later. It works with Claude Code, Codex and Cursor through each agent’s own hooks, and what Perch can show or answer depends on what each agent supports. Agents change over time, and a change on their side can affect a feature until we update Perch. Please check the agent support table on the home page before you buy.</p>
+
+    <h2 id="refunds">5. Refunds</h2>
+    <p>If Perch isn’t right for you, email <a href={perch.support}>{perch.email}</a> within 14 days of purchase with your order email, and we’ll refund you in full. No questions asked. Refunds go back to your original payment method through Stripe. This doesn’t limit any rights you have under consumer law where you live.</p>
+
+    <h2>6. Payment and taxes</h2>
+    <p>Prices are in US dollars. Payment is handled by Stripe. The ${perch.price} launch price applies to the first {perch.launchSeats.toLocaleString('en-US')} customers; after that the price is ${perch.regularPrice}. Launch pricing never changes what you already paid. Applicable sales tax or VAT may be added at checkout depending on where you are.</p>
+
+    <h2>7. Answering your agents</h2>
+    <p>Answering is off until you turn it on. When it’s on, Perch sends an agent only what you click or type, after a two-second window to undo. You are responsible for what you approve, deny or send, just as you would be in the agent’s own window. Read commands and changes before you allow them.</p>
+
+    <h2>8. Your content</h2>
+    <p>Your projects, prompts, notes and everything your agents produce belong to you. They stay on your Mac, and we never receive them. See the <a href="/privacy/">privacy policy</a>.</p>
+
+    <h2>9. Warranty and liability</h2>
+    <p>Apart from the refund above and any rights you have under law, Perch is provided “as is”, without warranties of any kind. To the extent the law allows, we are not liable for indirect or consequential losses, including the actions of any coding agent, and our total liability for any claim is limited to the amount you paid for Perch.</p>
+
+    <h2>10. Changes</h2>
+    <p>We may update these terms. Changes apply to future purchases, and they won’t take away a license you have already bought.</p>
+
+    <h2>11. Contact</h2>
+    <p>Questions about these terms: <a href={perch.support}>{perch.email}</a>.</p>
+  </article>
+</Store>
