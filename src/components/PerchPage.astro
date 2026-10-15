@@ -1,85 +1,200 @@
 ---
 import Store from '../layouts/Store.astro';
-import Mark from './store/Mark.astro';
-import Preview from './store/Preview.astro';
+import LiveDemo from './store/LiveDemo.astro';
 import Pricing from './store/Pricing.astro';
+import { providerIcons as P } from './store/icons';
 import { product } from '../data/product';
 import { perch, checkoutReady, purchaseHref } from '../data/perch';
-const steps = [
-  ['Connect your agents.', 'Review and install the local hooks for each provider in Settings.'],
-  ['Let the tab keep watch.', 'A small mark shows activity. Open the shelf for session details and pinned notes.'],
-  ['Pick up the thread.', 'Open the provider or supported session and respond there. Perch never replies for you.'],
-];
+
 const providers = [
-  ['Claude Code', 'CLI activity verified'],
-  ['Cursor', 'Local Agent activity verified'],
-  ['Codex', 'Adapter built · live checks pending'],
+  { key: 'claude', name: 'Claude Code', icon: P.claude },
+  { key: 'codex', name: 'Codex', icon: P.codex },
+  { key: 'cursor', name: 'Cursor', icon: P.cursor },
+];
+const pains = [
+  { tag: 'Stuck on a yes', title: 'It waited twenty minutes for one word.', body: 'You come back to find the agent sat on a permission prompt the whole time.', fix: 'Perch glows amber the second it asks. Press Return and it’s back at work.', tone: 'amber' },
+  { tag: 'Done, unnoticed', title: 'It finished while you were somewhere else.', body: 'The turn ended in a window you weren’t looking at, and nobody told you.', fix: 'A green check on the edge, and one quiet “done” when work wraps up.', tone: 'green' },
+  { tag: 'Ten tabs, one waiting', title: 'You hunt through terminals to find it.', body: 'Every session looks the same until you click into it.', fix: 'Every session in one list, with a click straight to the right place.', tone: 'blue' },
+];
+const small = [
+  { title: 'Two seconds to undo', body: 'Every answer shows “Sending…”. Esc takes it back.', icon: '<path d="M4 9a6 6 0 1 1 1.8 4.3M4 14V9h5"/>' },
+  { title: 'Keyboard first', body: 'A shortcut from anywhere, then Return, numbers, arrows and Esc.', icon: '<rect x="2.5" y="5.5" width="15" height="10" rx="2"/><path d="M5.5 9h1M9.5 9h1M13.5 9h1M6.5 12.5h7"/>' },
+  { title: 'Steps aside', body: 'Already in the terminal? Your agent asks there, as usual.', icon: '<path d="M7 4.5h-2.5v11H7M11 6.5l3.5 3.5-3.5 3.5M14.5 10H7.5"/>' },
+  { title: 'The exact tab', body: 'Optional jump to the Terminal or iTerm2 tab, or tmux pane.', icon: '<rect x="2.5" y="4" width="15" height="12" rx="2"/><path d="M2.5 7.5h15M6 11l2 1.5L6 14"/>' },
+  { title: 'One quiet “done”', body: 'Finished turns are summed up once. Sounds are opt-in.', icon: '<path d="M10 16.5a1.8 1.8 0 0 0 1.8-1.5H8.2A1.8 1.8 0 0 0 10 16.5ZM5 13.5V9a5 5 0 0 1 10 0v4.5l1.5 1.5h-13Z"/>' },
+  { title: 'Set up in a click', body: 'Review the exact changes, connect, and remove them any time.', icon: '<path d="M8 12 12 8M7 9.5 5.5 11a2.8 2.8 0 0 0 4 4L11 13.5M9 6.5 10.5 5a2.8 2.8 0 0 1 4 4L13 10.5"/>' },
+];
+const promises = [
+  ['Nothing leaves your Mac', 'No account, no server, no analytics and no network requests. Not one.'],
+  ['No special permissions', 'No microphone, screen recording or Accessibility. Exact-tab jumping is the only thing that ever asks.'],
+  ['Status on disk, never content', 'Only session IDs, folders, states, times and tool names are saved. Never prompts, commands, diffs or transcripts.'],
+  ['Requests stay in memory', 'What an agent asks travels over a private local socket, shows on the card, and is gone once you answer.'],
+  ['Acts only when you do', 'Answering is off until you turn it on. Then Perch sends only what you click or type, with two seconds to undo.'],
+];
+const matrix = [
+  { name: 'Claude Code', icon: P.claude, cells: [true, true, true, true] },
+  { name: 'Codex', icon: P.codex, cells: [true, true, false, true] },
+  { name: 'Cursor', icon: P.cursor, cells: [true, false, false, true] },
 ];
 const faq = [...product.faq,
   { q: 'How much does Perch cost?', a: '$29 USD, paid once. No subscription. Applicable taxes will be shown at checkout. Purchases are closed until the app is ready to deliver.' },
-  { q: 'What is included?', a: 'The native Mac app, agent-activity shelf, pinned sticky notes, keyboard shortcuts, and local storage. This is the app license; source code is not included.' },
-  { q: 'What does one-time purchase mean?', a: 'A single payment for a non-expiring license to the purchased version. Update coverage, device limits, support, and refund details will be published before sales open.' },
+  { q: 'What is included?', a: 'The native Mac app, the screen-edge shelf, agent status and opt-in answering, pinned sticky notes, keyboard shortcuts and local storage. This is the app license; source code is not included.' },
+  { q: 'What does one-time purchase mean?', a: 'A single payment for a non-expiring license to the purchased version. Update coverage, device limits, support and refund details will be published before sales open.' },
 ];
-const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication', name: 'Perch', applicationCategory: 'DeveloperApplication', operatingSystem: 'macOS 14+', description: perch.description, url: perch.origin, image: `${perch.origin}/products/perch-icon.webp`, offers: { '@type': 'Offer', price: perch.price, priceCurrency: perch.currency, availability: checkoutReady ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock', url: `${perch.origin}/checkout/`, description: checkoutReady ? 'One-time app license' : 'Purchases closed until delivery is ready' } };
+const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication', name: 'Perch', applicationCategory: 'DeveloperApplication', operatingSystem: 'macOS 14+', description: perch.description, url: perch.origin, image: `${perch.origin}/products/perch-icon-512.webp`, offers: { '@type': 'Offer', price: perch.price, priceCurrency: perch.currency, availability: checkoutReady ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock', url: `${perch.origin}/checkout/`, description: checkoutReady ? 'One-time app license' : 'Purchases closed until delivery is ready' } };
+const tick = '<svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7"/></svg>';
 ---
-<Store>
+<Store dark>
   <script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')}/>
-  <div class="perch">
-    <section class="dark hero" id="overview">
-      <div class="aurora" aria-hidden="true"></div>
-      <div class="shell hero-inner">
-        <p class="eyebrow hero-eyebrow">Perch for Mac · macOS 14+</p>
-        <h1>Stop checking<br/><span class="dim">on your agents.</span></h1>
-        <p class="lead hero-lead">Perch sits at the edge of your Mac and shows which Claude Code, Cursor, and Codex sessions are working, finished, or waiting for you. Stop tab-hopping. Get back to building.</p>
-        <div class="actions hero-actions">
-          <a class="button big" href={purchaseHref}>Get Perch · ${perch.price} <span aria-hidden="true">↗</span></a>
-          <a class="button big glass" href="#demo">See it in action <span aria-hidden="true">↓</span></a>
+  <div class="pp">
+    <section class="hero" id="overview">
+      <div class="sky" aria-hidden="true"><i class="sky-a"></i><i class="sky-b"></i><i class="sky-c"></i><i class="grain"></i></div>
+      <div class="shell hero-copy">
+        <a class="pill-tag rise" href="#demo" style="--d:0ms"><img src="/products/perch-icon-512.webp" alt="" width="20" height="20"/>Perch for Mac<span>Now answers your agents</span></a>
+        <h1 class="rise" style="--d:80ms">Your agents need you.<br/><span class="soft">Answer in one keystroke.</span></h1>
+        <p class="hero-lead rise" style="--d:160ms">Perch is a small tab on the edge of your Mac. It shows the moment Claude Code, Codex or Cursor is working, done or waiting on you, and lets you approve, answer and reply right there. No hunting for the window.</p>
+        <div class="hero-actions rise" style="--d:240ms">
+          <a class="button big" href={purchaseHref}>Get Perch · ${perch.price} once</a>
+          <a class="button big glass" href="#demo">Watch it work <span aria-hidden="true">↓</span></a>
         </div>
-        <p class="status-label hero-status">{checkoutReady ? 'One-time purchase · No subscription' : '$29 USD, one time · No subscription · Purchases open when delivery is ready'}</p>
-        <div class="works" aria-label="Works with">
+        <p class="hero-meta rise" style="--d:300ms">{checkoutReady ? 'One payment · No subscription · macOS 14+' : 'One payment · No subscription · macOS 14+ · Purchases open soon'}</p>
+        <div class="works rise" style="--d:360ms" aria-label="Works with">
           <span>Works with</span>
-          {providers.map(([name]) => <span class="chip">{name}</span>)}
+          {providers.map(p => <span class="works-item"><span class="works-icon" set:html={p.icon}></span>{p.name}</span>)}
         </div>
-        <div class="hero-stage" id="demo"><Preview/></div>
       </div>
+      <div class="shell demo-shell rise" id="demo" style="--d:440ms"><LiveDemo/></div>
     </section>
 
-    <div class="shell benefits">
-      {['Local agent activity', 'Sticky notes within reach', 'No account or server', 'One payment. Yours to keep.'].map(text => <span><span aria-hidden="true">✓</span>{text}</span>)}
-    </div>
+    <section class="shell section" id="why">
+      <header class="intro reveal">
+        <p class="eyebrow">Why Perch</p>
+        <h2>Agents are fast.<br/><span class="soft">Waiting on you isn’t.</span></h2>
+        <p class="lead">Every minute an agent spends waiting for a yes is a minute of your day it didn’t use. Perch closes that gap.</p>
+      </header>
+      <div class="pains">
+        {pains.map((pain, index) => (
+          <article class={`pain reveal ${pain.tone}`} style={`transition-delay:${index * 80}ms`}>
+            <p class="pain-tag"><i></i>{pain.tag}</p>
+            <h3>{pain.title}</h3>
+            <p class="pain-body">{pain.body}</p>
+            <p class="pain-fix"><b>With Perch</b>{pain.fix}</p>
+          </article>
+        ))}
+      </div>
+    </section>
 
     <section class="shell section" id="how">
       <header class="intro reveal">
         <p class="eyebrow">How it works</p>
-        <h2>Set up once.<br/><span class="dim">Then stop checking.</span></h2>
-        <p class="lead">A small, independent utility for the agents you already use. No new coding environment to move into.</p>
+        <h2>Set up in two minutes.<br/><span class="soft">Then stop checking.</span></h2>
+        <p class="lead">Keep the agents and terminals you already use. Perch sits beside them.</p>
       </header>
       <div class="steps">
-        {steps.map(([title, body], index) => <article class="reveal"><span class="step-number">0{index + 1}</span><h3>{title}</h3><p>{body}</p></article>)}
+        <article class="step reveal">
+          <div class="step-art art-download" aria-hidden="true"><div class="icon-halo"><img src="/products/perch-icon-512.webp" alt="" width="112" height="112"/></div></div>
+          <h3><span>1</span>Download Perch</h3>
+          <p>A native Mac app for macOS 14 and later. No account to create, nothing to sign in to.</p>
+        </article>
+        <article class="step reveal" style="transition-delay:80ms">
+          <div class="step-art art-connect" aria-hidden="true">
+            <img class="connect-hub" src="/products/perch-icon-512.webp" alt="" width="56" height="56"/>
+            <svg class="connect-lines" viewBox="0 0 300 80" preserveAspectRatio="none"><path d="M150 4v70M150 22C150 40 50 34 50 74M150 22c0 18 100 12 100 52"/></svg>
+            <div class="connect-row">{providers.map(p => <span><span class="connect-icon" set:html={p.icon}></span><b set:html={tick}></b><small>{p.name}</small></span>)}</div>
+          </div>
+          <h3><span>2</span>Connect your agents</h3>
+          <p>Perch finds the agents on your Mac and shows the exact changes before one click connects them.</p>
+        </article>
+        <article class="step reveal" style="transition-delay:160ms">
+          <div class="step-art art-work" aria-hidden="true">
+            <div class="mini-labels"><span class="needs">Pricing page <em>Waiting for you</em></span><span class="work">Perch <em>Editing files</em></span><span class="done">Research notes <em>Turn finished</em></span></div>
+            <div class="mini-tab"><i class="pd-mk needs"></i><i class="pd-mk work"></i><i class="pd-mk done" set:html={tick}></i></div>
+          </div>
+          <h3><span>3</span>Get back to work</h3>
+          <p>The tab keeps watch. When something needs you, you’ll know, and you can answer in place.</p>
+        </article>
       </div>
     </section>
 
     <section class="shell section" id="features">
       <header class="intro reveal">
-        <p class="eyebrow">Everything in view</p>
-        <h2>Know what needs you.<br/><span class="dim">Ignore the rest.</span></h2>
-        <p class="lead">Small details that add up to fewer interruptions and more time on the work itself.</p>
+        <p class="eyebrow">Everything at the edge</p>
+        <h2>Answer right where<br/><span class="soft">you’re already looking.</span></h2>
       </header>
-      <div class="feature-grid">
-        {product.features.map((feature, index) => <article class="reveal" style={`transition-delay:${index * 60}ms`}><div class="feature-art" aria-hidden="true"><span class="feature-glyph">{feature.icon}</span></div><div class="feature-copy"><h3>{feature.title}</h3><p>{feature.body}</p></div></article>)}
+      <div class="bento">
+        <article class="tile t-approve reveal">
+          <div class="tile-copy"><p class="tile-tag">Approve</p><h3>See exactly what you’re approving.</h3><p>The real command or diff, the agent’s own reason, and Allow on Return. Or tell it what to do instead.</p></div>
+          <div class="tile-art"><div class="mini-card">
+            <div class="pd-who"><span class="pd-av big"><Fragment set:html={P.claude}/><b class="pd-badge amber"></b></span><div><strong>Claude Code · pricing-page</strong><span class="amber">Waiting for you</span></div></div>
+            <h5>Claude Code wants to run a command</h5>
+            <div class="pd-code"><span>$</span> pnpm test --filter pricing</div>
+            <div class="pd-primary"><span class="pd-pi" set:html={tick}></span><span class="pd-pl">Allow</span><kbd>⏎</kbd></div>
+            <div class="pd-acts"><span class="pd-sec"><kbd>2</kbd>Allow for this session</span><span class="pd-sec"><kbd>3</kbd>Deny</span></div>
+          </div></div>
+        </article>
+        <article class="tile t-question reveal" style="transition-delay:60ms">
+          <div class="tile-copy"><p class="tile-tag">Answer</p><h3>Claude asked. You pressed 2.</h3><p>Questions arrive as numbered options with their descriptions. One key, and it’s back at work.</p></div>
+          <div class="tile-art"><div class="mini-card">
+            <p class="pd-chip-l">Billing</p><h5>Which billing periods should the toggle offer?</h5>
+            <div class="pd-opts"><span class="pd-opt"><kbd>1</kbd><span><b>Monthly and yearly</b><small>Yearly shows the 20% saving</small></span></span><span class="pd-opt chosen"><kbd>2</kbd><span><b>Yearly only</b></span></span><span class="pd-opt"><kbd>3</kbd><span><b>Monthly only</b></span></span></div>
+          </div></div>
+        </article>
+        <article class="tile t-plan reveal">
+          <div class="tile-copy"><p class="tile-tag">Plan</p><h3>Review the plan first.</h3><p>Approve it to start, or send feedback and Claude keeps planning.</p></div>
+          <div class="tile-art"><div class="mini-card plan"><b>Pricing page</b><ol><li>Add a monthly / yearly toggle</li><li>Show the yearly saving on each tier</li><li>Update the tests</li></ol><div class="pd-primary"><span class="pd-pi" set:html={tick}></span><span class="pd-pl">Approve plan</span><kbd>⏎</kbd></div></div></div>
+        </article>
+        <article class="tile t-reply reveal" style="transition-delay:60ms">
+          <div class="tile-copy"><p class="tile-tag">Reply</p><h3>Tell it what’s next.</h3><p>When a turn ends, read what it said and reply. It keeps going. You never opened the terminal.</p></div>
+          <div class="tile-art"><div class="mini-card"><div class="pd-said"><small>Claude Code said</small>All 42 tests pass. Want the comparison table next?</div><div class="pd-field"><span class="fake-input">Yes, three columns<i></i></span><span class="pd-send ready"><svg class="pd-i" viewBox="0 0 16 16" style="stroke-width:2"><path d="M8 13V3M4 7l4-4 4 4"/></svg></span></div></div></div>
+        </article>
+        <article class="tile t-glance reveal" style="transition-delay:120ms">
+          <div class="tile-copy"><p class="tile-tag">Glance</p><h3>Read every session without opening anything.</h3><p>Blue is working, amber needs you, green is done. Hover for names.</p></div>
+          <div class="tile-art glance-art"><div class="mini-labels static"><span class="needs">Pricing page <em>Waiting</em></span><span class="work">Perch <em>Editing</em></span><span class="done">Notes <em>Done</em></span></div><div class="mini-tab"><i class="pd-mk needs"></i><i class="pd-mk work"></i><i class="pd-mk done" set:html={tick}></i></div></div>
+        </article>
+        <article class="tile t-steps reveal">
+          <div class="tile-copy"><p class="tile-tag">Recent steps</p><h3>Catch up in three seconds.</h3><p>Each session ends with what it did and how long it took, without storing a single command or prompt.</p></div>
+          <div class="tile-art"><ul class="timeline">
+            <li class="ok"><i set:html={tick}></i>Turn finished <span>· took 6m 12s</span><em>6m</em></li>
+            <li><i></i>Allowed from Perch <span>· Ran a command</span><em>7m</em></li>
+            <li class="wait"><i></i>Needed you <span>· waited 42s</span><em>8m</em></li>
+            <li><i></i>Edited files ×4 <span>· 3m</span><em>11m</em></li>
+          </ul></div>
+        </article>
+        <article class="tile t-notes reveal" style="transition-delay:60ms">
+          <div class="tile-copy"><p class="tile-tag">Notes</p><h3>Write the next prompt while it works.</h3><p>Up to ten sticky notes on the same edge. Copy one the second your agent is done.</p></div>
+          <div class="tile-art notes-art"><div class="note n-sky">Ask about dark mode</div><div class="note n-rose">Check the Stripe webhook</div><div class="note n-butter"><b>Next: comparison table</b>Three columns, monthly by default.</div></div>
+        </article>
+      </div>
+      <div class="small-grid">
+        {small.map((item, index) => <div class="small reveal" style={`transition-delay:${index * 50}ms`}><svg viewBox="0 0 20 20" aria-hidden="true" set:html={item.icon}></svg><h3>{item.title}</h3><p>{item.body}</p></div>)}
       </div>
     </section>
 
-    <section class="dark band" id="coverage">
-      <div class="shell integrations">
-        <div class="reveal">
-          <p class="eyebrow">The connections, honestly</p>
-          <h2>Your agents.<br/><span class="dim">Their own apps.</span></h2>
-          <p class="lead">Perch reads local events. It doesn’t read your prompts or send replies. Your agent plans and API costs stay separate.</p>
+    <section class="privacy" id="privacy">
+      <div class="privacy-glow" aria-hidden="true"></div>
+      <div class="shell privacy-inner">
+        <header class="intro reveal">
+          <p class="eyebrow">Private by design</p>
+          <h2>Nothing leaves your Mac.<br/><span class="soft">Not one request.</span></h2>
+          <p class="lead">Some agent tools send your words, screenshots or terminal output through someone else’s server. Perch doesn’t have a server.</p>
+        </header>
+        <ol class="promises reveal">
+          {promises.map(([title, body], index) => <li><span class="num">0{index + 1}</span><div><h3>{title}</h3><p>{body}</p></div></li>)}
+        </ol>
+      </div>
+    </section>
+
+    <section class="shell section" id="agents">
+      <div class="agents reveal">
+        <div>
+          <p class="eyebrow">Works with</p>
+          <h2>Your agents.<br/><span class="soft">In their own apps.</span></h2>
+          <p class="lead">Perch hooks into the agents you already use. Your plans, models and API costs stay exactly as they are.</p>
         </div>
-        <div class="provider-list reveal">
-          {providers.map(([name, status]) => <div><b>{name}</b><span>{status}</span></div>)}
-          <p class="fine">Cursor’s passive hooks don’t expose permission-waiting status. Session-opening behavior varies by provider.</p>
+        <div class="matrix" role="table" aria-label="What Perch supports for each agent">
+          <div class="mrow mhead" role="row"><span role="columnheader">Agent</span><span role="columnheader">Status</span><span role="columnheader">Approve tools</span><span role="columnheader">Questions &amp; plans</span><span role="columnheader">Reply after a turn</span></div>
+          {matrix.map(row => <div class="mrow" role="row"><span role="cell" class="mname"><span class="micon" set:html={row.icon}></span>{row.name}</span>{row.cells.map(on => <span role="cell" class={on ? 'yes' : 'no'}>{on ? <Fragment set:html={tick}/> : '–'}<span class="sr">{on ? 'Supported' : 'Not supported'}</span></span>)}</div>)}
+          <p class="fine">Answering is opt-in. Cursor’s hooks don’t report when it’s waiting for permission. The Codex desktop app isn’t verified yet.</p>
         </div>
       </div>
     </section>
@@ -87,8 +202,8 @@ const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication
     <section class="shell section" id="pricing">
       <header class="intro reveal">
         <p class="eyebrow">Pricing</p>
-        <h2>One payment.<br/><span class="dim">Yours to keep.</span></h2>
-        <p class="lead">No monthly bill. No annual plan. Just a useful tool, on your terms.</p>
+        <h2>One payment.<br/><span class="soft">Yours to keep.</span></h2>
+        <p class="lead">No monthly bill, no account, no server. Just a well-made Mac app that pays for itself the first time an agent doesn’t sit waiting.</p>
       </header>
       <Pricing/>
     </section>
@@ -96,99 +211,235 @@ const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication
     <section class="shell section faq-layout" id="questions">
       <div class="reveal">
         <p class="eyebrow">Before you buy</p>
-        <h2>A few good<br/><span class="dim">questions.</span></h2>
+        <h2>Good<br/><span class="soft">questions.</span></h2>
         <a class="text-link" href={perch.support}>Ask us something else ↗</a>
       </div>
       <div class="faq reveal">{faq.map(entry => <details><summary>{entry.q}</summary><p>{entry.a}</p></details>)}</div>
     </section>
 
-    <section class="dark closing">
+    <section class="closing">
+      <div class="sky closing-sky" aria-hidden="true"><i class="sky-a"></i><i class="sky-b"></i><i class="sky-c"></i><i class="grain"></i></div>
       <div class="shell closing-inner reveal">
-        <Mark product="perch" size={72}/>
-        <h2>Get back to the work<br/><span class="dim">that matters.</span></h2>
-        <p class="lead">Let Perch keep watch on your agents. $29, once.</p>
-        <a class="button big" href={purchaseHref}>Get Perch · ${perch.price} <span aria-hidden="true">↗</span></a>
+        <div class="icon-halo big"><img src="/products/perch-icon-512.webp" alt="" width="120" height="120"/></div>
+        <h2>Stop checking.<br/><span class="soft">Start shipping.</span></h2>
+        <p class="lead">Let Perch keep watch, and answer your agents the moment they need you.</p>
+        <div class="hero-actions">
+          <a class="button big" href={purchaseHref}>Get Perch · ${perch.price} once</a>
+          <a class="button big glass" href="#demo">See the demo again</a>
+        </div>
+        <p class="hero-meta">macOS 14+ · Native SwiftUI · No subscription</p>
       </div>
     </section>
   </div>
 </Store>
 
 <style>
-.hero{position:relative;isolation:isolate;overflow:hidden;background:#07090a;padding:170px 0 0;text-align:center}
-.aurora{position:absolute;inset:-25% -10%;z-index:-2;background:radial-gradient(38% 34% at 22% 30%,rgba(111,154,130,.5),transparent 70%),radial-gradient(34% 30% at 78% 24%,rgba(176,140,90,.42),transparent 70%),radial-gradient(46% 38% at 52% 78%,rgba(78,118,164,.4),transparent 72%);filter:blur(30px);animation:drift 22s ease-in-out infinite alternate}
-.hero:after{content:'';position:absolute;left:0;right:0;bottom:0;height:260px;z-index:-1;background:linear-gradient(to bottom,rgba(7,9,10,0),var(--paper));pointer-events:none}
-@keyframes drift{from{transform:translate3d(-3%,0,0) scale(1)}to{transform:translate3d(3%,-2%,0) scale(1.08)}}
-.hero-inner{display:flex;flex-direction:column;align-items:center}
-.hero-eyebrow{color:var(--on-dark-muted)}
-.hero h1{margin-top:26px;font-size:clamp(52px,8.4vw,110px);letter-spacing:-.055em;line-height:.96}
-.hero-lead{margin:30px auto 0;max-width:600px;font-size:clamp(18px,2vw,22px)}
-.hero-actions{justify-content:center;margin-top:40px}
-.hero-status{display:block;margin-top:22px;color:var(--on-dark-muted);text-align:center;line-height:1.7}
-.hero-status:before{display:none}
-.works{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:10px;margin-top:48px;font-size:13px;color:var(--on-dark-muted)}
-.works .chip{padding:7px 14px;border-radius:999px;border:1px solid var(--on-dark-line);background:rgba(255,255,255,.04);color:var(--on-dark)}
-.hero-stage{width:min(860px,100%);margin:90px auto 0;padding-bottom:200px;position:relative;z-index:1}
+.pp{--amber:#FAC961;--blue:#5E8FFA;--green:#61CC8C;--t1:rgba(255,255,255,.94);--t2:rgba(255,255,255,.56);--t3:rgba(255,255,255,.34);--raised:rgba(255,255,255,.055);--sys:-apple-system,BlinkMacSystemFont,'SF Pro Text','Inter Tight',system-ui,sans-serif;--mono:ui-monospace,'SF Mono',SFMono-Regular,Menlo,monospace;--muted:rgba(245,245,242,.6);overflow-x:clip}
+.soft{background:linear-gradient(180deg,rgba(255,255,255,.72),rgba(255,255,255,.38));-webkit-background-clip:text;background-clip:text;color:transparent}
+.pp h2{font-size:clamp(38px,5.6vw,68px);letter-spacing:-.05em;line-height:1.02}
+.pp .eyebrow{color:var(--amber);opacity:.85}
 
-.benefits{display:flex;justify-content:center;flex-wrap:wrap;gap:16px 44px;padding-block:44px 8px;font-size:15px;color:var(--muted)}
-.benefits>span>span{color:var(--green);margin-right:8px}
+/* Sky */
+.sky{position:absolute;inset:0;z-index:-1;overflow:hidden;background:linear-gradient(180deg,#0a0c14 0%,#1b2033 34%,#3c3449 58%,#211a20 78%,#08090a 100%)}
+.sky i{position:absolute;display:block;border-radius:50%;filter:blur(60px)}
+.sky-a{width:70%;height:55%;left:-12%;top:8%;background:rgba(108,134,206,.42);animation:float 26s ease-in-out infinite alternate}
+.sky-b{width:55%;height:45%;right:-10%;top:4%;background:rgba(196,132,170,.3);animation:float 30s ease-in-out infinite alternate-reverse}
+.sky-c{width:90%;height:40%;left:5%;top:44%;background:rgba(244,158,104,.36);animation:float 34s ease-in-out infinite alternate}
+.sky .grain{inset:0;width:auto;height:auto;border-radius:0;filter:none;opacity:.22;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+@keyframes float{from{transform:translate3d(-4%,0,0) scale(1)}to{transform:translate3d(4%,-3%,0) scale(1.1)}}
 
-.intro{text-align:center;max-width:760px;margin:0 auto}
-.intro .eyebrow{margin-bottom:20px}
-.intro .lead{margin:24px auto 0}
-#pricing .intro{margin-bottom:64px}
+/* Hero */
+.hero{position:relative;isolation:isolate;padding:150px 0 0;text-align:center}
+.hero:after{content:'';position:absolute;left:0;right:0;bottom:0;height:420px;z-index:-1;background:linear-gradient(180deg,rgba(8,9,10,0),#08090a 70%);pointer-events:none}
+.hero-copy{display:flex;flex-direction:column;align-items:center}
+.pill-tag{display:inline-flex;align-items:center;gap:9px;padding:6px 6px 6px 8px;border-radius:999px;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);font-size:14px;font-weight:500;transition:background .2s ease}
+.pill-tag:hover{background:rgba(255,255,255,.12)}
+.pill-tag img{width:20px;height:20px;border-radius:5px}
+.pill-tag span{padding:4px 10px;border-radius:999px;background:rgba(250,201,97,.16);color:var(--amber);font-size:13px}
+.hero h1{margin-top:30px;font-size:clamp(46px,7.6vw,104px);letter-spacing:-.058em;line-height:.98}
+.hero-lead{margin:28px auto 0;max-width:640px;text-wrap:balance;font-size:clamp(17px,1.9vw,21px);line-height:1.55;color:rgba(255,255,255,.72)}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:38px}
+.hero-actions .button:not(.glass){box-shadow:0 0 0 1px rgba(255,255,255,.2),0 14px 40px -10px rgba(250,201,97,.45)}
+.hero-meta{margin-top:20px;font-size:13px;color:rgba(255,255,255,.5)}
+.works{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px 22px;margin-top:44px;font-size:14px;color:rgba(255,255,255,.5)}
+.works-item{display:inline-flex;align-items:center;gap:9px;color:rgba(255,255,255,.85);font-weight:500}
+.works-icon{width:24px;height:24px;display:block}
+.works-icon :global(svg){width:100%;height:100%}
+.demo-shell{width:min(1200px,calc(100% - 48px));margin-top:72px}
+.rise{animation:rise 1s cubic-bezier(.2,.75,.2,1) both;animation-delay:var(--d)}
+@keyframes rise{from{opacity:0;transform:translateY(24px);filter:blur(6px)}to{opacity:1;transform:none;filter:none}}
 
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:64px}
-.steps article{background:var(--surface);border-radius:28px;padding:38px 34px;box-shadow:0 1px 0 rgba(0,0,0,.03),0 24px 60px -34px rgba(0,0,0,.28)}
-.step-number{display:inline-grid;place-items:center;width:42px;height:42px;border-radius:50%;background:#e6eee9;color:var(--green);font:500 13px var(--mono)}
-.steps h3{font-size:25px;margin:36px 0 12px}
-.steps p{font-size:16px;color:var(--muted)}
+/* Shared intro */
+.intro{text-align:center;max-width:780px;margin:0 auto}
+.intro .eyebrow{margin-bottom:18px}
+.intro .lead{margin:22px auto 0;text-wrap:balance}
+.pp .lead{color:rgba(255,255,255,.62)}
 
-.feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:64px}
-.feature-grid article{display:flex;flex-direction:column;background:var(--surface);border-radius:28px;overflow:hidden;box-shadow:0 1px 0 rgba(0,0,0,.03),0 24px 60px -34px rgba(0,0,0,.28)}
-.feature-art{height:176px;display:grid;place-items:center;background:radial-gradient(120% 90% at 50% 0%,#eaf2ed 0,#dce8e0 100%)}
-.feature-grid article:nth-child(3n+2) .feature-art{background:radial-gradient(120% 90% at 50% 0%,#f4eee2 0,#e9dfcb 100%)}
-.feature-grid article:nth-child(3n) .feature-art{background:radial-gradient(120% 90% at 50% 0%,#e9edf5 0,#d6deeb 100%)}
-.feature-glyph{font:300 58px var(--mono);color:var(--green)}
-.feature-copy{padding:28px 30px 34px}
-.feature-copy h3{font-size:23px;margin-bottom:12px}
-.feature-copy p{font-size:15px;color:var(--muted)}
+/* Why */
+.pains{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:64px}
+.pain{--c:250,201,97;position:relative;display:flex;flex-direction:column;padding:30px 28px;border-radius:28px;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);overflow:hidden}
+.pain:before{content:'';position:absolute;left:-20%;right:-20%;top:-60%;height:100%;background:radial-gradient(50% 50% at 50% 100%,rgba(var(--c),.16),transparent 70%);pointer-events:none}
+.pain.green{--c:97,204,140}.pain.blue{--c:94,143,250}
+.pain-tag{display:flex;align-items:center;gap:8px;font:500 12px/1.5 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:rgb(var(--c))}
+.pain-tag i{width:8px;height:8px;border-radius:50%;background:rgb(var(--c));box-shadow:0 0 10px rgba(var(--c),.8)}
+.pain h3{margin:22px 0 10px;font-size:24px;line-height:1.18}
+.pain-body{font-size:15.5px;color:var(--t2)}
+.pain-fix{margin-top:auto;padding-top:26px;font-size:15.5px;color:rgba(255,255,255,.85)}
+.pain-fix b{display:block;margin-bottom:6px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--t3)}
 
-.band{padding-block:120px}
-.integrations{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
-.integrations h2{margin:20px 0 24px}
-.integrations .lead{font-size:18px}
-.provider-list{border-top:1px solid var(--line)}
-.provider-list>div{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px 0;border-bottom:1px solid var(--line);font-size:17px}
-.provider-list>div>span{font-size:13px;color:var(--muted);text-align:right}
-.provider-list .fine{margin-top:20px}
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:64px}
+.step{padding:14px 14px 30px;border-radius:30px;background:rgba(255,255,255,.035);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.step-art{position:relative;height:230px;border-radius:20px;overflow:hidden;display:grid;place-items:center;background:radial-gradient(90% 80% at 30% 0%,rgba(108,134,206,.45),transparent 70%),radial-gradient(80% 70% at 90% 100%,rgba(244,158,104,.35),transparent 70%),#1a1b24;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.step h3{display:flex;align-items:center;gap:10px;margin:26px 16px 10px;font-size:21px}
+.step h3 span{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.9);color:#111;font-size:13px;font-weight:650;letter-spacing:0}
+.step p{margin:0 16px;font-size:15px;color:var(--t2)}
+.icon-halo{position:relative;display:grid;place-items:center;width:150px;height:150px;border-radius:40px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 30px 60px -20px rgba(0,0,0,.6);backdrop-filter:blur(12px)}
+.icon-halo:before{content:'';position:absolute;inset:-30%;border-radius:50%;background:radial-gradient(closest-side,rgba(250,201,97,.28),transparent);z-index:-1;animation:breathe 5s ease-in-out infinite}
+.icon-halo img{width:112px;height:112px;filter:drop-shadow(0 12px 22px rgba(0,0,0,.45))}
+@keyframes breathe{50%{opacity:.5;transform:scale(.9)}}
+.art-connect{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0}
+.connect-hub{width:56px;height:56px;filter:drop-shadow(0 8px 16px rgba(0,0,0,.4))}
+.connect-lines{width:64%;height:44px;fill:none;stroke:rgba(250,201,97,.7);stroke-width:1.6;stroke-dasharray:4 5;animation:dash 1.4s linear infinite}
+@keyframes dash{to{stroke-dashoffset:-18}}
+.connect-row{display:flex;gap:28px}
+.connect-row>span{position:relative;display:flex;flex-direction:column;align-items:center;gap:8px}
+.connect-icon{display:block;width:52px;height:52px;padding:3px;border-radius:15px;box-shadow:0 0 0 2px rgba(250,201,97,.65)}
+.connect-icon :global(svg){width:100%;height:100%;display:block}
+.connect-row b{position:absolute;right:-7px;top:-7px;width:20px;height:20px;border-radius:50%;background:var(--amber);display:grid;place-items:center}
+.connect-row b :global(svg){width:12px;height:12px;fill:none;stroke:#2a1d05;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.connect-row small{font-size:12px;font-weight:600;color:rgba(255,255,255,.85)}
+.art-work{justify-items:end;padding-right:0}
+.mini-tab{position:relative;justify-self:end;display:flex;flex-direction:column;align-items:center;gap:18px;width:34px;padding:14px 0;background:#000;border-radius:13px 0 0 13px}
+.mini-tab:before,.mini-tab:after{content:'';position:absolute;right:0;width:13px;height:13px}
+.mini-tab:before{top:-13px;background:radial-gradient(circle at 0 0,transparent 12.5px,#000 13px)}
+.mini-tab:after{bottom:-13px;background:radial-gradient(circle at 0 100%,transparent 12.5px,#000 13px)}
+.mini-tab :global(.pd-mk.done svg){position:absolute;inset:2px;width:16px;height:16px;fill:none;stroke:var(--green);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.art-work{display:flex;align-items:center;justify-content:flex-end;gap:12px}
+.mini-labels{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.mini-labels span{--c:255,255,255;display:flex;gap:7px;align-items:center;height:30px;padding:0 12px;border-radius:999px;font:650 13px var(--sys);white-space:nowrap;background:linear-gradient(rgba(var(--c),.14),rgba(var(--c),.14)),rgba(30,30,32,.86);box-shadow:inset 0 0 0 1px rgba(var(--c),.38)}
+.mini-labels em{font-style:normal;font-weight:550;color:rgb(var(--c))}
+.mini-labels .needs{--c:250,201,97}.mini-labels .work{--c:94,143,250}.mini-labels .done{--c:97,204,140}
 
-.closing{padding-block:140px;text-align:center}
-.closing-inner{display:flex;flex-direction:column;align-items:center;gap:0}
-.closing h2{margin:34px 0 20px;font-size:clamp(40px,6vw,76px)}
-.closing .lead{margin-bottom:40px}
+/* Bento */
+.bento{display:grid;grid-template-columns:repeat(6,1fr);gap:18px;margin-top:64px}
+.tile{--glow:108,134,206;position:relative;display:flex;flex-direction:column;border-radius:30px;overflow:hidden;background:#111215;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);min-height:440px}
+.tile:before{content:'';position:absolute;inset:0;background:radial-gradient(70% 60% at 80% 100%,rgba(var(--glow),.42),transparent 70%),radial-gradient(60% 50% at 0% 100%,rgba(var(--glow),.18),transparent 70%);pointer-events:none}
+.tile-copy{position:relative;padding:32px 32px 0}
+.tile-tag{font:500 12px/1.5 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:rgba(var(--glow),1);filter:brightness(1.3)}
+.tile h3{margin:12px 0 10px;font-size:clamp(22px,2.2vw,28px);line-height:1.12;letter-spacing:-.035em}
+.tile-copy>p:last-child{font-size:15.5px;color:var(--t2);max-width:440px}
+.tile-art{position:relative;flex:1;display:flex;align-items:flex-end;justify-content:center;padding:28px 28px 0}
+.t-approve,.t-question{grid-column:span 3}
+.t-plan,.t-reply,.t-glance{grid-column:span 2}
+.t-steps,.t-notes{grid-column:span 3;min-height:400px}
+.t-approve{--glow:97,204,140}.t-question{--glow:250,201,97}.t-plan{--glow:94,143,250}.t-reply{--glow:229,135,106}.t-glance{--glow:180,140,220}.t-steps{--glow:94,143,250}.t-notes{--glow:250,201,97}
+.mini-card{width:100%;max-width:380px;padding:18px 20px 20px;border-radius:24px 24px 0 0;background:rgba(40,40,43,.92);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 0 1px rgba(255,255,255,.1),0 -10px 50px rgba(0,0,0,.35);font-family:var(--sys);color:var(--t1);text-align:left}
+.mini-card h5{margin:0 0 10px;font-size:16px;font-weight:650;letter-spacing:-.015em;line-height:1.3}
+.mini-card .pd-who{margin-bottom:14px}
+.mini-card .pd-primary{margin-top:4px}
+.mini-card .pd-primary kbd{font-size:13px}
+.mini-card .pd-opts{margin:10px 0 0}
+.mini-card.plan b{display:block;font-size:15px;margin-bottom:6px}
+.mini-card.plan ol{margin:0 0 14px;padding-left:20px;font-size:14px;line-height:1.75;color:rgba(255,255,255,.82)}
+.fake-input{flex:1;display:flex;align-items:center;height:40px;border-radius:12px;border:1px solid rgba(250,201,97,.55);background:rgba(255,255,255,.04);padding:0 13px;font-size:14px}
+.fake-input i{width:1.5px;height:17px;margin-left:2px;background:var(--amber);animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.glance-art{align-items:center;justify-content:flex-end;gap:12px;padding:20px 0 40px}
+.timeline{list-style:none;margin:0;padding:22px 24px;width:100%;max-width:420px;border-radius:24px 24px 0 0;background:rgba(40,40,43,.92);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);font:14px var(--sys)}
+.timeline li{position:relative;display:flex;align-items:center;gap:10px;padding:8px 0;color:rgba(255,255,255,.88)}
+.timeline li:not(:last-child):after{content:'';position:absolute;left:9px;top:30px;bottom:-10px;width:1px;background:rgba(255,255,255,.1)}
+.timeline i{display:grid;place-items:center;width:19px;height:19px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.3)}
+.timeline .ok i{background:rgba(97,204,140,.2);box-shadow:inset 0 0 0 1.5px var(--green)}
+.timeline .wait i{background:rgba(250,201,97,.2);box-shadow:inset 0 0 0 1.5px var(--amber)}
+.timeline i :global(svg){width:11px;height:11px;fill:none;stroke:var(--green);stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.timeline span{color:var(--t2)}
+.timeline em{margin-left:auto;font-style:normal;color:var(--t3);font-size:13px}
+.notes-art{align-items:center;padding:30px 28px 40px}
+.note{position:absolute;width:170px;height:150px;padding:16px;border-radius:16px;color:#2b2617;font:500 14px/1.4 var(--sys);box-shadow:0 18px 30px -10px rgba(0,0,0,.5);transition:transform .5s cubic-bezier(.3,1.2,.5,1)}
+.note b{display:block;margin-bottom:6px;font-weight:650}
+.n-sky{background:#BDD9F2;transform:translate(-120px,8px) rotate(-9deg)}
+.n-rose{background:#F5C4C4;transform:translate(120px,8px) rotate(8deg)}
+.n-butter{position:relative;background:#FAE39E;width:200px;height:170px}
+.t-notes:hover .n-sky{transform:translate(-150px,0) rotate(-13deg)}
+.t-notes:hover .n-rose{transform:translate(150px,0) rotate(12deg)}
+.small-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:38px 40px;margin-top:70px;padding:0 6px}
+.small svg{width:26px;height:26px;fill:none;stroke:var(--amber);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.small h3{margin:16px 0 6px;font-size:18px}
+.small p{font-size:15px;color:var(--t2)}
 
-@media(max-width:960px){
-  .feature-grid{grid-template-columns:1fr 1fr}
-  .integrations{gap:50px}
+/* Privacy */
+.privacy{position:relative;isolation:isolate;padding-block:140px;overflow:hidden}
+.privacy-glow{position:absolute;left:50%;top:0;width:1100px;height:700px;transform:translateX(-50%);z-index:-1;background:radial-gradient(closest-side,rgba(250,201,97,.13),transparent),radial-gradient(40% 50% at 30% 60%,rgba(108,134,206,.14),transparent 70%)}
+.promises{list-style:none;margin:70px auto 0;padding:0;max-width:880px;display:grid;gap:0;border-top:1px solid rgba(255,255,255,.1)}
+.promises li{display:grid;grid-template-columns:70px 1fr;gap:20px;padding:28px 0;border-bottom:1px solid rgba(255,255,255,.1)}
+.promises .num{font:500 13px var(--mono);color:var(--amber);padding-top:6px}
+.promises h3{font-size:24px;margin-bottom:6px}
+.promises p{font-size:16px;color:var(--t2);max-width:620px}
+
+/* Agents */
+.agents{display:grid;grid-template-columns:.85fr 1.15fr;gap:70px;align-items:center}
+.agents h2{margin:18px 0 22px;font-size:clamp(36px,4.4vw,56px)}
+.agents .lead{font-size:18px}
+.matrix{border-radius:26px;padding:10px 24px 20px;background:rgba(255,255,255,.035);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+.mrow{display:grid;grid-template-columns:1.4fr repeat(4,1fr);align-items:center;gap:8px;padding:16px 0;border-bottom:1px solid rgba(255,255,255,.08);text-align:center;font-size:15px}
+.mrow>span:first-child{text-align:left}
+.mhead{font-size:12.5px;color:var(--t3);line-height:1.3}
+.mname{display:flex;align-items:center;gap:10px;font-weight:600}
+.micon{width:28px;height:28px;display:block}
+.micon :global(svg){width:100%;height:100%}
+.yes :global(svg){width:18px;height:18px;margin:auto;fill:none;stroke:var(--green);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.no{color:var(--t3)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.matrix .fine{margin-top:16px}
+
+/* FAQ + closing */
+.faq-layout h2{margin:16px 0 26px}
+.closing{position:relative;isolation:isolate;padding:150px 0 130px;text-align:center;overflow:hidden}
+.closing-sky{background:linear-gradient(180deg,#08090a 0%,#1d1f2e 40%,#3c3449 70%,#1a1418 100%)}
+.closing-inner{display:flex;flex-direction:column;align-items:center}
+.icon-halo.big{width:170px;height:170px;border-radius:46px}
+.icon-halo.big img{width:120px;height:120px}
+.closing h2{margin:44px 0 20px;font-size:clamp(44px,7vw,92px)}
+.closing .lead{margin:0 auto}
+
+@media(max-width:1000px){
+  .bento{grid-template-columns:repeat(2,1fr)}
+  .t-approve,.t-question,.t-plan,.t-reply,.t-glance,.t-steps,.t-notes{grid-column:span 1}
+  .t-glance{grid-column:span 2}
+  .agents{grid-template-columns:1fr;gap:40px}
+  .pains,.steps{grid-template-columns:1fr;max-width:560px;margin-inline:auto}
 }
 @media(max-width:760px){
-  .hero{padding-top:128px}
-  .hero-stage{margin-top:64px;padding-bottom:150px}
+  .hero{padding-top:118px}
+  .hero h1{font-size:clamp(32px,9.6vw,44px);letter-spacing:-.05em}
+  .pp h2{font-size:clamp(32px,9vw,40px)}
   .hero-actions{flex-direction:column;width:100%}
   .hero-actions .button{width:100%}
-  .works{margin-top:36px}
-  .benefits{display:grid;grid-template-columns:1fr 1fr;gap:16px 14px;text-align:left;font-size:13px;padding-inline:4px}
-  .steps{grid-template-columns:1fr;gap:16px;margin-top:44px}
-  .steps article{padding:28px 24px}
-  .steps h3{margin:26px 0 8px;font-size:22px}
-  .feature-grid{grid-template-columns:1fr;gap:16px;margin-top:44px}
-  .feature-art{height:160px}
-  .feature-copy{padding:24px}
-  .integrations{grid-template-columns:1fr;gap:36px}
-  .band{padding-block:80px}
-  .closing{padding-block:100px}
-  .closing .button{width:100%}
+  .works{margin-top:34px}
+  .demo-shell{width:calc(100% - 32px);margin-top:48px}
+  .pains,.steps{margin-top:44px}
+  .bento{grid-template-columns:1fr;margin-top:44px}
+  .t-glance{grid-column:span 1}
+  .tile{min-height:0}
+  .tile-copy{padding:26px 24px 0}
+  .tile-art{padding:24px 18px 0}
+  .notes-art{min-height:250px}
+  .note{width:140px;height:130px;font-size:13px}
+  .n-butter{width:170px;height:150px}
+  .n-sky{transform:translate(-80px,8px) rotate(-9deg)}.n-rose{transform:translate(80px,8px) rotate(8deg)}
+  .small-grid{grid-template-columns:1fr;gap:30px;margin-top:54px}
+  .privacy{padding-block:90px}
+  .promises li{grid-template-columns:44px 1fr;gap:12px}
+  .promises h3{font-size:20px}
+  .matrix{padding:6px 14px 16px;overflow-x:auto}
+  .mrow{grid-template-columns:1.3fr repeat(4,.8fr);font-size:13px;gap:4px}
+  .mhead{font-size:10.5px}
+  .mname{gap:7px}
+  .micon{width:22px;height:22px}
+  .closing{padding:100px 0 90px}
 }
+@media(prefers-reduced-motion:reduce){.rise{animation:none}}
 </style>
 
 <script>

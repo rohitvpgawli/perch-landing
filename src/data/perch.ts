@@ -1,6 +1,6 @@
 export const perch = {
   name: 'Perch', origin: 'https://perched.fyi', price: 29, currency: 'USD',
-  description: 'Agent activity and sticky notes at the edge of your Mac. Keep an eye on Claude Code, Cursor, and Codex without losing your flow.',
+  description: 'See every Claude Code, Codex and Cursor session from the edge of your Mac, then approve, answer and reply in a keystroke. No account, no server. Nothing leaves your Mac.',
   support: 'https://github.com/rohitvpgawli/perch-landing/issues',
   requirements: 'macOS 14+ · Native SwiftUI + AppKit',
 };

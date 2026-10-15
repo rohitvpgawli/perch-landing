@@ -15,4 +15,4 @@ Status: Purchases are closed until delivery is ready. No payment is currently co
 - [Support](https://github.com/rohitvpgawli/perch-landing/issues): Public project support.
 
 ## Integration limitations
-Claude Code CLI and Cursor local Agent activity have been checked. Codex has an adapter; live verification remains pending. Cursor passive hooks do not expose awaiting-permission status. Perch observes activity and opens providers or supported sessions; it does not reply, approve tools, or make decisions.
+Claude Code CLI and Cursor local Agent activity have been checked live, and Codex CLI answering was checked live; the Codex desktop app is not verified yet. Cursor passive hooks do not expose awaiting-permission status. Answering is opt-in and off by default: for Claude Code, Perch can allow or deny tools, answer questions, approve or revise plans, and reply when a turn ends; Codex supports allow, deny and replies; Cursor supports a reply when a turn finishes. Every answer has a two-second undo, and Perch never answers on its own.

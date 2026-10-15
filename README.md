@@ -17,7 +17,7 @@ npm run preview
 
 ## Pages and discovery
 
-- `/`: Perch features, interactive agent/notes preview, integrations, pricing, FAQ.
+- `/`: Perch landing page with a live, interactive demo (`src/components/store/LiveDemo.astro`), features, privacy, agent coverage, pricing, FAQ.
 - `/checkout/`: Availability and purchase details; noindex.
 - `/privacy/`, `/terms/`: Current privacy and purchase information.
 - `/robots.txt`, `/sitemap.xml`: Search discovery.

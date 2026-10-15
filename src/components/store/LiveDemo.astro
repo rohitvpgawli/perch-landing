@@ -1,0 +1,878 @@
+---
+import { providerIcons as P } from './icons';
+const chapters = ['Agents work', 'One needs you', 'Approve in a keystroke', 'Answer and reply', 'Notes at the edge'];
+---
+<div class="pd" data-demo>
+  <div class="pd-frame" data-frame tabindex="0" aria-label="Interactive Perch demo. Use Return, number keys and Escape on the card.">
+    <div class="pd-stage" data-stage>
+      <div class="pd-wall" aria-hidden="true"></div>
+
+      <div class="pd-menubar" aria-hidden="true">
+        <svg class="pd-apple" viewBox="0 0 14 17"><path fill="currentColor" d="M11.6 9c0-2 1.7-3 1.8-3.1-1-1.4-2.5-1.6-3-1.7-1.3-.1-2.5.8-3.1.8-.7 0-1.7-.8-2.7-.7C3.2 4.3 2 5.1 1.3 6.3c-1.5 2.5-.4 6.3 1 8.4.7 1 1.5 2.1 2.6 2.1 1-.1 1.4-.7 2.7-.7 1.2 0 1.6.7 2.7.6 1.1 0 1.8-1 2.5-2 .8-1.1 1.1-2.2 1.1-2.3 0 0-2.3-.9-2.3-3.4ZM9.5 2.9c.6-.7 1-1.7.9-2.7-.9 0-1.9.6-2.5 1.3-.6.6-1 1.6-.9 2.6 1 .1 1.9-.5 2.5-1.2Z"/></svg>
+        <b>Terminal</b><span class="pd-mi">Shell</span><span class="pd-mi">Edit</span><span class="pd-mi">View</span><span class="pd-mi">Window</span><span class="pd-mi">Help</span>
+        <span class="pd-mb-right">
+          <svg class="pd-mbperch" data-mb viewBox="0 0 18 14"><rect x="1" y="1" width="16" height="12" rx="3.2" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M17 3.6h-4.4a1.8 1.8 0 0 0-1.8 1.8v3.2a1.8 1.8 0 0 0 1.8 1.8H17Z" fill="currentColor"/><circle class="pd-mblight" cx="13.6" cy="7" r="1.5"/></svg>
+          <svg viewBox="0 0 18 13" class="pd-mi"><path fill="currentColor" d="M9 12.4 6.6 9.9a3.4 3.4 0 0 1 4.8 0Zm-4-4.1L3.6 6.8a7.6 7.6 0 0 1 10.8 0L13 8.3a5.6 5.6 0 0 0-8 0ZM1.5 4.8 0 3.3a12.7 12.7 0 0 1 18 0l-1.5 1.5a10.6 10.6 0 0 0-15 0Z"/></svg>
+          <svg viewBox="0 0 26 12" class="pd-mi"><rect x=".6" y=".6" width="22" height="10.8" rx="3" fill="none" stroke="currentColor" stroke-opacity=".55" stroke-width="1.1"/><rect x="2.3" y="2.3" width="15" height="7.4" rx="1.6" fill="currentColor"/><path d="M24.2 4v4" stroke="currentColor" stroke-opacity=".55" stroke-width="1.4" stroke-linecap="round"/></svg>
+          <span data-clock>Tue 9:41 AM</span>
+        </span>
+      </div>
+
+      <div class="pd-win pd-term pd-claude" aria-hidden="true">
+        <div class="pd-winbar"><span class="pd-traffic"><i></i><i></i><i></i></span><span>pricing-page — claude — 92×28</span></div>
+        <div class="pd-tbody"><div class="pd-banner"><span><span class="o">✻</span> Welcome to <b>Claude Code</b></span><small>~/shop/pricing-page</small></div><div data-term="claude"></div><div class="pd-working" data-working="claude"><span class="o">✻</span> <span class="pd-shimmer">Working…</span> <span class="g">(esc to interrupt)</span></div></div>
+      </div>
+
+      <div class="pd-win pd-term pd-codex" aria-hidden="true">
+        <div class="pd-winbar"><span class="pd-traffic"><i></i><i></i><i></i></span><span>perch — codex — 80×16</span></div>
+        <div class="pd-tbody"><div class="pd-cbanner"><b>&gt;_ OpenAI Codex</b> <span class="g">· ~/shop/perch</span></div><div data-term="codex"></div><div class="pd-working" data-working="codex"><span class="pd-shimmer b">• Working</span> <span class="g">(4m 12s · esc to interrupt)</span></div></div>
+      </div>
+
+      <div class="pd-win pd-cursorwin" aria-hidden="true">
+        <div class="pd-winbar"><span class="pd-traffic"><i></i><i></i><i></i></span><span>research-notes — Cursor</span></div>
+        <div class="pd-cbody">
+          <p class="pd-bubble">Summarize the hook research into notes/hooks.md</p>
+          <div data-term="cursor"></div>
+        </div>
+      </div>
+
+      <div class="pd-dock" aria-hidden="true">
+        <span set:html={P.finder}></span><span class="on" set:html={P.terminal}></span><span class="on" set:html={P.claude}></span><span class="on" set:html={P.codex}></span><span class="on" set:html={P.cursor}></span><i class="pd-dsep"></i><span class="on"><img src="/products/perch-icon-512.webp" alt="" width="46" height="46"/></span>
+      </div>
+
+      <div class="pd-tab" data-tab aria-hidden="true"><i class="pd-mk" data-mark="claude"></i><i class="pd-mk" data-mark="codex"></i><i class="pd-mk" data-mark="cursor"></i></div>
+      <div class="pd-labels" data-labels aria-hidden="true"><span data-label="claude"></span><span data-label="codex"></span><span data-label="cursor"></span></div>
+      <div class="pd-digest" data-digest aria-hidden="true"></div>
+
+      <div class="pd-shelf" data-shelf>
+        <div class="pd-rail" aria-hidden="true">
+          <span class="pd-rinbox" data-r="inbox"><svg class="pd-i" viewBox="0 0 20 20"><path d="M3 11.5 5 5h10l2 6.5V15a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Z"/><path d="M3 11.5h4l1 2h4l1-2h4"/></svg><b data-badge>1</b></span>
+          <span class="pd-rsess"><span data-r="claude"><i class="pd-mk" data-rmark="claude"></i></span><span data-r="codex"><i class="pd-mk" data-rmark="codex"></i></span><span data-r="cursor"><i class="pd-mk" data-rmark="cursor"></i></span></span>
+          <span class="pd-rnotes"><span data-r="notes"><svg class="pd-i" viewBox="0 0 20 20"><rect x="3.5" y="4" width="13" height="12" rx="2"/><path d="M3.5 7.5h13M6.5 10.5h7M6.5 13h5"/></svg></span><i class="pd-rdiv"></i><span data-r="note"><i class="pd-minote"></i></span><span data-r="plus" data-plus><svg class="pd-i" viewBox="0 0 20 20"><path d="M10 4.5v11M4.5 10h11"/></svg></span></span>
+          <span class="pd-rmore"><i></i><i></i><i></i></span>
+        </div>
+        <div class="pd-col">
+          <div class="pd-card" data-card><i class="pd-ptr"></i><div class="pd-cbody2" data-card-body></div></div>
+          <div class="pd-toast" data-toast role="status"></div>
+        </div>
+      </div>
+
+      <div class="pd-hud" data-hud aria-hidden="true"></div>
+      <svg class="pd-mouse" data-mouse viewBox="0 0 24 24" aria-hidden="true"><path d="M5 2.5v17.2l4.3-4.1 2.9 6.6 2.9-1.3-2.9-6.5h6Z" fill="#111" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/></svg>
+    </div>
+  </div>
+
+  <div class="pd-story">
+    <button class="pd-play" type="button" data-play aria-label="Pause demo"><svg viewBox="0 0 16 16" data-play-icon><path d="M5 3.5v9M11 3.5v9"/></svg></button>
+    <div class="pd-chapters" role="group" aria-label="Demo chapters">
+      {chapters.map((label, index) => <button type="button" data-chapter={index}><i></i><span>{label}</span></button>)}
+    </div>
+  </div>
+  <p class="pd-caption" data-caption aria-live="polite">Three agents at work. Perch keeps one quiet tab on the edge of your screen.</p>
+  <p class="pd-hint">Live and interactive. Click the card, or press <kbd>Return</kbd>, <kbd>1</kbd>–<kbd>3</kbd> and <kbd>Esc</kbd> to undo. Sample sessions.</p>
+</div>
+
+<style is:global>
+.pd{--amber:#FAC961;--blue:#5E8FFA;--green:#61CC8C;--red:#FF736B;--t1:rgba(255,255,255,.94);--t2:rgba(255,255,255,.56);--t3:rgba(255,255,255,.34);--raised:rgba(255,255,255,.055);--sys:-apple-system,BlinkMacSystemFont,'SF Pro Text','Inter Tight',system-ui,sans-serif;--mono:ui-monospace,'SF Mono',SFMono-Regular,Menlo,monospace;width:100%}
+.pd-frame{position:relative;width:100%;height:700px;border-radius:22px;overflow:hidden;outline:none;background:#0d0e10;box-shadow:0 0 0 1px rgba(255,255,255,.1),0 0 0 7px #0b0b0d,0 0 0 8px rgba(255,255,255,.08),0 60px 140px -40px rgba(0,0,0,.9),0 0 120px -30px rgba(250,201,97,.18)}
+.pd-frame:focus-visible{box-shadow:0 0 0 1px rgba(255,255,255,.1),0 0 0 7px #0b0b0d,0 0 0 9px var(--amber),0 60px 140px -40px rgba(0,0,0,.9)}
+.pd-stage{position:absolute;left:0;top:0;width:1120px;height:700px;transform:scale(var(--s,1));transform-origin:0 0;overflow:hidden;font-family:var(--sys);color:var(--t1);-webkit-font-smoothing:antialiased;user-select:none;letter-spacing:-.003em;text-align:left;line-height:normal}
+.pd-stage button{font:inherit;color:inherit;border:0;background:none;padding:0;cursor:pointer}
+.pd-stage kbd{font-family:var(--sys)}
+.pd-wall{position:absolute;inset:0;background:radial-gradient(55% 45% at 18% 12%,rgba(150,170,214,.55),transparent 70%),radial-gradient(45% 40% at 88% 18%,rgba(214,160,180,.32),transparent 70%),radial-gradient(70% 55% at 55% 105%,rgba(236,156,112,.42),transparent 72%),linear-gradient(180deg,#56637c 0%,#6e6677 48%,#56464f 100%)}
+.pd-wall:after{content:'';position:absolute;inset:0;opacity:.18;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+.pd-menubar{position:absolute;left:0;right:0;top:0;height:26px;display:flex;align-items:center;gap:18px;padding:0 14px;font-size:13px;background:rgba(18,18,28,.32);backdrop-filter:blur(20px) saturate(160%);-webkit-backdrop-filter:blur(20px) saturate(160%);z-index:20;color:rgba(255,255,255,.92)}
+.pd-apple{width:13px;height:16px}
+.pd-menubar b{font-weight:650}
+.pd-mb-right{margin-left:auto;display:flex;align-items:center;gap:16px}
+.pd-mb-right svg{height:13px;width:auto}
+.pd-mbperch{width:18px!important;height:14px!important}
+.pd-mblight{fill:#2a2a30;transition:fill .4s ease}
+.pd-stage.alert .pd-mblight{fill:var(--amber)}
+
+.pd-win{position:absolute;border-radius:12px;background:rgba(24,24,27,.94);box-shadow:0 0 0 .5px rgba(0,0,0,.7),inset 0 0 0 1px rgba(255,255,255,.1),0 34px 70px -18px rgba(0,0,0,.6);overflow:hidden;backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px)}
+.pd-winbar{position:relative;height:30px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:550;color:rgba(255,255,255,.5);border-bottom:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.025)}
+.pd-traffic{position:absolute;left:12px;top:9px;display:flex;gap:7px}
+.pd-traffic i{width:12px;height:12px;border-radius:50%;background:#ff5f57}
+.pd-traffic i:nth-child(2){background:#febc2e}.pd-traffic i:nth-child(3){background:#28c840}
+.pd-claude{left:40px;top:48px;width:560px;height:340px;z-index:3}
+.pd-codex{left:250px;top:404px;width:460px;height:200px;z-index:4}
+.pd-cursorwin{left:650px;top:96px;width:350px;height:214px;z-index:2}
+.pd-tbody{padding:12px 16px;font:12.5px/1.62 var(--mono);color:rgba(236,236,236,.88);height:calc(100% - 30px);display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
+.pd-tbody>[data-term]{flex:1 1 0;display:flex;flex-direction:column;min-height:0;overflow:hidden}
+.pd-tbody>[data-term]>:first-child{margin-top:auto}
+.pd-banner{align-self:flex-start;border:1px solid rgba(229,135,106,.55);border-radius:8px;padding:6px 14px;margin-bottom:auto;display:flex;flex-direction:column;font-size:12px}
+.pd-banner b{font-weight:600;color:#fff}
+.pd-banner small{color:var(--t3);font-size:11.5px}
+.pd-cbanner{margin-bottom:auto;padding-bottom:6px}
+.pd-tbody .o{color:#E5876A}.pd-tbody .g,.pd-l .g{color:rgba(255,255,255,.38)}.pd-l .ok{color:var(--green)}.pd-l b{color:#fff;font-weight:600}.pd-l .y{color:var(--amber)}.pd-l .b{color:#8fb0ff}
+.pd-l{white-space:pre-wrap;animation:pd-in .35s ease both}
+.pd-l.p{color:#fff;margin-top:6px}
+.pd-l.s{color:#fff;margin-top:4px}
+.pd-working{display:none;margin-top:4px}
+.pd-working.on{display:block}
+.pd-shimmer{background:linear-gradient(90deg,#E5876A 0,#ffd0bc 50%,#E5876A 100%) 0 0/200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:pd-shim 1.6s linear infinite}
+.pd-shimmer.b{background-image:linear-gradient(90deg,#8fb0ff 0,#e2eaff 50%,#8fb0ff 100%)}
+.pd-caret-t{display:inline-block;width:7px;height:14px;background:rgba(255,255,255,.75);vertical-align:-2px;animation:pd-blink 1s steps(1) infinite}
+.pd-cbody{padding:14px;font-size:12.5px;display:flex;flex-direction:column;gap:8px;height:calc(100% - 30px)}
+.pd-bubble{align-self:flex-end;max-width:85%;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:8px 11px;line-height:1.4;margin:0}
+.pd-cbody [data-term]{display:flex;flex-direction:column;gap:6px;color:rgba(255,255,255,.72);line-height:1.45}
+.pd-cbody .pd-l{white-space:normal}
+
+.pd-dock{position:absolute;left:50%;bottom:8px;transform:translateX(-50%);display:flex;align-items:flex-end;gap:7px;padding:6px 8px 8px;border-radius:20px;background:rgba(255,255,255,.16);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22),0 10px 30px rgba(0,0,0,.25);backdrop-filter:blur(24px) saturate(160%);-webkit-backdrop-filter:blur(24px) saturate(160%);z-index:6}
+.pd-dock>span{position:relative;width:46px;height:46px;display:block}
+.pd-dock>span>svg,.pd-dock img{width:46px;height:46px;display:block;filter:drop-shadow(0 3px 5px rgba(0,0,0,.25))}
+.pd-dock>span.on:after{content:'';position:absolute;left:50%;bottom:-6px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:rgba(255,255,255,.75)}
+.pd-dsep{width:1px;height:40px;align-self:center;background:rgba(255,255,255,.3)}
+
+/* Perch marks */
+.pd-mk{position:relative;display:block;width:20px;height:20px;flex:none}
+.pd-mk.work:before{content:'';position:absolute;inset:1px;border-radius:50%;border:2.6px solid rgba(255,255,255,.16);border-top-color:var(--blue);border-right-color:var(--blue);animation:pd-spin .9s linear infinite}
+.pd-mk.needs:before{content:'';position:absolute;inset:3px;border-radius:50%;background:radial-gradient(circle at 36% 32%,#ffe08f,var(--amber) 62%);box-shadow:0 0 10px rgba(250,201,97,.55);animation:pd-pulse 1.1s ease-in-out 4}
+.pd-mk.done svg{position:absolute;inset:2px;width:16px;height:16px;fill:none;stroke:var(--green);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:20;animation:pd-draw .5s ease both}
+.pd-mk.idle:before{content:'';position:absolute;inset:7px;border-radius:50%;background:rgba(255,255,255,.4)}
+
+.pd-tab{position:absolute;right:0;top:236px;width:30px;padding:14px 0;display:flex;flex-direction:column;align-items:center;gap:12px;background:#000;border-radius:13px 0 0 13px;z-index:12;transition:transform .45s cubic-bezier(.3,1.3,.5,1),width .3s ease,gap .3s ease,filter .4s ease}
+.pd-tab:before,.pd-tab:after{content:'';position:absolute;right:0;width:13px;height:13px}
+.pd-tab:before{top:-13px;background:radial-gradient(circle at 0 0,transparent 12.5px,#000 13px)}
+.pd-tab:after{bottom:-13px;background:radial-gradient(circle at 0 100%,transparent 12.5px,#000 13px)}
+.pd-stage.hover .pd-tab{width:34px;gap:20px}
+.pd-stage.nudge .pd-tab{transform:translateX(-8px);filter:drop-shadow(0 0 14px rgba(250,201,97,.65))}
+.pd-stage.finish .pd-tab{filter:drop-shadow(0 0 14px rgba(97,204,140,.6))}
+.pd-stage.shelf-open .pd-tab{transform:translateX(110%)}
+.pd-labels{position:absolute;right:46px;top:250px;z-index:11;display:flex;flex-direction:column;align-items:flex-end;gap:8px;pointer-events:none}
+.pd-labels span{--c:255,255,255;display:flex;gap:8px;align-items:center;height:32px;padding:0 13px;border-radius:999px;font-size:13.5px;font-weight:650;white-space:nowrap;background:linear-gradient(rgba(var(--c),.14),rgba(var(--c),.14)),rgba(30,30,32,.86);box-shadow:inset 0 0 0 1px rgba(var(--c),.38),0 6px 16px rgba(0,0,0,.25);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);opacity:0;transform:translateX(12px);transition:opacity .3s ease,transform .4s cubic-bezier(.3,1.2,.5,1)}
+.pd-labels span:nth-child(2){transition-delay:.04s}.pd-labels span:nth-child(3){transition-delay:.08s}
+.pd-labels span em{font-style:normal;font-weight:550;color:rgb(var(--c))}
+.pd-labels .needs{--c:250,201,97}.pd-labels .work{--c:94,143,250}.pd-labels .done{--c:97,204,140}
+.pd-stage.hover .pd-labels span{opacity:1;transform:none}
+.pd-digest{position:absolute;right:46px;top:276px;z-index:11;display:flex;align-items:center;gap:8px;height:34px;padding:0 15px;border-radius:999px;font-size:14px;font-weight:650;background:linear-gradient(rgba(97,204,140,.16),rgba(97,204,140,.16)),rgba(30,30,32,.88);box-shadow:inset 0 0 0 1px rgba(97,204,140,.4),0 8px 20px rgba(0,0,0,.3);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);opacity:0;transform:translateX(14px);transition:opacity .35s ease,transform .45s cubic-bezier(.3,1.2,.5,1)}
+.pd-digest em{font-style:normal;color:var(--green);font-weight:550}
+.pd-digest svg{width:14px;height:14px;fill:none;stroke:var(--green);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.pd-stage.digest .pd-digest{opacity:1;transform:none}
+
+/* Shelf: rail + card */
+.pd-shelf{position:absolute;inset:0;z-index:14;pointer-events:none}
+.pd-rail{position:absolute;right:12px;top:48px;width:48px;display:flex;flex-direction:column;gap:10px;align-items:center}
+.pd-rail>span{display:flex;flex-direction:column;align-items:center;background:rgba(30,30,33,.9);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1),0 8px 20px rgba(0,0,0,.35);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);opacity:0;transform:translateX(30px);transition:opacity .3s ease,transform .45s cubic-bezier(.3,1.25,.5,1)}
+.pd-rail>span:nth-child(2){transition-delay:.035s}.pd-rail>span:nth-child(3){transition-delay:.07s}.pd-rail>span:nth-child(4){transition-delay:.105s}
+.pd-stage.shelf-open .pd-rail>span{opacity:1;transform:none}
+.pd-rinbox{position:relative;width:48px;height:48px;border-radius:50%;justify-content:center}
+.pd-rinbox.sel{box-shadow:inset 0 0 0 2px rgba(255,255,255,.55),0 8px 20px rgba(0,0,0,.35)!important}
+.pd-rinbox svg{width:22px;height:22px}
+.pd-rinbox b{position:absolute;top:-5px;right:-5px;min-width:20px;height:20px;border-radius:10px;background:var(--amber);color:#1c1406;font-size:12px;font-weight:700;display:grid;place-items:center;box-shadow:0 0 0 2px #1f1f22,0 0 8px rgba(250,201,97,.4);transition:transform .3s cubic-bezier(.3,1.5,.5,1)}
+.pd-rinbox b.zero{transform:scale(0)}
+.pd-rsess,.pd-rnotes{border-radius:24px;padding:6px 0;gap:4px}
+.pd-rsess>span,.pd-rnotes>span{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;transition:background .25s ease}
+.pd-rsess>span.sel,.pd-rnotes>span.sel{background:rgba(255,255,255,.12)}
+.pd-rnotes svg{width:19px;height:19px}
+.pd-rdiv{width:22px;height:1px;background:rgba(255,255,255,.1);margin:4px 0}
+.pd-minote{width:17px;height:19px;border-radius:3.5px;background:#FAE39E;position:relative}
+.pd-minote:before,.pd-minote:after{content:'';position:absolute;left:4px;height:1.6px;border-radius:1px;background:rgba(0,0,0,.18)}
+.pd-minote:before{top:6px;width:9px}.pd-minote:after{top:10px;width:7px}
+.pd-rmore{width:48px;height:48px;border-radius:50%;flex-direction:row!important;justify-content:center;gap:4px}
+.pd-rmore i{width:4px;height:4px;border-radius:50%;background:rgba(255,255,255,.85)}
+.pd-i{fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+
+.pd-col{position:absolute;right:70px;top:48px;width:372px;display:flex;flex-direction:column;align-items:center;gap:10px;transition:transform .45s cubic-bezier(.3,1.2,.5,1)}
+.pd-card{--py:24px;position:relative;width:100%;border-radius:26px;background:rgba(38,38,41,.9);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 0 0 1px rgba(255,255,255,.1),0 30px 60px -12px rgba(0,0,0,.55);backdrop-filter:blur(30px) saturate(140%);-webkit-backdrop-filter:blur(30px) saturate(140%);opacity:0;transform:scale(.9);transform-origin:100% var(--py);transition:opacity .28s ease,transform .45s cubic-bezier(.3,1.2,.5,1),height .4s ease;pointer-events:auto}
+.pd-stage.shelf-open .pd-card{opacity:1;transform:none}
+.pd-stage:not(.shelf-open) .pd-card{pointer-events:none}
+.pd-ptr{position:absolute;right:-7px;top:calc(var(--py) - 7px);width:14px;height:14px;border-radius:3px;background:rgb(40,40,43);box-shadow:inset -1px 1px 0 rgba(255,255,255,.1);transform:rotate(45deg);transition:top .45s cubic-bezier(.3,1.2,.5,1)}
+.pd-cbody2{position:relative;padding:18px 20px 20px}
+.pd-enter{animation:pd-in .38s cubic-bezier(.2,.8,.2,1) both}
+.pd-head{display:flex;align-items:center;gap:6px;margin-bottom:14px}
+.pd-head h4{flex:1;min-width:0;margin:0;font-size:20px;font-weight:650;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pd-head h4.big{font-size:24px}
+.pd-btn{width:28px;height:28px;display:grid;place-items:center;color:var(--t2);flex:none}
+.pd-btn svg{width:16px;height:16px}
+.pd-dots{display:flex;gap:4px;align-items:center;margin-right:4px}
+.pd-dots i{width:5px;height:5px;border-radius:3px;background:rgba(255,255,255,.28)}
+.pd-dots i.on{width:18px}
+.pd-dots i.amber{background:var(--amber)}.pd-dots i.green{background:var(--green)}
+.pd-who{display:flex;gap:12px;align-items:center;margin-bottom:16px}
+.pd-who strong{display:block;font-size:15px;font-weight:650;letter-spacing:-.01em}
+.pd-who span{font-size:13px}
+.amber{color:var(--amber)}.blue{color:var(--blue)}.green{color:var(--green)}
+.pd-t3{color:var(--t3)}
+.pd-av{position:relative;width:36px;height:36px;flex:none}
+.pd-av svg{width:100%;height:100%;display:block}
+.pd-av.big{width:44px;height:44px}
+.pd-badge{position:absolute;right:-3px;bottom:-3px;width:12px;height:12px;border-radius:50%;box-shadow:0 0 0 2.5px rgb(38,38,41)}
+.pd-av.big .pd-badge{width:13px;height:13px}
+.pd-badge.amber{background:var(--amber)}.pd-badge.blue{background:var(--blue)}.pd-badge.green{background:var(--green)}
+.pd-cbody2 h5{margin:0 0 4px;font-size:17px;font-weight:650;letter-spacing:-.015em;line-height:1.3}
+.pd-sub{margin:0 0 10px;font-size:13.5px;color:var(--t2)}
+.pd-code{font:12.5px/1.5 var(--mono);background:rgba(0,0,0,.32);border:1px solid rgba(255,255,255,.06);border-radius:12px;padding:9px 12px;margin-bottom:8px}
+.pd-code span{color:var(--t3)}
+.pd-rule{display:flex;align-items:center;gap:7px;margin:0 0 14px;font-size:12px;color:var(--t3)}
+.pd-rule svg{width:13px;height:13px}
+.pd-primary{position:relative;width:100%;display:flex;align-items:center;gap:12px;height:48px;padding:0 10px;border-radius:16px;background:rgba(97,204,140,.13)!important;box-shadow:inset 0 0 0 1.5px rgba(97,204,140,.4);font-size:16px!important;font-weight:650;overflow:hidden;transition:transform .12s ease,background .2s ease}
+.pd-primary:hover{background:rgba(97,204,140,.2)!important}
+.pd-pi{width:28px;height:28px;border-radius:8px;background:#6fd497;color:#10301d;display:grid;place-items:center;box-shadow:inset 0 -2px 0 rgba(0,0,0,.18)}
+.pd-pi svg{width:16px;height:16px}
+.pd-pl{flex:1;text-align:left}
+.pd-primary kbd{width:30px;height:24px;border-radius:6px;display:grid;place-items:center;background:rgba(97,204,140,.25);box-shadow:inset 0 0 0 1px rgba(97,204,140,.5),inset 0 -2px 0 rgba(0,0,0,.25);color:#9fe3b9}
+.pd-primary kbd svg{width:14px;height:14px}
+.pd-drain{position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--green);transform-origin:0 0;transform:scaleX(0)}
+.pd-card.sending .pd-drain{animation:pd-drain 2s linear forwards}
+.pd-card.sending .pd-primary,.pd-card.sending .pd-opt.chosen{opacity:.85}
+.pd-card.sending .pd-acts,.pd-card.sending .pd-opt:not(.chosen){opacity:.35;transition:opacity .2s ease}
+.pd-acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.pd-sec{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 13px 0 8px;border-radius:999px;background:var(--raised)!important;font-size:14px!important;color:rgba(255,255,255,.82)!important;transition:background .2s ease,transform .12s ease}
+.pd-sec:hover{background:rgba(255,255,255,.09)!important}
+.pd-sec kbd,.pd-opt kbd{min-width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-size:12px;font-weight:650;background:rgba(255,255,255,.09);box-shadow:inset 0 -2px 0 rgba(0,0,0,.35);color:var(--t2)}
+.pressed{transform:scale(.97)}
+.pd-chip-l{margin:0 0 4px;font-size:12px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--amber)}
+.pd-opts{display:flex;flex-direction:column;gap:8px;margin:12px 0}
+.pd-opt{display:flex!important;align-items:center;gap:14px;width:100%;min-height:50px;padding:9px 14px!important;border-radius:16px;background:var(--raised)!important;text-align:left;transition:background .2s ease,box-shadow .2s ease,transform .12s ease}
+.pd-opt:hover{background:rgba(255,255,255,.09)!important}
+.pd-opt b{display:block;font-size:15px;font-weight:600}
+.pd-opt small{display:block;font-size:12.5px;color:var(--t2);margin-top:1px}
+.pd-opt.chosen{background:rgba(250,201,97,.12)!important;box-shadow:inset 0 0 0 1.5px rgba(250,201,97,.5)}
+.pd-opt.chosen kbd{background:var(--amber);color:#2a1d05}
+.pd-field{display:flex;gap:8px;align-items:center;margin-top:4px}
+.pd-field input{flex:1;min-width:0;height:40px;border-radius:12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:var(--t1);font:14px var(--sys);padding:0 13px;outline:none;user-select:text;transition:border-color .2s ease}
+.pd-field input:focus{border-color:rgba(250,201,97,.6)}
+.pd-field input::placeholder{color:var(--t2)}
+.pd-send{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.08)!important;color:var(--t2)!important;display:grid;place-items:center;flex:none;transition:background .2s ease,color .2s ease}
+.pd-send.ready{background:var(--amber)!important;color:#2a1d05!important}
+.pd-send svg{width:16px;height:16px}
+.pd-said{background:rgba(0,0,0,.28);border-radius:14px;padding:11px 13px;margin:8px 0 10px;font-size:14px;line-height:1.45}
+.pd-said small{display:block;font-size:12px;font-weight:650;color:var(--t3);margin-bottom:4px}
+.pd-chips{display:flex;gap:6px;margin:-6px 0 14px}
+.pd-chip{height:28px;padding:0 12px;border-radius:999px;display:inline-flex;align-items:center;font-size:14px;font-weight:550}
+.pd-chip.amber{background:rgba(250,201,97,.14)}.pd-chip.blue{background:rgba(94,143,250,.16)}
+.pd-sect{display:flex;justify-content:space-between;margin:12px 0 6px;font-size:14px;font-weight:650;color:var(--t2)}
+.pd-row{display:flex!important;align-items:center;gap:12px;width:calc(100% + 16px);margin:0 -8px;padding:9px 8px!important;border-radius:14px;text-align:left;transition:background .2s ease,transform .12s ease}
+.pd-row:hover{background:var(--raised)!important}
+.pd-row.needs{background:rgba(250,201,97,.07)!important}
+.pd-rt{flex:1;min-width:0}
+.pd-rt b{display:block;font-size:15px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pd-rt small{display:block;font-size:13px;color:var(--t2)}
+.pd-rt small.amber{color:var(--amber)}
+.pd-when{font-size:13px;color:var(--t3)}
+.pd-row>svg{width:13px;height:13px;color:var(--t3)}
+.pd-copy{display:inline-flex!important;align-items:center;gap:6px;height:28px;padding:0 10px!important;border-radius:999px;background:var(--raised)!important;font-size:13px!important;color:rgba(255,255,255,.85)!important}
+.pd-copy svg{width:13px;height:13px}
+.pd-paper{position:relative;min-height:190px;border-radius:18px;background:#F6E2A0;color:#2b2617;padding:12px 18px 18px;box-shadow:inset 0 -1px 0 rgba(0,0,0,.08)}
+.pd-paper small{display:block;text-align:center;font-size:11.5px;font-weight:550;color:rgba(0,0,0,.34);margin-bottom:8px}
+.pd-paper [data-note-text]{font-size:16px;line-height:1.45;white-space:pre-wrap;display:inline}
+.pd-paper .pd-caret{display:inline-block;width:1.5px;height:18px;background:#b8860b;vertical-align:-3px;margin-left:1px;animation:pd-blink 1s steps(1) infinite}
+.pd-swatches{display:flex;align-items:center;gap:12px;margin-top:14px}
+.pd-swatches i{width:22px;height:22px;border-radius:50%}
+.pd-swatches .on{box-shadow:0 0 0 2px rgb(38,38,41),0 0 0 3.5px rgba(255,255,255,.85)}
+.pd-swatches .butter{background:#FAE39E}.pd-swatches .rose{background:#F5C4C4}.pd-swatches .sage{background:#C4DEBD}.pd-swatches .sky{background:#BDD9F2}
+.pd-swatches span{margin-left:auto;font-size:12.5px;color:var(--t2)}
+.pd-toast{display:flex;align-items:center;gap:10px;height:40px;padding:0 8px 0 16px;border-radius:999px;font-size:14px;font-weight:550;background:rgba(30,30,33,.92);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1),0 10px 24px rgba(0,0,0,.35);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);position:relative;overflow:hidden;opacity:0;transform:translateY(-8px) scale(.96);transition:opacity .25s ease,transform .4s cubic-bezier(.3,1.3,.5,1);pointer-events:auto;white-space:nowrap}
+.pd-toast.show{opacity:1;transform:none}
+.pd-toast.plain{padding-right:16px}
+.pd-toast svg{width:15px;height:15px;fill:none;stroke:var(--green);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.pd-toast button{height:28px;padding:0 12px!important;border-radius:999px;background:rgba(255,255,255,.1)!important;font-size:13px!important;font-weight:650}
+.pd-toast button:hover{background:rgba(255,255,255,.18)!important}
+.pd-toast i{position:absolute;left:0;bottom:0;height:2px;width:100%;background:var(--amber);transform-origin:0 0;animation:pd-drain 2s linear forwards}
+
+.pd-hud{position:absolute;left:50%;bottom:92px;z-index:30;display:flex;align-items:center;gap:12px;padding:9px 18px 9px 9px;border-radius:18px;background:rgba(18,18,20,.82);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12),0 20px 40px rgba(0,0,0,.4);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);font-size:15px;font-weight:600;opacity:0;transform:translate(-50%,10px) scale(.95);pointer-events:none}
+.pd-hud.show{animation:pd-hud 1.5s cubic-bezier(.3,1.2,.5,1) both}
+.pd-hud kbd{min-width:44px;height:42px;padding:0 10px;border-radius:10px;display:grid;place-items:center;font-size:19px;font-weight:600;background:linear-gradient(#45454b,#2d2d32);box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 4px 0 #111,0 5px 10px rgba(0,0,0,.4);animation:pd-key 1.5s ease both}
+.pd-hud kbd svg{width:20px;height:20px}
+.pd-mouse{position:absolute;left:0;top:0;width:24px;height:24px;z-index:40;pointer-events:none;opacity:0;transform:translate(640px,460px);transition-property:transform,opacity;transition-timing-function:cubic-bezier(.45,.05,.2,1),ease;transition-duration:.8s,.3s;filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
+.pd-mouse.on{opacity:1}
+.pd-mouse.down path{transform:scale(.86);transform-origin:5px 3px}
+
+/* Compact (phone) scene */
+.pd-stage.compact{width:460px;height:640px}
+.pd-stage.compact .pd-mi{display:none}
+.pd-stage.compact .pd-claude{left:12px;top:42px;width:394px;height:330px}
+.pd-stage.compact .pd-codex,.pd-stage.compact .pd-cursorwin{display:none}
+.pd-stage.compact .pd-dock>span:nth-child(1){display:none}
+.pd-stage.compact .pd-tab{top:200px}
+.pd-stage.compact .pd-labels{top:214px;right:44px}
+.pd-stage.compact .pd-digest{top:236px}
+.pd-stage.compact .pd-labels span{font-size:13px}
+
+/* Story player */
+.pd-story{display:flex;align-items:center;justify-content:center;gap:10px;margin:28px auto 0;max-width:100%}
+.pd-play{flex:none;width:44px;height:44px;border-radius:50%;border:0;display:grid;place-items:center;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);color:#fff;transition:background .2s ease}
+.pd-play:hover{background:rgba(255,255,255,.14)}
+.pd-play svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pd-chapters{position:relative;display:flex;gap:4px;padding:4px;border-radius:999px;background:rgba(255,255,255,.06);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);overflow-x:auto;scrollbar-width:none}
+.pd-chapters::-webkit-scrollbar{display:none}
+.pd-chapters button{position:relative;flex:none;overflow:hidden;border:0;border-radius:999px;height:36px;padding:0 16px;background:transparent;color:rgba(255,255,255,.55);font-size:14px;font-weight:500;letter-spacing:-.01em;transition:color .25s ease,background .25s ease;white-space:nowrap}
+.pd-chapters button:hover{color:#fff}
+.pd-chapters button span{position:relative}
+.pd-chapters button i{position:absolute;left:0;top:0;bottom:0;width:100%;transform-origin:0 0;transform:scaleX(0);background:rgba(255,255,255,.1)}
+.pd-chapters button[aria-current=true]{color:#fff;background:rgba(255,255,255,.08)}
+.pd-caption{margin:22px auto 0;max-width:620px;min-height:3.2em;text-align:center;font-size:17px;line-height:1.55;color:rgba(255,255,255,.8);transition:opacity .3s ease}
+.pd-caption.fade{opacity:0}
+.pd-hint{margin:6px auto 0;text-align:center;font-size:13px;color:rgba(255,255,255,.42)}
+.pd-hint kbd{display:inline-block;min-width:22px;padding:1px 6px;border-radius:5px;background:rgba(255,255,255,.08);box-shadow:inset 0 -1px 0 rgba(0,0,0,.4),inset 0 0 0 1px rgba(255,255,255,.08);font:500 12px var(--sys);color:rgba(255,255,255,.75)}
+
+@keyframes pd-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes pd-spin{to{transform:rotate(360deg)}}
+@keyframes pd-pulse{50%{transform:scale(1.35);box-shadow:0 0 18px rgba(250,201,97,.9)}}
+@keyframes pd-draw{from{stroke-dashoffset:20}to{stroke-dashoffset:0}}
+@keyframes pd-shim{to{background-position:-200% 0}}
+@keyframes pd-blink{50%{opacity:0}}
+@keyframes pd-drain{from{transform:scaleX(1)}to{transform:scaleX(0)}}
+@keyframes pd-hud{0%{opacity:0;transform:translate(-50%,10px) scale(.95)}14%,78%{opacity:1;transform:translate(-50%,0) scale(1)}100%{opacity:0;transform:translate(-50%,-4px) scale(.98)}}
+@keyframes pd-key{0%,24%{transform:none}30%,40%{transform:translateY(3px);box-shadow:inset 0 1px 0 rgba(255,255,255,.15),0 1px 0 #111,0 2px 4px rgba(0,0,0,.4)}48%{transform:none}}
+@media(max-width:760px){
+  .pd-frame{border-radius:16px;box-shadow:0 0 0 1px rgba(255,255,255,.1),0 40px 80px -30px rgba(0,0,0,.9)}
+  .pd-story{justify-content:flex-start}
+  .pd-chapters button{padding:0 13px;font-size:13px}
+  .pd-caption{font-size:15px;min-height:4.6em}
+}
+</style>
+
+<script>
+  import { providerIcons as P } from './icons';
+
+  type State = 'work' | 'needs' | 'done';
+  type Key = 'claude' | 'codex' | 'cursor';
+  type Line = [kind: string, text: string];
+
+  const CANCEL = Symbol('cancel');
+  const ic = {
+    back: '<svg class="pd-i" viewBox="0 0 16 16"><path d="M10 3 5 8l5 5"/></svg>',
+    close: '<svg class="pd-i" viewBox="0 0 16 16"><path d="M4 4l8 8M12 4l-8 8"/></svg>',
+    pencil: '<svg class="pd-i" viewBox="0 0 16 16"><path d="M3 13l.8-3L11 2.8 13.2 5 6 12.2Z"/></svg>',
+    gear: '<svg class="pd-i" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.2"/><path d="M8 1.8v1.6M8 12.6v1.6M1.8 8h1.6M12.6 8h1.6M3.6 3.6l1.1 1.1M11.3 11.3l1.1 1.1M3.6 12.4l1.1-1.1M11.3 4.7l1.1-1.1"/></svg>',
+    check: '<svg class="pd-i" viewBox="0 0 16 16" style="stroke-width:2.4"><path d="M3.5 8.5l3 3 6-7"/></svg>',
+    enter: '<svg class="pd-i" viewBox="0 0 16 16" style="stroke-width:1.8"><path d="M12.5 3.5v4a2 2 0 0 1-2 2h-7M6 6.5l-3 3 3 3"/></svg>',
+    up: '<svg class="pd-i" viewBox="0 0 16 16" style="stroke-width:2"><path d="M8 13V3M4 7l4-4 4 4"/></svg>',
+    chev: '<svg class="pd-i" viewBox="0 0 16 16" style="stroke-width:2"><path d="M6 3l5 5-5 5"/></svg>',
+    history: '<svg class="pd-i" viewBox="0 0 16 16"><path d="M2.5 8a5.5 5.5 0 1 0 1.6-3.9M2.5 2.5v2.5H5M8 5v3l2 1.5"/></svg>',
+    pin: '<svg class="pd-i" viewBox="0 0 16 16"><path d="M6 2h4l-.6 4 2.6 2.5H4L6.6 6Z M8 8.5V14"/></svg>',
+    trash: '<svg class="pd-i" viewBox="0 0 16 16"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.7 9h5.6l.7-9"/></svg>',
+    copy: '<svg class="pd-i" viewBox="0 0 16 16"><rect x="5" y="5" width="8.5" height="8.5" rx="2"/><path d="M11 5V3.5A1.5 1.5 0 0 0 9.5 2h-6A1.5 1.5 0 0 0 2 3.5v6A1.5 1.5 0 0 0 3.5 11H5"/></svg>',
+    tick: '<svg viewBox="0 0 16 16"><path d="M3.5 8.5l3 3 6-7"/></svg>',
+  };
+
+  const root = document.querySelector<HTMLElement>('[data-demo]');
+  if (root) init(root);
+
+  function init(root: HTMLElement) {
+    const q = <T extends Element = HTMLElement>(s: string) => root.querySelector<T>(s) as T;
+    const frame = q('[data-frame]'), stage = q('[data-stage]');
+    const card = q('[data-card]'), body = q('[data-card-body]'), toastEl = q('[data-toast]');
+    const hud = q('[data-hud]'), mouse = q('[data-mouse]'), caption = q('[data-caption]'), digest = q('[data-digest]');
+    const tab = q('[data-tab]'), playBtn = q<HTMLButtonElement>('[data-play]');
+    const chapterButtons = [...root.querySelectorAll<HTMLButtonElement>('[data-chapter]')];
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Scale the fixed-size scene to the frame; phones get a tighter scene around the shelf.
+    const fit = () => {
+      const width = frame.clientWidth, compact = width < 760;
+      stage.classList.toggle('compact', compact);
+      const [w, h] = compact ? [460, 640] : [1120, 700];
+      const scale = width / w;
+      stage.style.setProperty('--s', String(scale));
+      frame.style.height = `${h * scale}px`;
+    };
+    new ResizeObserver(fit).observe(frame);
+    fit();
+
+    // Real local time in the menu bar and on the note.
+    const clock = q('[data-clock]');
+    const now = () => new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    const tickClock = () => { clock.textContent = `${new Date().toLocaleDateString([], { weekday: 'short' })} ${now()}`; };
+    tickClock(); setInterval(tickClock, 20000);
+
+    // ---------- Sessions ----------
+    const sessions: Record<Key, { name: string; provider: string; folder: string; icon: string; state: State; status: string }> = {
+      claude: { name: 'Polish the pricing page', provider: 'Claude Code', folder: 'pricing-page', icon: P.claude, state: 'work', status: 'Editing files' },
+      codex: { name: 'Perch', provider: 'Codex', folder: 'perch', icon: P.codex, state: 'work', status: 'Editing files' },
+      cursor: { name: 'Research notes', provider: 'Cursor', folder: 'research-notes', icon: P.cursor, state: 'work', status: 'Thinking' },
+    };
+    const keys: Key[] = ['claude', 'codex', 'cursor'];
+    const tone = (s: State) => (s === 'needs' ? 'amber' : s === 'work' ? 'blue' : 'green');
+    const said = (k: Key) => { const s = sessions[k]; return s.state === 'needs' ? 'Waiting for you' : s.state === 'done' ? 'Turn finished' : s.status; };
+
+    function setMark(el: HTMLElement, state: State) {
+      if (el.dataset.state === state) return;
+      el.dataset.state = state;
+      el.className = `pd-mk ${state}`;
+      el.innerHTML = state === 'done' ? ic.tick : '';
+    }
+    function setS(k: Key, state: State, status?: string) {
+      sessions[k].state = state;
+      if (status) sessions[k].status = status;
+      paintSessions();
+    }
+    function paintSessions() {
+      for (const k of keys) {
+        setMark(q(`[data-mark=${k}]`), sessions[k].state);
+        setMark(q(`[data-rmark=${k}]`), sessions[k].state);
+        const label = q(`[data-label=${k}]`);
+        label.className = sessions[k].state;
+        label.innerHTML = `${sessions[k].name} <em>${said(k)}</em>`;
+      }
+      const waiting = keys.filter(k => sessions[k].state === 'needs').length;
+      stage.classList.toggle('alert', waiting > 0);
+      const badge = q('[data-badge]');
+      if (waiting) badge.textContent = String(waiting);
+      badge.classList.toggle('zero', !waiting);
+    }
+
+    // ---------- Terminals ----------
+    const term = (k: Key) => q(`[data-term=${k}]`);
+    const esc = (t: string) => t.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]!));
+    function lineHTML([kind, text]: Line) {
+      const t = esc(text);
+      switch (kind) {
+        case 'p': return `<span class="g">›</span> ${t}`;
+        case 'c': { const i = t.indexOf('('); return `<span class="o">⏺</span> ${i > 0 ? `<b>${t.slice(0, i)}</b>${t.slice(i)}` : `<b>${t}</b>`}`; }
+        case 's': return `<span style="color:#fff">⏺</span> ${t}`;
+        case 'r': return `<span class="g">  ⎿  </span>${t}`;
+        case 'y': return `<span class="g">  ⎿  </span><span class="y">${t}</span>`;
+        case 'ok': return `<span class="g">  ⎿  </span><span class="ok">✓ ${t}</span>`;
+        case 'x': return `<span class="g">• </span>${t}`;
+        case 'xb': return `<span class="b">• </span>${t}`;
+        default: return t;
+      }
+    }
+    function put(k: Key, line: Line) {
+      const el = document.createElement('div');
+      el.className = `pd-l ${line[0]}`;
+      el.innerHTML = lineHTML(line);
+      term(k).append(el);
+      fitTerm(k);
+      return el;
+    }
+    // Drop the oldest lines that no longer fit. Sums layout heights, since the
+    // lines' slide-in transform would inflate scrollHeight.
+    function fitTerm(k: Key) {
+      const box = term(k);
+      const used = () => [...box.children].reduce((sum, child) => sum + (child as HTMLElement).offsetHeight + parseFloat(getComputedStyle(child).marginTop), 0);
+      while (box.children.length > 1 && used() > box.clientHeight + 1) box.firstElementChild!.remove();
+    }
+    const working = (k: 'claude' | 'codex', on: boolean) => { q(`[data-working=${k}]`).classList.toggle('on', on); fitTerm(k); };
+    async function typePrompt(k: Key, text: string, speed = 26) {
+      const el = put(k, ['p', '']);
+      el.innerHTML = '<span class="g">›</span> <span></span><i class="pd-caret-t"></i>';
+      const span = el.children[1];
+      for (const ch of text) { span.textContent += ch; await sleep(speed); }
+      el.querySelector('i')?.remove();
+    }
+
+    const claude: Line[][] = [
+      [['p', 'Add a monthly / yearly toggle to the pricing page'], ['c', 'Read(src/pages/pricing.tsx)'], ['c', 'Update(src/components/PricingToggle.tsx)'], ['r', 'Updated with 24 additions and 3 removals']],
+      [['c', 'Bash(pnpm test --filter pricing)'], ['y', 'Running PermissionRequest hook…']],
+      [['ok', '42 passed · 1.8s']],
+      [['c', 'AskUserQuestion(Which billing periods should the toggle offer?)'], ['r', 'Monthly and yearly'], ['c', 'Update(src/components/PricingToggle.tsx)'], ['s', 'The pricing page now has a yearly toggle, and all 42 tests pass. Want me to add the comparison table next?'], ['p', 'Yes, three columns. Monthly by default.']],
+      [['c', 'Write(src/components/CompareTable.tsx)'], ['s', 'Done. The comparison table is in and the tests pass.']],
+    ];
+    const codex: Line[] = [['p', 'Tidy up the onboarding copy'], ['x', 'Explored Onboarding.swift, Views.swift'], ['xb', 'Edited Onboarding.swift (+12 −9)']];
+    const cursorLines: Line[] = [['t', 'Reading agent-integration-findings.md…'], ['t', 'Writing notes/hooks.md']];
+
+    function baseline(i: number) {
+      for (const k of keys) term(k).innerHTML = '';
+      claude.slice(0, i).flat().forEach(l => put('claude', l));
+      codex.forEach(l => put('codex', l));
+      if (i >= 1) cursorDone(); else put('cursor', cursorLines[0]);
+      working('claude', i === 1 || i >= 3);
+      working('codex', true);
+      setS('claude', i === 2 ? 'needs' : 'work', 'Editing files');
+      setS('codex', 'work', 'Editing files');
+      setS('cursor', i >= 1 ? 'done' : 'work', 'Thinking');
+    }
+    function cursorDone() {
+      term('cursor').innerHTML = '';
+      put('cursor', ['t', 'Read agent-integration-findings.md']);
+      const done = put('cursor', ['t', '']);
+      done.innerHTML = '<span style="color:var(--green)">✓</span> Updated <b>notes/hooks.md</b> · 6 sections';
+    }
+
+    // ---------- Card ----------
+    const PY = { inbox: 24, claude: 82, note: 264 };
+    let route = '';
+    function show(name: string, html: string, py: number) {
+      route = name;
+      card.classList.remove('sending');
+      body.innerHTML = html;
+      body.classList.remove('pd-enter'); void body.offsetWidth; body.classList.add('pd-enter');
+      // Slide the card down to meet low rail items, keeping its pointer inside.
+      const drop = Math.max(0, py - 120);
+      card.parentElement!.style.transform = `translateY(${drop}px)`;
+      card.style.setProperty('--py', `${py - drop}px`);
+      root.querySelectorAll('[data-r]').forEach(el => el.classList.remove('sel'));
+      const sel = name === 'inbox' ? 'inbox' : name === 'note' ? 'note' : 'claude';
+      q(`[data-r=${sel}]`).classList.add('sel');
+    }
+    const openShelf = () => stage.classList.add('shelf-open');
+    const closeShelf = () => { stage.classList.remove('shelf-open'); hideToast(); };
+    const head = (k: Key, status: string, cls: string, dot: number) => {
+      const s = sessions[k];
+      return `<div class="pd-head"><span class="pd-btn">${ic.back}</span><h4>${s.name}</h4><span class="pd-dots">${[0, 1, 2].map(i => `<i class="${i === dot ? `on ${cls}` : ''}"></i>`).join('')}</span><span class="pd-btn">${ic.pencil}</span><span class="pd-btn">${ic.close}</span></div>
+      <div class="pd-who"><span class="pd-av big">${s.icon}<b class="pd-badge ${cls}"></b></span><div><strong>${s.provider} · ${s.folder}</strong><span class="${cls}">${status}</span> <span class="pd-t3">· now</span></div></div>`;
+    };
+    const primary = (act: string, label: string) => `<button class="pd-primary" type="button" data-act="${act}"><span class="pd-pi">${ic.check}</span><span class="pd-pl">${label}</span><kbd>${ic.enter}</kbd><i class="pd-drain"></i></button>`;
+    const sec = (act: string, n: number, label: string) => `<button class="pd-sec" type="button" data-act="${act}"><kbd>${n}</kbd>${label}</button>`;
+    const row = (k: Key) => {
+      const s = sessions[k], cls = tone(s.state);
+      const sub = s.state === 'needs' ? 'Waiting for you' : s.state === 'done' ? 'Finished in 6m' : `${s.status} · 4m`;
+      return `<button class="pd-row ${s.state === 'needs' ? 'needs' : ''}" type="button" data-act="row-${k}"><span class="pd-av">${s.icon}<b class="pd-badge ${cls}"></b></span><span class="pd-rt"><b>${s.name}</b><small class="${s.state === 'needs' ? 'amber' : ''}">${s.provider} · ${sub}</small></span><span class="pd-when">${s.state === 'done' ? '6m' : 'now'}</span>${ic.chev}</button>`;
+    };
+    const views = {
+      inbox() {
+        const by = (st: State) => keys.filter(k => sessions[k].state === st);
+        const [n, w, d] = [by('needs'), by('work'), by('done')];
+        return `<div class="pd-head"><h4 class="big">Agents</h4><span class="pd-btn">${ic.gear}</span><span class="pd-btn">${ic.close}</span></div>
+          <div class="pd-chips">${n.length ? `<span class="pd-chip amber">${n.length} needs you</span>` : ''}${w.length ? `<span class="pd-chip blue">${w.length} working</span>` : ''}</div>
+          ${n.length ? `<p class="pd-sect">Needs you</p>${n.map(row).join('')}` : ''}
+          ${w.length ? `<p class="pd-sect">Working</p>${w.map(row).join('')}` : ''}
+          ${d.length ? `<p class="pd-sect">Recent <span>Clear</span></p>${d.map(row).join('')}` : ''}`;
+      },
+      permission: () => `${head('claude', 'Waiting for you', 'amber', 0)}<h5>Claude Code wants to run a command</h5><p class="pd-sub">Run the pricing tests</p>
+        <div class="pd-code"><span>$</span> pnpm test --filter pricing</div><p class="pd-rule">${ic.history}For this session: Bash(pnpm test:*)</p>
+        ${primary('allow', 'Allow')}<div class="pd-acts">${sec('session', 2, 'Allow for this session')}${sec('deny', 3, 'Deny')}${sec('term', 4, 'Answer in Terminal')}</div>`,
+      question: () => `${head('claude', 'Waiting for you', 'amber', 0)}<p class="pd-chip-l">Billing</p><h5>Which billing periods should the toggle offer?</h5>
+        <div class="pd-opts">${options.map(([t, d], i) => `<button class="pd-opt" type="button" data-act="opt${i + 1}"><kbd>${i + 1}</kbd><span><b>${t}</b>${d ? `<small>${d}</small>` : ''}</span></button>`).join('')}</div>
+        <div class="pd-field"><input data-input placeholder="Or answer in your own words…" aria-label="Answer in your own words" maxlength="80"/><button class="pd-send" type="button" data-act="own" aria-label="Send">${ic.up}</button></div>`,
+      reply: () => `${head('claude', 'Waiting for your reply', 'amber', 0)}<h5>Your move</h5>
+        <div class="pd-said"><small>Claude Code said</small>The pricing page now has a yearly toggle, and all 42 tests pass. Want me to add the comparison table next?</div>
+        <div class="pd-field"><input data-input placeholder="Reply to Claude Code…" aria-label="Reply to Claude Code" maxlength="80"/><button class="pd-send" type="button" data-act="send" aria-label="Send">${ic.up}</button></div>
+        <div class="pd-acts">${sec('focus', 1, 'Reply…')}${sec('done', 2, 'Done for now')}${sec('term', 3, 'Answer in Terminal')}</div>`,
+      note: () => `<div class="pd-head"><span class="pd-btn">${ic.back}</span><h4>Note</h4><button class="pd-copy" type="button" data-act="copy">${ic.copy}Copy</button><span class="pd-btn">${ic.pin}</span><span class="pd-btn">${ic.trash}</span><span class="pd-btn">${ic.close}</span></div>
+        <div class="pd-paper"><small>Today at ${now()}</small><div data-note-text></div><i class="pd-caret"></i></div>
+        <div class="pd-swatches"><i class="butter on"></i><i class="rose"></i><i class="sage"></i><i class="sky"></i><span data-count>0/1000 · Saved</span></div>`,
+    };
+    const options: [string, string][] = [['Monthly and yearly', 'Yearly shows the 20% saving'], ['Yearly only', ''], ['Monthly only', '']];
+
+    let toastTimer = 0;
+    function toast(html: string, opts: { undo?: boolean; ttl?: number } = {}) {
+      clearTimeout(toastTimer);
+      toastEl.className = `pd-toast${opts.undo ? '' : ' plain'}`;
+      toastEl.innerHTML = opts.undo ? `<span>${html}</span><button type="button" data-act="undo">Undo</button><i></i>` : html;
+      void toastEl.offsetWidth; toastEl.classList.add('show');
+      if (opts.ttl) toastTimer = window.setTimeout(hideToast, opts.ttl);
+    }
+    function hideToast() { clearTimeout(toastTimer); toastEl.classList.remove('show'); }
+
+    // ---------- Clock, waiting and cancellation ----------
+    let token = 0, time = 0, last = 0, paused = reduced, visible = false, started = false;
+    let pendingAct: string | null = null, chapter = 0, chapterTime = 0;
+    const waiters = new Set<() => void>();
+    const durations = [8200, 6400, 9600, 13500, 10500];
+    function frameLoop(t: number) {
+      const dt = last ? Math.min(t - last, 100) : 0;
+      last = t;
+      const running = visible && !paused && !document.hidden;
+      if (running) { time += dt; chapterTime += dt; }
+      waiters.forEach(w => w());
+      chapterButtons.forEach((b, i) => {
+        const p = i < chapter ? 1 : i > chapter ? 0 : Math.min(chapterTime / durations[i], .985);
+        (b.firstElementChild as HTMLElement).style.transform = `scaleX(${p})`;
+      });
+      requestAnimationFrame(frameLoop);
+    }
+    requestAnimationFrame(frameLoop);
+
+    function sleep(ms: number) {
+      const mine = token, end = time + ms;
+      return new Promise<void>((resolve, reject) => {
+        const w = () => {
+          if (mine !== token) { waiters.delete(w); reject(CANCEL); }
+          else if (time >= end) { waiters.delete(w); resolve(); }
+        };
+        waiters.add(w);
+      });
+    }
+    // Resolves with the visitor's action, or null when the scripted pause runs out.
+    function waitAct(acts: string[], ms: number) {
+      const mine = token, end = time + ms;
+      if (pendingAct && !acts.includes(pendingAct)) pendingAct = null;
+      return new Promise<string | null>((resolve, reject) => {
+        const w = () => {
+          if (mine !== token) { waiters.delete(w); reject(CANCEL); }
+          else if (pendingAct && acts.includes(pendingAct)) { const a = pendingAct; pendingAct = null; waiters.delete(w); resolve(a); }
+          else if (time >= end) { waiters.delete(w); resolve(null); }
+        };
+        waiters.add(w);
+      });
+    }
+
+    // ---------- Pointer, keys and captions ----------
+    function point(el: Element) {
+      const s = parseFloat(stage.style.getPropertyValue('--s')) || 1;
+      const r = el.getBoundingClientRect(), sr = stage.getBoundingClientRect();
+      return [(r.left - sr.left + r.width / 2) / s, (r.top - sr.top + r.height / 2) / s];
+    }
+    async function moveTo(el: Element, ms = 800) {
+      const [x, y] = point(el);
+      mouse.style.transitionDuration = `${ms}ms, .3s`;
+      mouse.style.transform = `translate(${x - 4}px, ${y - 3}px)`;
+      mouse.classList.add('on');
+      await sleep(ms);
+    }
+    async function click(el: Element, ms = 800) {
+      await moveTo(el, ms);
+      mouse.classList.add('down'); el.classList.add('pressed');
+      await sleep(160);
+      mouse.classList.remove('down'); el.classList.remove('pressed');
+    }
+    async function press(key: string, label: string, el?: Element | null) {
+      hud.innerHTML = `<kbd>${key}</kbd><span>${label}</span>`;
+      hud.classList.remove('show'); void hud.offsetWidth; hud.classList.add('show');
+      await sleep(420);
+      el?.classList.add('pressed');
+      await sleep(180);
+      el?.classList.remove('pressed');
+    }
+    let captionTimer = 0;
+    function say(text: string) {
+      clearTimeout(captionTimer);
+      caption.classList.add('fade');
+      captionTimer = window.setTimeout(() => { caption.textContent = text; caption.classList.remove('fade'); }, 220);
+    }
+    const hover = (on: boolean) => stage.classList.toggle('hover', on);
+
+    // Shows "Sending…" for the two-second undo window. Returns false if taken back.
+    async function send(sending: string, receipt: string) {
+      card.classList.add('sending');
+      const label = body.querySelector('.pd-pl');
+      const before = label?.textContent;
+      if (label) label.textContent = 'Sending…';
+      toast(sending, { undo: true });
+      const a = await waitAct(['undo'], 2000);
+      card.classList.remove('sending');
+      if (label && before) label.textContent = before;
+      if (a === 'undo') { toast('Taken back. Nothing was sent.', { ttl: 1800 }); return false; }
+      toast(`${ic.tick}<span>${receipt}</span>`, { ttl: 2200 });
+      return true;
+    }
+    async function typeInto(input: HTMLInputElement, text: string) {
+      for (const ch of text) {
+        if (document.activeElement === input) return;
+        input.value += ch;
+        input.nextElementSibling?.classList.toggle('ready', !!input.value.trim());
+        await sleep(32);
+      }
+    }
+
+    // ---------- Chapters ----------
+    async function agentsWork() {
+      say('Three agents, three windows. Perch keeps one quiet tab on the edge of your screen.');
+      working('claude', false);
+      await sleep(500);
+      await typePrompt('claude', claude[0][0][1]);
+      working('claude', true);
+      await sleep(600); put('claude', claude[0][1]);
+      await moveTo(tab, 1100);
+      hover(true);
+      say('Blue means working. Hover the tab to read every session without switching windows.');
+      await sleep(1100); put('claude', claude[0][2]);
+      await sleep(900); put('claude', claude[0][3]);
+      await sleep(600);
+      cursorDone(); setS('cursor', 'done');
+      stage.classList.add('finish');
+      say('Cursor just finished. Green check, no pop-up, nothing stealing focus.');
+      await sleep(1900);
+      stage.classList.remove('finish'); hover(false);
+      await sleep(500);
+    }
+    async function needsYou() {
+      say('Claude Code wants to run a command. In a terminal, it would sit there waiting until you noticed.');
+      await sleep(700);
+      working('claude', false);
+      put('claude', claude[1][0]);
+      await sleep(600);
+      put('claude', claude[1][1]);
+      setS('claude', 'needs');
+      stage.classList.add('nudge');
+      await sleep(900);
+      say('Perch notices instantly. The tab nudges out with an amber glow, and the menu bar lights up.');
+      await moveTo(tab, 900);
+      stage.classList.remove('nudge');
+      hover(true);
+      await sleep(2600);
+      hover(false);
+      await sleep(400);
+    }
+    async function approve() {
+      say('Open the shelf. Everything waiting on you is at the top.');
+      await click(tab, 700);
+      openShelf(); show('inbox', views.inbox(), PY.inbox);
+      await sleep(1300);
+      await click(body.querySelector('[data-act="row-claude"]')!, 700);
+      show('permission', views.permission(), PY.claude);
+      say('The card shows the exact command and why. Press Return to allow, or try it yourself.');
+      for (;;) {
+        let a = await waitAct(['allow', 'session', 'deny'], 3200);
+        if (!a) { await press(ic.enter, 'Return', body.querySelector('.pd-primary')); a = 'allow'; }
+        const [sending, receipt] = a === 'deny' ? ['Denying', 'Denied · Claude will try another way'] : a === 'session' ? ['Allowing for this session', 'Allowed for this session · Bash(pnpm test:*)'] : ['Allowing', 'Allowed · Run a command'];
+        say('Two seconds to change your mind. Esc takes it back.');
+        if (await send(sending, receipt)) {
+          put('claude', a === 'deny' ? ['y', 'Denied from Perch'] : claude[2][0]);
+          break;
+        }
+        say('Taken back. Pick again whenever you like.');
+      }
+      setS('claude', 'work', 'Running tests'); working('claude', true);
+      say('Claude is already back at work. You never left what you were doing.');
+      await sleep(1900);
+    }
+    async function answer() {
+      openShelf();
+      working('claude', false);
+      put('claude', claude[3][0]);
+      setS('claude', 'needs');
+      show('question', views.question(), PY.claude);
+      say('Claude asks a question. Press 1, 2 or 3. Done before you would have found the window.');
+      let a = await waitAct(['opt1', 'opt2', 'opt3', 'own'], 3000);
+      const optEls = body.querySelectorAll('.pd-opt');
+      if (!a) { await press('1', 'Option 1', optEls[0]); a = 'opt1'; }
+      const input = body.querySelector<HTMLInputElement>('[data-input]')!;
+      const chosen = a === 'own' ? (input.value.trim() || 'Monthly and yearly') : options[Number(a.slice(3)) - 1][0];
+      if (a !== 'own') optEls[Number(a.slice(3)) - 1].classList.add('chosen');
+      if (!(await send(`Answering · ${chosen}`, `Answered · ${chosen}`))) optEls.forEach(o => o.classList.remove('chosen'));
+      put('claude', ['r', chosen]);
+      setS('claude', 'work', 'Editing files'); working('claude', true);
+      await sleep(1300);
+      put('claude', claude[3][2]);
+      await sleep(1100);
+      working('claude', false);
+      put('claude', claude[3][3]);
+      setS('claude', 'needs');
+      show('reply', views.reply(), PY.claude);
+      say('When a turn ends, read what Claude said and reply right from the card. It keeps going.');
+      const field = body.querySelector<HTMLInputElement>('[data-input]')!;
+      let b = await waitAct(['send', 'done', 'focus'], 1400);
+      if (b === 'focus') b = await waitAct(['send', 'done'], 12000);
+      if (!b) {
+        await typeInto(field, claude[3][4][1]);
+        b = await waitAct(['send', 'done'], document.activeElement === field ? 12000 : 700);
+        if (!b) { await press(ic.enter, 'Return', body.querySelector('.pd-send')); b = 'send'; }
+      }
+      if (b === 'done') {
+        toast(`${ic.tick}<span>Done for now · the turn ends as usual</span>`, { ttl: 2200 });
+        setS('claude', 'done');
+      } else {
+        const text = field.value.trim() || claude[3][4][1];
+        if (await send('Sending reply', 'Sent · Claude is on it')) {
+          put('claude', ['p', text]);
+          setS('claude', 'work', 'Editing files'); working('claude', true);
+        }
+      }
+      await sleep(1900);
+    }
+    async function notes() {
+      say('Jot down the next prompt while your agents work. Copy it the moment they are done.');
+      if (!stage.classList.contains('shelf-open')) { openShelf(); show('inbox', views.inbox(), PY.inbox); await sleep(600); }
+      hideToast();
+      await click(q('[data-plus]'), 800);
+      show('note', views.note(), PY.note);
+      const text = body.querySelector('[data-note-text]')!, count = body.querySelector('[data-count]')!;
+      const note = 'Next: comparison table\nThree columns, monthly by default.';
+      await sleep(300);
+      for (const ch of note) { text.textContent += ch; count.textContent = `${text.textContent!.length}/1000`; await sleep(38); }
+      count.textContent = `${note.length}/1000 · Saved`;
+      await sleep(500);
+      const a = await waitAct(['copy'], 700);
+      if (!a) await click(body.querySelector('[data-act="copy"]')!, 700);
+      toast(`${ic.tick}<span>Copied · paste it into any agent</span>`, { ttl: 1800 });
+      await sleep(2000);
+      closeShelf(); mouse.classList.remove('on');
+      await sleep(700);
+      claude[4].forEach(l => put('claude', l));
+      working('claude', false); working('codex', false);
+      put('codex', ['xb', 'Edited Views.swift (+3 −3)']); put('codex', ['t', '─ Worked for 6m 02s ─']);
+      setS('claude', 'done'); setS('codex', 'done');
+      digest.innerHTML = `${ic.tick}2 sessions finished <em>· Pricing page, Perch</em>`;
+      stage.classList.add('digest', 'finish');
+      say('When work finishes, Perch says so once. Not five pings. Then you get back to building.');
+      await sleep(3400);
+      stage.classList.remove('digest', 'finish');
+      await sleep(600);
+    }
+    const scripts = [agentsWork, needsYou, approve, answer, notes];
+
+    function setChapter(i: number) {
+      chapter = i; chapterTime = 0;
+      chapterButtons.forEach((b, n) => b.setAttribute('aria-current', String(n === i)));
+      const strip = chapterButtons[i].parentElement!, pill = chapterButtons[i];
+      strip.scrollTo({ left: pill.offsetLeft - (strip.clientWidth - pill.offsetWidth) / 2, behavior: reduced ? 'auto' : 'smooth' });
+    }
+    function reset(i: number) {
+      closeShelf(); hover(false);
+      stage.classList.remove('nudge', 'digest', 'finish');
+      card.classList.remove('sending');
+      hud.classList.remove('show');
+      pendingAct = null;
+      baseline(i);
+      if (i >= 3) { openShelf(); show('inbox', views.inbox(), PY.inbox); }
+    }
+    async function play(from: number) {
+      const mine = ++token;
+      for (let i = from; ; i = (i + 1) % scripts.length) {
+        if (mine !== token) return;
+        setChapter(i); reset(i);
+        try { await scripts[i](); }
+        catch (error) { if (error === CANCEL) return; throw error; }
+      }
+    }
+    function setPaused(value: boolean) {
+      paused = value;
+      playBtn.setAttribute('aria-label', paused ? 'Play demo' : 'Pause demo');
+      q('[data-play-icon]').innerHTML = paused ? '<path d="M5 3.2v9.6L12.5 8Z" fill="currentColor"/>' : '<path d="M5 3.5v9M11 3.5v9"/>';
+    }
+
+    // ---------- Visitor input ----------
+    function act(name: string) {
+      if (name === 'focus') { body.querySelector<HTMLInputElement>('[data-input]')?.focus(); }
+      if (name === 'term') { toast('In Perch, this brings the session’s terminal forward.', { ttl: 2000 }); return; }
+      pendingAct = name;
+      if (!started) { started = true; play(chapter); }
+      setPaused(false);
+    }
+    stage.addEventListener('click', event => {
+      const target = (event.target as Element).closest<HTMLElement>('[data-act]');
+      if (target) act(target.dataset.act!);
+    });
+    stage.addEventListener('input', event => {
+      const input = event.target as HTMLInputElement;
+      input.nextElementSibling?.classList.toggle('ready', !!input.value.trim());
+    });
+    const keymap: Record<string, Record<string, string>> = {
+      permission: { Enter: 'allow', '1': 'allow', '2': 'session', '3': 'deny', '4': 'term' },
+      question: { '1': 'opt1', '2': 'opt2', '3': 'opt3' },
+      reply: { Enter: 'focus', '1': 'focus', '2': 'done', '3': 'term' },
+    };
+    frame.addEventListener('keydown', event => {
+      const inInput = event.target instanceof HTMLInputElement;
+      if (event.key === 'Escape') {
+        if (card.classList.contains('sending')) { event.preventDefault(); act('undo'); }
+        else if (inInput) (event.target as HTMLInputElement).blur();
+        return;
+      }
+      if (inInput) {
+        if (event.key === 'Enter') { event.preventDefault(); act(route === 'question' ? 'own' : 'send'); }
+        return;
+      }
+      const name = keymap[route]?.[event.key];
+      if (name && stage.classList.contains('shelf-open') && !card.classList.contains('sending')) { event.preventDefault(); act(name); }
+    });
+    stage.addEventListener('pointerdown', event => {
+      if (!(event.target as Element).closest('input')) frame.focus({ preventScroll: true });
+    });
+    playBtn.addEventListener('click', () => {
+      if (!started) { started = true; setPaused(false); play(chapter); return; }
+      setPaused(!paused);
+    });
+    chapterButtons.forEach((button, i) => button.addEventListener('click', () => {
+      started = true; setPaused(false); play(i);
+    }));
+
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible && !started && !reduced) { started = true; play(0); }
+    }, { threshold: .3 }).observe(frame);
+
+    // Reduced motion: a still frame of the approval card until the visitor presses play.
+    setChapter(2); reset(2);
+    if (reduced) { openShelf(); show('permission', views.permission(), PY.claude); setPaused(true); }
+    else setChapter(0);
+  }
+</script>

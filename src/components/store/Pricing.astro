@@ -1,44 +1,52 @@
 ---
 import { perch, checkoutReady, purchaseHref } from '../../data/perch';
+const included = [
+  'The native Mac app and screen-edge shelf',
+  'Live status for Claude Code, Codex and Cursor',
+  'Approve, answer and reply from the card (opt-in)',
+  'Two-second undo on every answer',
+  'Recent steps and one quiet “done”',
+  'Ten pinned sticky notes in four colors',
+  'Keyboard shortcuts and local storage',
+  'No account, no server, no subscription',
+];
 ---
-<div class="offer dark reveal">
+<div class="offer reveal">
   <div class="offer-copy">
-    <span class="badge">Perch for Mac</span>
-    <h3>Everything you need.<br/><span class="dim">Nothing to renew.</span></h3>
-    <ul>
-      <li>Native Mac app and screen-edge shelf</li>
-      <li>Local agent activity and session shortcuts</li>
-      <li>Pinned sticky notes in four colors</li>
-      <li>Keyboard shortcuts and local storage</li>
-      <li>No account, no subscription</li>
-    </ul>
+    <span class="offer-badge"><img src="/products/perch-icon-512.webp" alt="" width="22" height="22"/>Perch for Mac</span>
+    <h3>Everything Perch does.<br/><span>Nothing to renew.</span></h3>
+    <ul>{included.map(item => <li>{item}</li>)}</ul>
   </div>
   <div class="offer-price">
-    <p class="price">${perch.price}<span>USD · one time</span></p>
-    <a class="button big" href={purchaseHref}>{checkoutReady ? 'Get Perch' : 'View purchase details'} <span aria-hidden="true">↗</span></a>
-    <p class="fine">{checkoutReady ? 'No recurring charges. Applicable taxes calculated at checkout.' : 'Purchases closed until delivery is ready. No payment is collected.'}</p>
-    <p class="fine">App license only · Source code not included · Applicable taxes shown at checkout.</p>
+    <p class="price"><sup>$</sup>{perch.price}<span>once</span></p>
+    <p class="price-note">USD · One payment, a license that doesn’t expire.</p>
+    <a class="button big" href={purchaseHref}>{checkoutReady ? `Get Perch · $${perch.price}` : 'View purchase details'}</a>
+    <p class="fine">{checkoutReady ? 'No recurring charges. Applicable taxes calculated at checkout.' : 'Purchases are closed until delivery is ready. No payment is collected yet.'}</p>
+    <p class="fine">macOS 14+ · App license only · Source code not included.</p>
   </div>
 </div>
 <style>
-.offer{display:grid;grid-template-columns:1.1fr 1fr;border-radius:32px;overflow:hidden;border:1px solid var(--line);background:radial-gradient(120% 90% at 0% 0%,#1b2a22 0,#0b0d0c 55%,#08090a 100%)}
-.offer-copy,.offer-price{padding:52px}
-.offer-copy .badge{border-color:var(--line)}
-.offer-copy h3{font-size:clamp(30px,3.4vw,40px);margin:24px 0 28px;letter-spacing:-.04em;line-height:1.1}
-.offer-copy ul{list-style:none;padding:0;margin:0;display:grid;gap:14px;font-size:16px}
+.offer{position:relative;display:grid;grid-template-columns:1.15fr 1fr;max-width:1000px;margin:64px auto 0;border-radius:34px;overflow:hidden;background:#0f1013;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1),0 50px 120px -40px rgba(250,201,97,.25)}
+.offer:before{content:'';position:absolute;inset:0;background:radial-gradient(60% 70% at 100% 0%,rgba(250,201,97,.2),transparent 70%),radial-gradient(60% 60% at 0% 100%,rgba(108,134,206,.18),transparent 70%);pointer-events:none}
+.offer-copy,.offer-price{position:relative;padding:50px}
+.offer-badge{display:inline-flex;align-items:center;gap:9px;padding:5px 12px 5px 6px;border-radius:999px;background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);font-size:13px;font-weight:500}
+.offer-badge img{border-radius:6px}
+.offer-copy h3{margin:26px 0 28px;font-size:clamp(28px,3.2vw,38px);line-height:1.1;letter-spacing:-.045em}
+.offer-copy h3 span{color:rgba(255,255,255,.5)}
+.offer-copy ul{list-style:none;margin:0;padding:0;display:grid;gap:13px;font-size:15.5px;color:rgba(255,255,255,.86)}
 .offer-copy li{display:flex;gap:12px;align-items:center}
-.offer-copy li:before{content:'';flex:none;width:18px;height:18px;border-radius:50%;background:#2f6b4f url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.6 2.5L12 5.5' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat}
-.offer-price{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:0;border-left:1px solid var(--line);background:rgba(255,255,255,.02)}
-.price{font-size:clamp(72px,8vw,104px);font-weight:600;letter-spacing:-.06em;line-height:1}
-.price span{display:block;font:500 12px/1.5 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:14px}
-.offer-price .button{width:100%;margin:34px 0 18px}
-.offer-price .fine+.fine{margin-top:8px}
+.offer-copy li:before{content:'';flex:none;width:18px;height:18px;border-radius:50%;background:rgba(97,204,140,.2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4 8.5l2.6 2.5L12 5.5' fill='none' stroke='%2361CC8C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/12px no-repeat}
+.offer-price{display:flex;flex-direction:column;justify-content:center;border-left:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025)}
+.price{display:flex;align-items:flex-start;font-size:clamp(84px,10vw,128px);font-weight:600;letter-spacing:-.07em;line-height:.9}
+.price sup{font-size:.36em;margin:.18em .06em 0 0;letter-spacing:0;color:rgba(255,255,255,.6)}
+.price span{align-self:flex-end;margin:0 0 .3em .3em;font-size:18px;font-weight:500;letter-spacing:-.01em;color:rgba(255,255,255,.55)}
+.price-note{margin-top:14px;font-size:15px;color:rgba(255,255,255,.6)}
+.offer-price .button{width:100%;margin:30px 0 18px}
+.offer-price .fine+.fine{margin-top:6px}
 @media(max-width:860px){
   .offer{grid-template-columns:1fr}
-  .offer-copy,.offer-price{padding:36px}
-  .offer-price{border-left:0;border-top:1px solid var(--line)}
+  .offer-copy,.offer-price{padding:34px}
+  .offer-price{border-left:0;border-top:1px solid rgba(255,255,255,.08)}
 }
-@media(max-width:560px){
-  .offer-copy,.offer-price{padding:28px 24px}
-}
+@media(max-width:560px){.offer-copy,.offer-price{padding:28px 22px}}
 </style>
