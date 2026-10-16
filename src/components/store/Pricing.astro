@@ -31,6 +31,11 @@ const included = [
   </div>
 </div>
 <p class="currency-note">Prices in US dollars, before any tax added at checkout.</p>
+<a class="money-back reveal" href="/back/">
+  <span class="mb-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="6" width="13" height="12" rx="2.5"/><path d="M15.5 10.5l6-3.5v10l-6-3.5"/></svg></span>
+  <span class="mb-copy"><b>Post about Perch, get your money back.</b><span>Share a clip of Perch at work. Half back at 10,000 views, all of it at 50,000.</span></span>
+  <svg class="mb-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>
+</a>
 <style>
 .offer{position:relative;display:grid;grid-template-columns:1.15fr 1fr;max-width:1000px;margin:64px auto 0;border-radius:34px;overflow:hidden;background:#0f1013;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1),0 50px 120px -40px rgba(250,201,97,.25)}
 .offer:before{content:'';position:absolute;inset:0;background:radial-gradient(60% 70% at 100% 0%,rgba(250,201,97,.2),transparent 70%),radial-gradient(60% 60% at 0% 100%,rgba(108,134,206,.18),transparent 70%);pointer-events:none}
@@ -57,6 +62,16 @@ const included = [
 .offer-join{margin:30px 0 18px}
 .offer-price .fine a{color:inherit}
 .currency-note{max-width:1000px;margin:22px auto 0;text-align:center;font-size:13px;color:rgba(255,255,255,.45)}
+.money-back{display:flex;align-items:center;gap:24px;max-width:1000px;margin:34px auto 0;padding:26px 30px 26px 26px;border-radius:26px;background:#0f1013;box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);transition:background .2s,box-shadow .2s}
+.money-back:hover{background:#141519;box-shadow:inset 0 0 0 1px rgba(250,201,97,.3)}
+.mb-icon{flex:none;display:grid;place-items:center;width:64px;height:64px;border-radius:18px;background:rgba(250,201,97,.12);box-shadow:inset 0 0 0 1px rgba(250,201,97,.18)}
+.mb-icon svg{width:26px;height:26px;fill:none;stroke:#FAC961;stroke-width:1.8;stroke-linejoin:round;stroke-linecap:round}
+.mb-copy{flex:1;display:grid;gap:6px}
+.mb-copy b{font-size:clamp(18px,2vw,21px);font-weight:600;letter-spacing:-.025em}
+.mb-copy span{font-size:15.5px;line-height:1.55;color:rgba(255,255,255,.55)}
+.mb-arrow{flex:none;width:22px;height:22px;fill:none;stroke:rgba(255,255,255,.5);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s,stroke .2s}
+.money-back:hover .mb-arrow{transform:translateX(3px);stroke:#fff}
+@media(max-width:560px){.money-back{gap:16px;padding:20px}.mb-icon{width:48px;height:48px;border-radius:14px}.mb-icon svg{width:22px;height:22px}}
 @media(max-width:860px){
   .offer{grid-template-columns:1fr}
   .offer-copy,.offer-price{padding:34px}
