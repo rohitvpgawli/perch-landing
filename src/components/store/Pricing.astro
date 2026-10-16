@@ -1,5 +1,6 @@
 ---
 import { perch, checkoutReady, purchaseHref } from '../../data/perch';
+import Waitlist from './Waitlist.astro';
 const seats = perch.launchSeats.toLocaleString('en-US');
 const included = [
   'The native Mac app and screen-edge shelf',
@@ -23,8 +24,9 @@ const included = [
     <p class="price"><sup>$</sup>{perch.price}<span>once</span></p>
     <p class="was"><s>${perch.regularPrice}</s><em>Save ${perch.regularPrice - perch.price}</em></p>
     <p class="price-note">USD. ${perch.regularPrice} once the first {seats} licenses are gone.</p>
-    <a class="button big" href={purchaseHref}>{checkoutReady ? `Get Perch for $${perch.price}` : 'View purchase details'}</a>
-    <p class="fine">{checkoutReady ? 'No recurring charges. Applicable taxes calculated at checkout.' : 'Purchases are closed until delivery is ready. No payment is collected yet.'}</p>
+    {checkoutReady
+      ? <><a class="button big" href={purchaseHref}>Get Perch for ${perch.price}</a><p class="fine">No recurring charges. Applicable taxes calculated at checkout.</p></>
+      : <div class="offer-join"><Waitlist source="pricing" compact note={`Perch is almost ready. Leave your email to lock in $${perch.price} on launch day. No payment yet.`}/></div>}
     <p class="fine">Full refund within 14 days · macOS 14+ · <a href="/terms/">Terms</a></p>
   </div>
 </div>
@@ -52,6 +54,7 @@ const included = [
 .price-note{margin-top:12px;font-size:15px;color:rgba(255,255,255,.6)}
 .offer-price .button{width:100%;margin:30px 0 18px}
 .offer-price .fine+.fine{margin-top:6px}
+.offer-join{margin:30px 0 18px}
 .offer-price .fine a{color:inherit}
 .currency-note{max-width:1000px;margin:22px auto 0;text-align:center;font-size:13px;color:rgba(255,255,255,.45)}
 @media(max-width:860px){

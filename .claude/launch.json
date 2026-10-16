@@ -1,0 +1,26 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "perch-site",
+      "url": "http://127.0.0.1:4323",
+      "port": 4323
+    },
+    {
+      "name": "perch-worker",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "wrangler",
+        "dev",
+        "--local",
+        "--local-upstream",
+        "localhost:8797",
+        "--port",
+        "8797"
+      ],
+      "port": 8797,
+      "url": "http://localhost:8797",
+      "autoPort": false
+    }
+  ]
+}

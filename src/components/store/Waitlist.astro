@@ -1,0 +1,64 @@
+---
+// Email capture while purchases are closed. Posts to /api/waitlist (worker/index.js → D1).
+import { perch } from '../../data/perch';
+interface Props { source: string; id?: string; note?: string; compact?: boolean }
+const { source, id, note = `We’ll email you once, the day Perch is ready, with the $${perch.price} launch price. No spam.`, compact = false } = Astro.props;
+---
+<form class:list={['waitlist', { compact }]} id={id} action="/api/waitlist" method="post" data-waitlist>
+  <div class="wl-field">
+    <label class="wl-sr" for={`wl-${source}`}>Email address</label>
+    <input id={`wl-${source}`} name="email" type="email" required autocomplete="email" inputmode="email" placeholder="you@work.com" maxlength="254"/>
+    <input type="hidden" name="source" value={source}/>
+    <input class="wl-trap" type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true"/>
+    <button type="submit">Get early access</button>
+  </div>
+  <p class="wl-note" role="status" aria-live="polite" data-default={note}>{note}</p>
+</form>
+
+<script>
+  const done = 'You’re on the list. We’ll write the day Perch is ready.';
+  document.querySelectorAll<HTMLFormElement>('form[data-waitlist]').forEach(form => {
+    const note = form.querySelector<HTMLElement>('.wl-note')!;
+    const button = form.querySelector('button')!;
+    if (new URLSearchParams(location.search).get('joined') === '1' && form.id === 'join') { form.classList.add('joined'); note.textContent = done; }
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      button.disabled = true;
+      form.classList.remove('error');
+      try {
+        const response = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { accept: 'application/json' } });
+        const result = await response.json();
+        if (!result.ok) throw new Error(result.error);
+        form.classList.add('joined');
+        note.textContent = done;
+        form.reset();
+      } catch (error) {
+        form.classList.add('error');
+        note.textContent = error instanceof Error && error.message ? error.message : 'Something went wrong. Please try again.';
+        button.disabled = false;
+      }
+    });
+  });
+</script>
+
+<style>
+.waitlist{width:100%;max-width:480px}
+.wl-field{display:flex;align-items:center;gap:6px;padding:6px;border-radius:999px;background:rgba(255,255,255,.08);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16),0 16px 40px -14px rgba(250,201,97,.45);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:box-shadow .2s ease}
+.wl-field:focus-within{box-shadow:inset 0 0 0 1px rgba(250,201,97,.6),0 16px 40px -14px rgba(250,201,97,.6)}
+.wl-field input[type=email]{flex:1;min-width:0;height:46px;padding:0 6px 0 18px;border:0;outline:0;background:transparent;color:#fff;font:inherit;font-size:16px}
+.wl-field input::placeholder{color:rgba(255,255,255,.45)}
+.wl-field button{flex:none;height:46px;padding:0 22px;border:0;border-radius:999px;background:linear-gradient(180deg,#fff,#ecebe6);color:#0b0c0c;font:inherit;font-size:15.5px;font-weight:600;cursor:pointer;box-shadow:inset 0 1px 0 #fff,inset 0 -1px 0 rgba(0,0,0,.06);transition:transform .2s ease}
+.wl-field button:hover{transform:translateY(-1px)}
+.wl-field button:disabled{opacity:.6;cursor:default;transform:none}
+.wl-note{margin-top:12px;font-size:13px;line-height:1.5;color:rgba(255,255,255,.55);text-align:center}
+.waitlist.joined .wl-field{display:none}
+.waitlist.joined .wl-note{margin-top:0;padding:14px 18px;border-radius:16px;background:rgba(97,204,140,.12);box-shadow:inset 0 0 0 1px rgba(97,204,140,.3);color:#9fe3b9;font-size:14.5px}
+.waitlist.error .wl-note{color:#ff9a8a}
+.compact .wl-note{text-align:left}
+.wl-sr,.wl-trap{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+@media(max-width:480px){
+  .wl-field{flex-direction:column;align-items:stretch;padding:6px;border-radius:24px}
+  .wl-field input[type=email]{text-align:center;padding:0 12px}
+  .wl-field button{width:100%}
+}
+</style>

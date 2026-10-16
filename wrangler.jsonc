@@ -11,6 +11,9 @@
     "html_handling": "auto-trailing-slash",
     "not_found_handling": "404-page"
   },
+  "d1_databases": [
+    { "binding": "WAITLIST", "database_name": "perch-waitlist", "database_id": "2148efd6-2be6-4a31-b8a8-4766dc11f9e4", "migrations_dir": "migrations" }
+  ],
   "workers_dev": false,
   "preview_urls": false,
   "routes": [
