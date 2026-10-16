@@ -34,6 +34,16 @@ Pushes to `main` deploy automatically through Cloudflare Workers Builds (connect
 
 Deployed to https://perched.fyi through Cloudflare MCP on October 14, 2026. HTTPS, all 23 served files, 301 redirects, custom 404, security headers, and closed checkout were verified. See `docs/HOSTING.md` for deployment IDs and DNS propagation notes.
 
+## Waitlist
+
+While checkout is closed, every purchase CTA becomes an email form (`src/components/store/Waitlist.astro`) that posts to `POST /api/waitlist` in `worker/index.js`. Addresses go to the `perch-waitlist` D1 database (`WAITLIST` binding, schema in `migrations/`), one row per email with source form, country and timestamp. Once `checkoutReady` is true the forms switch back to buy buttons.
+
+```sh
+npx wrangler d1 execute perch-waitlist --remote --command "select * from waitlist order by created_at desc"
+```
+
+Run the full site with the API locally via the `perch-worker` config in `.claude/launch.json` (`npm run build` first; `npx wrangler d1 migrations apply perch-waitlist --local` once).
+
 ## Analytics
 
 Page-level analytics use Cloudflare Web Analytics (cookieless). Add `perched.fyi` under Analytics & Logs → Web Analytics with automatic setup **off**, copy the site token, and set `CF_WEB_ANALYTICS_TOKEN` in the build environment (or `.env`) before `npm run deploy`. The beacon is omitted when the token is empty; the CSP in `public/_headers` already allows it.

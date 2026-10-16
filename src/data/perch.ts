@@ -19,7 +19,8 @@ if (configured) {
   if (deliveryReady) paymentLink = url.href;
 }
 export const checkoutReady = Boolean(paymentLink);
-export const purchaseHref = '/checkout/';
+// Until checkout opens, every purchase CTA points at the waitlist form in the hero.
+export const purchaseHref = checkoutReady ? '/checkout/' : '/#join';
 // Cloudflare Web Analytics site token; the beacon is omitted when unset.
 export const analyticsToken = import.meta.env.CF_WEB_ANALYTICS_TOKEN?.trim() ?? '';
 if (analyticsToken && !/^[0-9a-f]{32}$/.test(analyticsToken)) {

@@ -1,6 +1,7 @@
 ---
 import Store from '../layouts/Store.astro';
 import Mark from '../components/store/Mark.astro';
+import Waitlist from '../components/store/Waitlist.astro';
 import { perch, checkoutReady, paymentLink } from '../data/perch';
 const seats = perch.launchSeats.toLocaleString('en-US');
 ---
@@ -22,7 +23,7 @@ const seats = perch.launchSeats.toLocaleString('en-US');
         <ul><li>Native Mac app and screen-edge shelf</li><li>Live status for Claude Code, Codex and Cursor</li><li>Approve, answer and reply from the card</li><li>Pinned sticky notes and keyboard shortcuts</li><li>A year of updates and email support</li><li>Full refund within 14 days</li></ul>
         {checkoutReady
           ? <><a class="button" href={paymentLink}>Continue to Stripe ↗</a><p class="fine">Applicable taxes are calculated at checkout.</p></>
-          : <div class="closed"><h3>Nearly ready to perch.</h3><p>Purchases are closed while we prepare delivery. No payment is collected yet.</p><a class="text-link" href={perch.support}>Ask about availability ↗</a></div>}
+          : <div class="closed"><h3>Nearly ready to perch.</h3><p>Purchases are closed while we prepare delivery. No payment is collected yet. Leave your email and we’ll tell you the day it opens.</p><Waitlist source="checkout" compact note="One email on launch day. No spam."/></div>}
         <p class="fine">App license only. Source code is not included. See the <a href="/terms/">terms and refund policy</a> and <a href="/privacy/">privacy policy</a>.</p>
       </div>
     </div>

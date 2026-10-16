@@ -5,6 +5,7 @@ import Pricing from './store/Pricing.astro';
 import { providerIcons as P } from './store/icons';
 import { product } from '../data/product';
 import { perch, checkoutReady, purchaseHref } from '../data/perch';
+import Waitlist from './store/Waitlist.astro';
 
 const seats = perch.launchSeats.toLocaleString('en-US');
 const providers = [
@@ -58,11 +59,16 @@ const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication
         <a class="pill-tag rise" href="#pricing" style="--d:0ms"><img src="/products/perch-icon-512.webp" alt="" width="20" height="20"/>Perch for Mac<span>Launch price for the first {seats}</span></a>
         <h1 class="rise" style="--d:80ms">Stop babysitting<br/><span class="soft">your coding agents.</span></h1>
         <p class="hero-lead rise" style="--d:160ms">Perch lives on the edge of your Mac and tells you the second Claude Code, Codex or Cursor needs you. Approve, answer or reply in one keystroke, then get back to your own work.</p>
-        <div class="hero-actions rise" style="--d:240ms">
-          <a class="button big buy" href={purchaseHref} aria-label={`Get Perch for $${perch.price}, launch price, regularly $${perch.regularPrice}`}>Get Perch<span class="cta-price" aria-hidden="true"><s>${perch.regularPrice}</s><b>${perch.price}</b></span></a>
-          <a class="button big glass" href="#demo">Watch it work <span aria-hidden="true">↓</span></a>
-        </div>
-        <p class="hero-meta rise" style="--d:300ms">One payment · No subscription · macOS 14+ · 14-day refund</p>
+        {checkoutReady ? <>
+          <div class="hero-actions rise" style="--d:240ms">
+            <a class="button big buy" href={purchaseHref} aria-label={`Get Perch for $${perch.price}, launch price, regularly $${perch.regularPrice}`}>Get Perch<span class="cta-price" aria-hidden="true"><s>${perch.regularPrice}</s><b>${perch.price}</b></span></a>
+            <a class="button big glass" href="#demo">Watch it work <span aria-hidden="true">↓</span></a>
+          </div>
+          <p class="hero-meta rise" style="--d:300ms">One payment · No subscription · macOS 14+ · 14-day refund</p>
+        </> : <>
+          <div class="hero-actions rise" style="--d:240ms"><Waitlist id="join" source="hero" note="Be first to know when Perch is ready. One email on launch day, no spam."/></div>
+          <p class="hero-meta rise" style="--d:300ms">Launching soon · <s>${perch.regularPrice}</s> ${perch.price} for the first {seats} · macOS 14+</p>
+        </>}
         <div class="works rise" style="--d:360ms" aria-label="Works with">
           <span>Works with</span>
           {providers.map(p => <span class="works-item"><span class="works-icon" set:html={p.icon}></span>{p.name}</span>)}
@@ -235,10 +241,12 @@ const schema = { '@context': 'https://schema.org', '@type': 'SoftwareApplication
         <div class="icon-halo big"><img src="/products/perch-icon-512.webp" alt="" width="120" height="120"/></div>
         <h2>Stop checking.<br/><span class="soft">Start shipping.</span></h2>
         <p class="lead">Let Perch keep watch, and answer your agents the moment they need you.</p>
-        <div class="hero-actions">
-          <a class="button big buy" href={purchaseHref} aria-label={`Get Perch for $${perch.price}, launch price, regularly $${perch.regularPrice}`}>Get Perch<span class="cta-price" aria-hidden="true"><s>${perch.regularPrice}</s><b>${perch.price}</b></span></a>
-          <a class="button big glass" href="#demo">See the demo again</a>
-        </div>
+        {checkoutReady
+          ? <div class="hero-actions">
+              <a class="button big buy" href={purchaseHref} aria-label={`Get Perch for $${perch.price}, launch price, regularly $${perch.regularPrice}`}>Get Perch<span class="cta-price" aria-hidden="true"><s>${perch.regularPrice}</s><b>${perch.price}</b></span></a>
+              <a class="button big glass" href="#demo">See the demo again</a>
+            </div>
+          : <div class="hero-actions"><Waitlist source="closing"/></div>}
         <p class="hero-meta">Launch price for the first {seats} customers · macOS 14+</p>
       </div>
     </section>

@@ -1,7 +1,7 @@
 ---
 import '../styles/store.css';
 import Mark from '../components/store/Mark.astro';
-import { perch, analyticsToken, purchaseHref } from '../data/perch';
+import { perch, analyticsToken, purchaseHref, checkoutReady } from '../data/perch';
 interface Props { title?: string; description?: string; noindex?: boolean }
 const { title = 'Perch: stop babysitting your coding agents', description = perch.description, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, perch.origin).href;
@@ -36,7 +36,7 @@ const footer = [
     <header class="header"><nav class="shell nav" aria-label="Main navigation">
       <a href="/" class="brand"><Mark product="perch" size={32}/>Perch.</a>
       <div class="nav-links"><a href="/#demo">Demo</a><a href="/#inside">Features</a><a href="/#privacy">Privacy</a><a href="/#pricing">Pricing</a><a href="/#questions">FAQ</a></div>
-      <a class="button small nav-cta" href={purchaseHref}>Get Perch · ${perch.price}</a>
+      <a class="button small nav-cta" href={purchaseHref}>{checkoutReady ? `Get Perch · $${perch.price}` : 'Get early access'}</a>
     </nav></header>
     <main id="main"><slot/></main>
     <footer class="site-footer">
@@ -44,7 +44,7 @@ const footer = [
         <div class="footer-brand">
           <a class="brand" href="/" aria-label="Perch home"><Mark product="perch" size={30}/>Perch.</a>
           <p>Your coding agents at the edge of your Mac. Paid for once.</p>
-          <a class="footer-buy" href={purchaseHref}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>Get Perch for Mac</a>
+          <a class="footer-buy" href={purchaseHref}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>{checkoutReady ? 'Get Perch for Mac' : 'Join the waitlist'}</a>
           <small>${perch.price} once for the first {perch.launchSeats.toLocaleString('en-US')} customers, then ${perch.regularPrice}.</small>
         </div>
         <nav class="footer-cols" aria-label="Footer">
@@ -53,7 +53,7 @@ const footer = [
       </div>
       <div class="shell footer-bottom">
         <span>Perch runs on your Mac. Nothing it sees leaves it.</span>
-        <div class="footer-company"><span>© {new Date().getFullYear()} {perch.company}</span><span>Made in Vancouver <span role="img" aria-label="with love">❤️</span></span></div>
+        <div class="footer-company"><span>© {new Date().getFullYear()} {perch.company}</span><span>Made in Vancouver <span role="img" aria-label="with love">❤️</span> by <a class="footer-team" href="https://trillium.one" target="_blank" rel="noopener">quietmachines</a></span></div>
       </div>
       <div class="footer-wordmark" aria-hidden="true">
         <svg viewBox="0 0 1000 300" preserveAspectRatio="xMidYMin slice"><defs><pattern id="perch-stripes" width="13" height="10" patternUnits="userSpaceOnUse"><rect width="6" height="10" fill="#ffffff"/></pattern><linearGradient id="perch-fade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".2"/><stop offset="1" stop-color="#fff" stop-opacity=".04"/></linearGradient><mask id="perch-mask"><rect width="1000" height="300" fill="url(#perch-fade)"/></mask></defs><text x="500" y="285" text-anchor="middle" font-size="330" font-weight="700" letter-spacing="-6" fill="url(#perch-stripes)" mask="url(#perch-mask)" font-family="Inter Tight, -apple-system, sans-serif">perch</text></svg>
