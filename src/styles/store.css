@@ -90,7 +90,7 @@ a,button,summary{-webkit-tap-highlight-color:transparent;touch-action:manipulati
   padding:0 8px 0 24px;
   display:flex;justify-content:space-between;align-items:center;gap:20px;
   border-radius:999px;
-  background:rgba(11,12,14,.97);
+  background:#0b0c0e;
   border:1px solid var(--on-dark-line);
   box-shadow:0 14px 44px -18px rgba(0,0,0,.5);
   backdrop-filter:saturate(180%) blur(22px);
