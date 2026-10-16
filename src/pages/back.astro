@@ -1,0 +1,108 @@
+---
+import Store from '../layouts/Store.astro';
+import { perch, purchaseHref, checkoutReady } from '../data/perch';
+const claim = `mailto:${perch.email}?subject=${encodeURIComponent('Money back claim')}&body=${encodeURIComponent('Link to my post:\nScreenshot of the views: (attached)\nEmail I bought Perch with:\n')}`;
+const steps = [
+  { n: '01', title: 'Record', body: 'Ten seconds of Perch at work is plenty: an agent asking for approval at the edge of your screen, or you answering it in a keystroke.', icon: '<rect x="2.5" y="6" width="13" height="12" rx="2.5"/><path d="M15.5 10.5l6-3.5v10l-6-3.5"/>' },
+  { n: '02', title: 'Post', body: 'Share it from your own account on X, Instagram Reels, TikTok or YouTube Shorts. Say it’s Perch and add #perchformac.', icon: '<path d="M21 3L10 14"/><path d="M21 3l-7 18-4-7-7-4z"/>' },
+  { n: '03', title: 'Send us the link', body: 'Once it passes a mark, email the link, a screenshot of the views and the email you bought with.', icon: '<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3.5 7l8.5 6 8.5-6"/>' },
+];
+const tiers = [
+  { label: 'Reels, TikTok, Shorts', unit: 'views', marks: [['10,000', '50% back'], ['50,000', '100% back']] },
+  { label: 'X counts impressions', unit: 'impressions', marks: [['25,000', '50% back'], ['125,000', '100% back']] },
+];
+const rules = [
+  'One refund per license, on your first purchase.',
+  'Views have to be real: no bought views, bots or paid promotion.',
+  'Post as often as you like, but one post has to reach the mark on its own.',
+  'The refund goes back to the card you paid with, through Stripe. You keep your license.',
+  'A person reviews every claim, and that decision is final.',
+  'We may change or end this offer. Claims already sent will be honored.',
+  'Your video stays yours. We may reshare it with credit, unless you tell us not to.',
+];
+---
+<Store title="Post about Perch, get your money back | Perch" description="Share a clip of Perch at work. We refund half at 10,000 views and all of it at 50,000. You keep Perch either way.">
+  <article class="shell back">
+    <header class="back-hero">
+      <p class="eyebrow">Money back</p>
+      <h1>Post about Perch.<br/><span class="serif">Get your money back.</span></h1>
+      <p class="lead">If enough people see your post, we refund half of what you paid. Reach the next mark and we refund all of it. You keep Perch either way.</p>
+      <div class="back-actions">
+        <a class="button" href={purchaseHref}>{checkoutReady ? `Get Perch for $${perch.price}` : 'Get early access'}</a>
+        <a class="button glass" href={claim}>Send a claim</a>
+      </div>
+    </header>
+
+    <ol class="back-steps">
+      {steps.map(step => (
+        <li>
+          <div class="step-top"><span class="step-icon"><svg viewBox="0 0 24 24" aria-hidden="true" set:html={step.icon}/></span><span class="step-n">{step.n}</span></div>
+          <h2>{step.title}</h2>
+          <p>{step.body}</p>
+        </li>
+      ))}
+    </ol>
+
+    <section class="back-tiers" aria-labelledby="tiers-title">
+      <h2 id="tiers-title">How many views it takes</h2>
+      <div class="tier-grid">
+        {tiers.map(tier => (
+          <div class="tier">
+            <p class="eyebrow">{tier.label}</p>
+            <div class="tier-marks">
+              {tier.marks.map(([count, back]) => <div><b>{count}</b><small>{tier.unit}</small><em>{back}</em></div>)}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="back-rules" aria-labelledby="rules-title">
+      <h2 id="rules-title">The rules</h2>
+      <ul>{rules.map(rule => <li>{rule}</li>)}</ul>
+      <a class="button" href={claim}>Send a claim</a>
+      <p class="fine">Claims go to <a href={perch.support}>{perch.email}</a>. See also our <a href="/terms/#refunds">refund terms</a>.</p>
+    </section>
+  </article>
+</Store>
+<style>
+.back{max-width:1000px;padding-block:160px 100px}
+.back-hero{text-align:center;display:grid;justify-items:center}
+.back-hero .eyebrow{color:#FAC961;opacity:.85}
+.back-hero h1{margin:18px 0 22px;font-size:clamp(42px,6.4vw,76px);line-height:1.02}
+.back-hero .serif{color:#FAC961}
+.back-hero .lead{font-size:19px}
+.back-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:32px}
+.back-steps{list-style:none;margin:80px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.back-steps li{padding:26px;border-radius:24px;background:#0f1013;box-shadow:inset 0 0 0 1px rgba(255,255,255,.09)}
+.step-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.step-icon{display:grid;place-items:center;width:44px;height:44px;border-radius:13px;background:rgba(250,201,97,.12);box-shadow:inset 0 0 0 1px rgba(250,201,97,.18)}
+.step-icon svg{width:21px;height:21px;fill:none;stroke:#FAC961;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.step-n{font:500 13px var(--mono);color:var(--muted)}
+.back-steps h2{font-size:21px;letter-spacing:-.03em;margin-bottom:8px}
+.back-steps p{font-size:15px;color:rgba(245,245,242,.6)}
+.back-tiers,.back-rules{margin-top:90px}
+.back-tiers>h2,.back-rules>h2{font-size:clamp(28px,3.4vw,40px);text-align:center;margin-bottom:30px}
+.tier-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.tier{padding:28px;border-radius:24px;background:#0f1013;box-shadow:inset 0 0 0 1px rgba(255,255,255,.09)}
+.tier-marks{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+.tier-marks div{display:grid;gap:2px;padding:20px;border-radius:18px;background:rgba(255,255,255,.035);box-shadow:inset 0 0 0 1px rgba(255,255,255,.07)}
+.tier-marks b{font-size:clamp(28px,3.4vw,38px);font-weight:600;letter-spacing:-.05em;font-variant-numeric:tabular-nums}
+.tier-marks small{font-size:14px;color:var(--muted)}
+.tier-marks em{margin-top:12px;width:fit-content;font-style:normal;font-size:12.5px;font-weight:600;padding:4px 10px;border-radius:999px;color:#61CC8C;background:rgba(97,204,140,.12);box-shadow:inset 0 0 0 1px rgba(97,204,140,.3)}
+.back-rules{max-width:680px;margin-inline:auto;text-align:center}
+.back-rules ul{margin:0 0 34px;padding:6px 28px;border-radius:24px;background:#0f1013;box-shadow:inset 0 0 0 1px rgba(255,255,255,.09);list-style:none;text-align:left}
+.back-rules li{padding:16px 0;font-size:15.5px;line-height:1.55;color:rgba(245,245,242,.78)}
+.back-rules li+li{border-top:1px solid rgba(255,255,255,.07)}
+.back-rules .fine{margin-top:16px}
+@media(max-width:860px){
+  .back{padding-block:130px 80px}
+  .back-steps,.tier-grid{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+  .back-actions{flex-direction:column;width:100%}
+  .back-actions .button{width:100%}
+  .tier,.back-steps li{padding:22px}
+  .back-rules ul{padding:4px 20px}
+}
+</style>
