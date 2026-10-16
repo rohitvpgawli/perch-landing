@@ -2,7 +2,7 @@
 
 > A native Mac utility for agent activity and sticky notes at the edge of your screen.
 
-Perch is standalone software for macOS 14 and later, built with SwiftUI and AppKit.
+Perch is standalone software for Apple silicon Macs on macOS 14 and later, built with SwiftUI and AppKit.
 Price: $29 USD, one time, for the first 1,000 customers, then $99. Plus applicable taxes. Includes a year of updates and email support; full refund within 14 days. App license only; source code is not included.
 Status: Purchases are closed until delivery is ready. No payment is currently collected.
 

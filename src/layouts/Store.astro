@@ -17,7 +17,7 @@ const footer = [
     <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>{title}</title><meta name="description" content={description}/>
     <meta name="robots" content={noindex ? 'noindex, follow' : 'index, follow, max-image-preview:large'}/>
-    <link rel="canonical" href={canonical}/><link rel="icon" href="/products/perch-icon.webp" type="image/webp"/>
+    <link rel="canonical" href={canonical}/><link rel="icon" href="/favicon.ico" sizes="any"/><link rel="icon" href="/products/perch-icon.webp" type="image/webp"/>
     <link rel="apple-touch-icon" href="/apple-touch-icon.png"/><link rel="manifest" href="/site.webmanifest"/>
     <meta name="theme-color" content="#08090a"/>
     <meta property="og:title" content={title}/><meta property="og:description" content={description}/>
@@ -32,6 +32,13 @@ const footer = [
   </head>
   <body class="dark">
     <script is:inline>document.documentElement.classList.add('js')</script>
+    <script is:inline>
+      // Keep the campaign tags a visitor arrived with, so a later signup on any page can carry them.
+      try {
+        const tags = [...new URLSearchParams(location.search)].filter(([key, value]) => key.startsWith('utm_') && value);
+        if (tags.length) sessionStorage.setItem('perch-utm', JSON.stringify(Object.fromEntries(tags)));
+      } catch {}
+    </script>
     <a class="skip" href="#main">Skip to content</a>
     <header class="header"><nav class="shell nav" aria-label="Main navigation">
       <a href="/" class="brand"><Mark product="perch" size={32}/>Perch.</a>

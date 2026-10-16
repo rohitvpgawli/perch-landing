@@ -6,13 +6,14 @@ import { perch } from '../data/perch';
   <article class="shell policy">
     <p class="eyebrow">Privacy policy</p>
     <h1>Your agents’ work stays on your Mac.</h1>
-    <p class="updated">Last updated October 14, 2026</p>
+    <p class="updated">Last updated October 16, 2026</p>
     <div class="short">
       <h2>The short version</h2>
       <ul>
         <li>Perch keeps agent activity and your notes on your Mac. Prompts, commands, diffs and transcripts are never sent to us or anyone else.</li>
         <li>The app has no account, no analytics, no telemetry and no servers. It makes no network requests.</li>
         <li>When you buy, Stripe handles the payment. We receive your email and order details so we can deliver your license and support you.</li>
+        <li>If you join the launch list on this website, we keep your email so we can tell you when Perch is ready. Nothing else is added to it, and you can leave at any time.</li>
       </ul>
     </div>
 
@@ -34,22 +35,33 @@ import { perch } from '../data/perch';
     <h2>4. What we collect when you buy</h2>
     <p>Payments are processed by Stripe. We never see your full card number. Stripe shares your name, email, country and order details with us so we can deliver Perch, send receipts and updates, answer support and handle refunds. Stripe’s use of your data is covered by the <a href="https://stripe.com/privacy">Stripe Privacy Policy</a>. We keep purchase records as long as tax and accounting law requires.</p>
 
-    <h2>5. This website</h2>
+    <h2 id="launch-list">5. The launch list</h2>
+    <p>Before Perch is available, you can leave your email on this website to hear when it launches. When you do, we store:</p>
+    <ul>
+      <li>your email address;</li>
+      <li>which form on the site you used;</li>
+      <li>your country, worked out by Cloudflare from your connection (we don’t store your IP address);</li>
+      <li>the time you signed up;</li>
+      <li>any campaign tags in the link that brought you here (<code>utm_source</code>, <code>utm_medium</code>, <code>utm_campaign</code>, <code>utm_content</code>, <code>utm_term</code>), so we know which posts people found us through. To carry these tags from page to page during your visit, the site keeps them in your browser’s session storage, which is cleared when you close the tab.</li>
+    </ul>
+    <p>We use this only to email you about Perch’s launch and launch pricing, and to see which posts brought people to the site. We don’t sell it, share it or use it for advertising. The list is stored in a Cloudflare database. Every email we send has a way to opt out. To be removed sooner, email <a href={perch.support}>{perch.email}</a> and we’ll delete your entry.</p>
+
+    <h2>6. This website</h2>
     <p>This site sets no tracking cookies and runs no advertising scripts. We use Cloudflare Web Analytics to count page views and measure page speed; it uses no cookies or local storage and does not follow you across sites. Our hosting provider, Cloudflare, may keep standard server logs, such as IP address and browser type, for security and reliability. See <a href="https://www.cloudflare.com/privacypolicy/">Cloudflare’s privacy policy</a>.</p>
 
-    <h2>6. Email</h2>
-    <p>If you write to us, we use your message only to help you. We don’t send marketing email unless you ask for it, and we never sell or share your information.</p>
+    <h2>7. Email</h2>
+    <p>If you write to us, we use your message only to help you. We only send launch or marketing email if you joined the launch list or asked for it, and we never sell or share your information.</p>
 
-    <h2>7. Your rights</h2>
-    <p>Wherever you live, you can ask us for a copy of the purchase data we hold about you, ask us to correct it, or ask us to delete it where the law allows. Email <a href={perch.support}>{perch.email}</a>. Everything the app stores is already on your Mac and under your control.</p>
+    <h2>8. Your rights</h2>
+    <p>Wherever you live, you can ask us for a copy of the purchase or launch-list data we hold about you, ask us to correct it, or ask us to delete it where the law allows. Email <a href={perch.support}>{perch.email}</a>. Everything the app stores is already on your Mac and under your control.</p>
 
-    <h2>8. Your agents</h2>
+    <h2>9. Your agents</h2>
     <p>Claude Code, Codex, Cursor and the services behind them are run by other companies under their own privacy policies. Perch doesn’t change what those agents send to their providers.</p>
 
-    <h2>9. Children</h2>
+    <h2>10. Children</h2>
     <p>Perch is not directed at children under 13, and we don’t knowingly collect their data.</p>
 
-    <h2>10. Changes</h2>
+    <h2>11. Changes</h2>
     <p>If a future version of Perch ever needs to connect to the internet, for example to check for updates, we will say so here and in the release notes before it ships. We’ll update the date at the top when this policy changes.</p>
   </article>
 </Store>

@@ -36,7 +36,7 @@ Deployed to https://perched.fyi through Cloudflare MCP on October 14, 2026. HTTP
 
 ## Waitlist
 
-While checkout is closed, every purchase CTA becomes an email form (`src/components/store/Waitlist.astro`) that posts to `POST /api/waitlist` in `worker/index.js`. Addresses go to the `perch-waitlist` D1 database (`WAITLIST` binding, schema in `migrations/`), one row per email with source form, country and timestamp. Once `checkoutReady` is true the forms switch back to buy buttons.
+While checkout is closed, every purchase CTA becomes an email form (`src/components/store/Waitlist.astro`) that posts to `POST /api/waitlist` in `worker/index.js`. Addresses go to the `perch-waitlist` D1 database (`WAITLIST` binding, schema in `migrations/`), one row per email with source form, country, timestamp and any `utm_*` tags from the link the visitor arrived on (kept in session storage across pages by `src/layouts/Store.astro`). Apply new migrations with `npx wrangler d1 migrations apply perch-waitlist --remote` **before** deploying a Worker that writes the new columns. Once `checkoutReady` is true the forms switch back to buy buttons.
 
 ```sh
 npx wrangler d1 execute perch-waitlist --remote --command "select * from waitlist order by created_at desc"

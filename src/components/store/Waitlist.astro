@@ -12,11 +12,18 @@ const { source, id, note = `We’ll email you once, the day Perch is ready, with
     <input class="wl-trap" type="text" name="company" tabindex="-1" autocomplete="off" aria-hidden="true"/>
     <button type="submit">Get early access</button>
   </div>
-  <p class="wl-note" role="status" aria-live="polite" data-default={note}>{note}</p>
+  <p class="wl-note" role="status" aria-live="polite" >{note} <a href="/privacy/#launch-list">Privacy</a></p>
 </form>
 
 <script>
   const done = 'You’re on the list. We’ll write the day Perch is ready.';
+  const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+  // UTM tags from this URL, else the ones saved when the visit started (see Store.astro).
+  function campaignTags(): Record<string, string> {
+    const here = new URLSearchParams(location.search);
+    if (utmKeys.some(key => here.get(key))) return Object.fromEntries(utmKeys.filter(key => here.get(key)).map(key => [key, here.get(key)!]));
+    try { return JSON.parse(sessionStorage.getItem('perch-utm') || '{}'); } catch { return {}; }
+  }
   document.querySelectorAll<HTMLFormElement>('form[data-waitlist]').forEach(form => {
     const note = form.querySelector<HTMLElement>('.wl-note')!;
     const button = form.querySelector('button')!;
@@ -26,7 +33,9 @@ const { source, id, note = `We’ll email you once, the day Perch is ready, with
       button.disabled = true;
       form.classList.remove('error');
       try {
-        const response = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { accept: 'application/json' } });
+        const body = new FormData(form);
+        Object.entries(campaignTags()).forEach(([key, value]) => body.set(key, value));
+        const response = await fetch(form.action, { method: 'POST', body, headers: { accept: 'application/json' } });
         const result = await response.json();
         if (!result.ok) throw new Error(result.error);
         form.classList.add('joined');
@@ -53,6 +62,7 @@ const { source, id, note = `We’ll email you once, the day Perch is ready, with
 .wl-note{margin-top:12px;font-size:13px;line-height:1.5;color:rgba(255,255,255,.55);text-align:center}
 .waitlist.joined .wl-field{display:none}
 .waitlist.joined .wl-note{margin-top:0;padding:14px 18px;border-radius:16px;background:rgba(97,204,140,.12);box-shadow:inset 0 0 0 1px rgba(97,204,140,.3);color:#9fe3b9;font-size:14.5px}
+.wl-note a{color:inherit;text-decoration:underline;text-underline-offset:3px}
 .waitlist.error .wl-note{color:#ff9a8a}
 .compact .wl-note{text-align:left}
 .wl-sr,.wl-trap{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}

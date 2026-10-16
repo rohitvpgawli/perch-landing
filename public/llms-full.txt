@@ -1,7 +1,7 @@
 # Perch: product information
 
 Canonical website: https://perched.fyi/
-Perch is an independent native Mac utility built with SwiftUI and AppKit. It requires macOS 14 or later. It keeps agent activity and pinned sticky notes at the edge of the screen.
+Perch is an independent native Mac utility built with SwiftUI and AppKit. It requires a Mac with Apple silicon running macOS 14 or later; Intel Macs are not supported. It keeps agent activity and pinned sticky notes at the edge of the screen.
 
 ## Features
 A small screen-edge tab opens a shelf with Needs you, Working, and Recent sessions. Session actions can open the provider or supported session, copy a resume command, or hide a session until it changes. Ten sticky notes in four colors keep short reminders nearby. Keyboard shortcuts and local storage are included. Users review local provider hook changes before installing, and can pause monitoring or remove hooks in Settings.

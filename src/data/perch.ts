@@ -5,7 +5,7 @@ export const perch = {
   company: 'One Trinity Consulting Inc.',
   email: 'support@trillium.one',
   support: 'mailto:support@trillium.one',
-  requirements: 'macOS 14+ · Native SwiftUI + AppKit',
+  requirements: 'macOS 14+ · Apple silicon · Native SwiftUI + AppKit',
 };
 // A live link alone must never open sales before delivery is ready.
 const configured = import.meta.env.STRIPE_PERCH_PAYMENT_LINK?.trim();

@@ -1,6 +1,7 @@
 // Canonicalize to https://perched.fyi before serving static assets.
 const origin = 'perched.fyi';
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const utmKeys = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
 
 // POST /api/waitlist stores one address per person in D1. Fetch callers get JSON;
 // plain form posts (no JS) are redirected back with ?joined=1.
@@ -16,11 +17,12 @@ async function joinWaitlist(request, env) {
   const email = String(form.get('email') || '').trim().toLowerCase();
   if (email.length > 254 || !emailPattern.test(email)) return reply(400, { ok: false, error: 'Please enter a valid email address.' });
   const source = String(form.get('source') || '').slice(0, 40) || null;
+  const utm = utmKeys.map(key => String(form.get(key) || '').trim().slice(0, 100) || null);
 
   try {
     await env.WAITLIST
-      .prepare('INSERT OR IGNORE INTO waitlist (email, source, country) VALUES (?, ?, ?)')
-      .bind(email, source, request.cf?.country ?? null)
+      .prepare(`INSERT OR IGNORE INTO waitlist (email, source, country, ${utmKeys.join(', ')}) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`)
+      .bind(email, source, request.cf?.country ?? null, ...utm)
       .run();
   } catch (error) {
     console.error('waitlist insert failed', error);

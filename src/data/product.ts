@@ -2,7 +2,7 @@ export const product = {
     name: 'Perch', status: 'In development',
     category: 'Agent status, answers & sticky notes for Mac', short: 'Your agents, one glance away.',
     description: 'Working, finished, or waiting on you. See every agent at the edge of your screen, answer it in a keystroke, and keep a note for what comes next.',
-    requirements: 'macOS 14+ · Native SwiftUI + AppKit',
+    requirements: 'macOS 14+ · Apple silicon · Native SwiftUI + AppKit',
     included: ['Native Mac app and screen-edge shelf', 'Agent status for Claude Code, Codex and Cursor', 'Opt-in approvals, answers and replies', 'Pinned sticky notes', 'Keyboard shortcuts and local storage'],
     faq: [
       { q: 'Which agents work with Perch?', a: 'Claude Code, Codex and Cursor. Perch shows when each session is working, finished or waiting on you. Live checks are recorded for the Claude Code CLI and Cursor’s local Agent, and Codex CLI answering was checked live. The Codex desktop app is not verified yet. Ordinary Claude chats and OpenCode are not supported.' },
