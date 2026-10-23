@@ -30,6 +30,8 @@ Product copy is in `src/data/product.ts`; site/checkout settings are in `src/dat
 
 Resource content is in `src/content/`; editorial templates reuse the existing Store shell, policy typography, buttons and FAQ. Run `npm run check:content` (requires Python 3) to build and validate all links, fragments, metadata, sitemap coverage, text exports and RSS. See [docs/CONTENT.md](docs/CONTENT.md) for the reference audit, page inventory and authoring workflow.
 
+`npm run check:motion` checks interrupted disclosure animations, stale completion callbacks, focus recovery, reduced-motion changes and the no-animation fallback. It uses Node's built-in TypeScript stripping (Node 22.6+). Real browser checks remain necessary for appearance and pointer/keyboard navigation.
+
 ## Cloudflare deployment
 
 `wrangler.jsonc` names the Worker `perch-landing`, serves `dist/`, enables a real 404 page, and attaches the `perched.fyi` and `www.perched.fyi` custom domains. `worker/index.js` runs before assets and 301-redirects `http://` and `www.` requests to `https://perched.fyi`.

@@ -36,9 +36,15 @@ const labelFor = (href: string) => findPage(href)?.title ?? (href === '/privacy/
       {section.table && <div class="resource-table" role="region" aria-label={section.table.caption} tabindex="0"><table><caption>{section.table.caption}</caption><thead><tr>{section.table.columns.map(column => <th scope="col">{column}</th>)}</tr></thead><tbody>{section.table.rows.map(row => <tr>{row.map((cell, i) => i === 0 ? <th scope="row">{cell}</th> : <td>{cell}</td>)}</tr>)}</tbody></table></div>}
       {section.links?.map(link => <p><a href={link.href}>{link.label} <span aria-hidden="true">↗</span></a></p>)}
     </section>)}
-    {page.faqs?.length && <section class="resource-section" aria-labelledby="questions"><h2 id="questions">Common questions</h2><div class="faq">{page.faqs.map(item => <details><summary>{item.q}</summary><p>{item.a}</p></details>)}</div></section>}
+    {page.faqs?.length && <section class="resource-section" aria-labelledby="questions"><h2 id="questions">Common questions</h2><div class="faq resource-faq">{page.faqs.map(item => <details><summary>{item.q}</summary><div class="resource-faq-answer"><p>{item.a}</p></div></details>)}</div></section>}
     <aside class="resource-section resource-related" aria-labelledby="related-title"><h2 id="related-title">Keep reading</h2><ul>{page.related.map(href => <li><a href={href}>{labelFor(href)}</a></li>)}</ul></aside>
     <div class="short resource-cta"><h2>Your agents, one glance away.</h2><p>{checkoutReady ? 'Keep supported agent activity at the edge of your Mac.' : 'Perch is launching soon. Join the launch list to hear when it is ready.'}</p><div class="actions"><a class="button small" href={purchaseHref}>{checkoutReady ? 'Get Perch' : 'Get early access'}</a><a href="/#demo">Watch the demo ↗</a></div><p class="fine">{perch.requirements}</p></div>
     <p class="fine resource-formats"><a href={markdownPath(path)}>Read as Markdown</a> · <a href="/resources/content.json">Content index</a> · <a href={perch.support}>Contact support</a></p>
   </article>
 </Store>
+<script>
+  import { animateDisclosure } from '../scripts/disclosure';
+  document.querySelectorAll<HTMLDetailsElement>('.resource-faq details').forEach(details => {
+    animateDisclosure(details, details.querySelector<HTMLElement>('.resource-faq-answer')!, 'accordion');
+  });
+</script>

@@ -53,14 +53,15 @@ const productLinks = [['/#demo', 'Demo'], ['/#inside', 'Features'], ['/#privacy'
   .nav-links{gap:18px;font-size:14px}
   .nav-links>a{line-height:20px}
   .nav-dropdown{position:relative}
-  summary{display:flex;align-items:center;gap:6px;min-height:42px;cursor:pointer;color:var(--on-dark-muted);list-style:none;padding:0;font:inherit;line-height:20px;white-space:nowrap}
+  summary{display:flex;align-items:center;gap:6px;min-height:42px;cursor:pointer;color:var(--on-dark-muted);list-style:none;padding:0;font:inherit;line-height:20px;white-space:nowrap;transition:color .18s ease}
   summary::-webkit-details-marker{display:none}
   summary:hover,details[open]>summary{color:var(--on-dark)}
-  .nav-chevron{width:12px;height:12px;flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:transform .2s ease}
+  .nav-chevron{width:12px;height:12px;flex:none;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;transition:transform .28s cubic-bezier(.22,1,.36,1)}
   details[open]>summary .nav-chevron{transform:rotate(180deg)}
-  .nav-panel{position:absolute;top:calc(100% + 14px);padding:12px;background:#0b0c0e;border:1px solid var(--on-dark-line);border-radius:24px;box-shadow:0 24px 60px -20px rgba(0,0,0,.65)}
-  .nav-panel a{display:block;padding:13px 16px;border-radius:14px;color:var(--on-dark)}
-  .nav-panel a:hover{background:rgba(255,255,255,.06)}
+  details[data-state='closing']>summary .nav-chevron{transform:rotate(0)}
+  .nav-panel{position:absolute;top:calc(100% + 14px);padding:12px;background:#0b0c0e;border:1px solid var(--on-dark-line);border-radius:24px;box-shadow:0 24px 60px -20px rgba(0,0,0,.65);transform-origin:50% 0}
+  .nav-panel a{display:block;padding:13px 16px;border-radius:14px;color:var(--on-dark);transition:background .18s ease}
+  .nav-panel a:hover,.nav-panel a:focus-visible{background:rgba(255,255,255,.06)}
   .nav-panel b{display:block;font-size:15px;font-weight:550}
   .nav-panel small{display:block;margin-top:4px;color:var(--on-dark-muted);font-size:13px;line-height:1.45}
   .use-case-panel{right:-110px;width:590px;display:grid;grid-template-columns:1fr 1fr;gap:4px}
@@ -75,20 +76,49 @@ const productLinks = [['/#demo', 'Demo'], ['/#inside', 'Features'], ['/#privacy'
   @media(max-width:400px){.nav{gap:10px;padding-left:12px}.nav .brand{font-size:14px;gap:6px}.nav .button.small{padding:9px 10px;font-size:12px}.mobile-menu summary{font-size:12px}}
 </style>
 <script>
+  import { animateDisclosure } from '../scripts/disclosure';
   const menus = [...document.querySelectorAll<HTMLDetailsElement>('.nav-dropdown')];
-  menus.forEach(menu => menu.addEventListener('toggle', () => {
-    if (menu.open) menus.forEach(other => { if (other !== menu) other.open = false; });
-  }));
+  const controls = new Map<HTMLDetailsElement, ReturnType<typeof animateDisclosure>>();
+  menus.forEach(menu => {
+    const panel = menu.querySelector<HTMLElement>('.nav-panel')!;
+    const summary = menu.querySelector('summary')!;
+    const control = animateDisclosure(menu, panel, 'popup', () => {
+      controls.forEach((other, element) => { if (element !== menu) other.setOpen(false); });
+    });
+    controls.set(menu, control);
+    // Escape closes; Tab follows native document order and closes after leaving.
+    menu.addEventListener('focusout', () => requestAnimationFrame(() => {
+      if (!menu.contains(document.activeElement)) control.setOpen(false);
+    }));
+    menu.addEventListener('keydown', event => {
+      const links = [...panel.querySelectorAll<HTMLAnchorElement>('a[href]')];
+      if (!['ArrowDown', 'ArrowUp', 'Home', 'End'].includes(event.key)) return;
+      if (!control.isOpen && document.activeElement !== summary) return;
+      event.preventDefault();
+      control.setOpen(true);
+      const current = links.indexOf(document.activeElement as HTMLAnchorElement);
+      const next = event.key === 'Home' ? 0 : event.key === 'End' ? links.length - 1 : event.key === 'ArrowDown' ? (current + 1) % links.length : (current < 0 ? links.length - 1 : (current - 1 + links.length) % links.length);
+      links[next]?.focus({ preventScroll: true });
+    });
+    menu.addEventListener('click', event => {
+      const link = (event.target as Element).closest('a');
+      if (!link) return;
+      const next = new URL(link.href);
+      // Close before leaving so a restored history entry has no open popup.
+      const leaving = next.pathname !== location.pathname || next.search !== location.search;
+      control.setOpen(false, { instant: leaving });
+    });
+  });
   document.addEventListener('pointerdown', event => {
-    menus.forEach(menu => { if (!menu.contains(event.target as Node)) menu.open = false; });
+    controls.forEach((control, menu) => { if (!menu.contains(event.target as Node)) control.setOpen(false); });
   });
   document.addEventListener('keydown', event => {
     if (event.key !== 'Escape') return;
-    menus.forEach(menu => {
-      if (menu.open) { menu.open = false; menu.querySelector('summary')?.focus(); }
+    controls.forEach((control, menu) => {
+      if (control.isOpen) { control.setOpen(false); menu.querySelector('summary')?.focus({ preventScroll: true }); }
     });
   });
-  menus.forEach(menu => menu.addEventListener('click', event => {
-    if ((event.target as Element).closest('a')) menu.open = false;
-  }));
+  // Restored history entries should return with a quiet, closed navigation.
+  window.addEventListener('pagehide', () => controls.forEach(control => control.setOpen(false, { instant: true })));
+  window.matchMedia('(max-width: 1040px)').addEventListener('change', () => controls.forEach(control => control.setOpen(false, { instant: true })));
 </script>

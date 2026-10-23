@@ -21,7 +21,7 @@ Perch uses that organization with original product-specific writing. Flit copy, 
 - Five blog articles: parallel-agent monitoring, status without transcripts, human decisions, the checking loop, monitor/agent/orchestrator roles.
 - Six definitions: hooks, sessions, human-in-the-loop, local-first, tool approvals, context switching.
 
-Content is authored in typed `src/content/*.ts` modules and statically rendered through `src/pages/[...path].astro`. The route handles only explicit static paths; the existing custom 404 remains in place. Editorial layouts reuse Store, policy styles, buttons, tokens and native details/FAQ behavior. New layout CSS is restricted to `resource-*` classes. Menus use native details/summary with optional JavaScript for Escape, outside clicks and closing other menus.
+Content is authored in typed `src/content/*.ts` modules and statically rendered through `src/pages/[...path].astro`. The route handles only explicit static paths; the existing custom 404 remains in place. Editorial layouts reuse Store, policy styles, buttons, tokens and native details/FAQ behavior. New layout CSS is restricted to `resource-*` classes. Menus use native details/summary with progressive enhancement for motion, arrow-key navigation, Escape, outside clicks, focus leaving the menu and closing other menus.
 
 `src/content/index.ts` is the page registry. `src/content/format.ts` generates the text and structured data from the same visible content. Build-time checks reject duplicate routes, duplicate section IDs, invalid table widths and missing related links.
 
@@ -56,3 +56,18 @@ The source changes do not submit URLs to a search engine or guarantee indexing. 
 - No app files, payment configuration, availability flags, agent implementation or Worker implementation were changed. No live signup or payment was submitted.
 
 Local proof artifacts are in ignored `.qa/`: the pre-change home build, preserved-file checksums, browser results and `resources-desktop.png`. They are not required to deploy the website.
+
+## Motion refinement — October 23, 2026
+
+The motion pass changes navigation and new editorial pages only. The landing component, its existing animations and shared design tokens remain unchanged.
+
+- Menus: 240 ms entrance with a 6 px move and subtle scale; 160 ms exit. Both directions continue from the currently rendered frame when interrupted. The easing decelerates without a bounce.
+- Editorial FAQs: 280 ms expansion and 160 ms collapse. Content height returns to its natural size afterward, including fractional pixels. Answers remain native details content without JavaScript.
+- Cards: soft surface/border feedback and a 2 px directional arrow response. The clickable card stays stationary so the hit target does not move.
+- Pages: a 240 ms entrance from 88% to full opacity, with the navigation outside the animation. Standard document navigation stays immediately interactive; no transition overlay or outbound wait is added.
+- Reduced motion: the entrance and hover movement are disabled, and disclosure actions settle immediately. Changing the preference during an active animation also settles it.
+- Focus: closing menu content immediately becomes inert; Escape returns focus to its trigger. Arrow keys/Home/End navigate menu links. Tab preserves the document's natural order and closes the menu on exit.
+
+`src/scripts/disclosure.ts` owns animation cancellation and state. `npm run check:motion` tests rapid reversals, a stale animation completion racing a newer action, focus recovery, live reduced-motion changes and missing animation support. Those tests exercise state contracts; appearance and actual link navigation are checked separately in the browser.
+
+Browser review for this pass checked rapid menu switching, ArrowDown/End/Tab/Escape focus flow, repeated FAQ toggles, natural answer height after completion, and first-click category/article navigation. Mobile checks at 390 px covered opening the menu and following a guide link, with no horizontal overflow. The final checked flow recorded no console warnings/errors. Review artifacts are saved in ignored `.qa/`.
