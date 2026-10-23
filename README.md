@@ -22,9 +22,13 @@ npm run preview
 - `/privacy/`, `/terms/`: Current privacy and purchase information.
 - `/robots.txt`, `/sitemap.xml`: Search discovery.
 - `/llms.txt`, `/llms-full.txt`: Plain-text product information for assistants.
+- `/resources/`, `/use-cases/`, `/guides/`, `/alternatives/`, `/blog/`, `/glossary/`: 34 new static resource pages, built from the typed content registry.
+- `/content/*.md`, `/resources/content.json`, `/blog/rss.xml`: Markdown representations, structured content and the blog feed.
 - Social metadata, SoftwareApplication JSON-LD, icons, web manifest, custom 404, security headers, and redirects for previous Perch paths are included.
 
 Product copy is in `src/data/product.ts`; site/checkout settings are in `src/data/perch.ts`. Existing Perch screenshots and responsive styling are preserved. Other studio/product routes have been retired.
+
+Resource content is in `src/content/`; editorial templates reuse the existing Store shell, policy typography, buttons and FAQ. Run `npm run check:content` (requires Python 3) to build and validate all links, fragments, metadata, sitemap coverage, text exports and RSS. See [docs/CONTENT.md](docs/CONTENT.md) for the reference audit, page inventory and authoring workflow.
 
 ## Cloudflare deployment
 

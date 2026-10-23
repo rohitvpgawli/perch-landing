@@ -11,3 +11,14 @@
 
 /checkout/*
   X-Robots-Tag: noindex, follow
+
+/content/*
+  Content-Type: text/markdown; charset=utf-8
+  X-Robots-Tag: noindex, follow
+
+/resources/content.json
+  Content-Type: application/json; charset=utf-8
+  X-Robots-Tag: noindex, follow
+
+/blog/rss.xml
+  Content-Type: application/rss+xml; charset=utf-8

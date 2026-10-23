@@ -1,0 +1,92 @@
+import type { ContentPage } from './types';
+export const useCases: ContentPage[] = [
+  {
+    category: 'use-cases', slug: 'developers', title: 'A coding-agent monitor for developers on Mac',
+    description: 'See Claude Code, Codex and Cursor activity at the edge of your Mac. Review requests, keep notes and return to the coding session that needs you.',
+    lead: 'Your editor, terminal and browser are all open. Your agent is in one of them, waiting for a decision. Perch puts session status at the edge of your Mac so you can find the next thing that needs you without checking every window.',
+    sections: [
+      { title: 'Keep implementation and review moving', paragraphs: ['A coding session alternates between work the agent can do and decisions only you should make. Perch shows that distinction with three states: a blue ring while work is running, an amber dot when a session needs you, and a green check when a turn finishes.', 'The shelf groups sessions into Needs you, Working and Recent. Use it to choose which session to open. A finished turn is a cue to review the result; it does not mean the code is correct.'] },
+      { title: 'A practical development loop', steps: ['Give the agent a bounded task and agree on how you will check its result.', 'Continue your own implementation or review while it works.', 'When a session needs you, read the request. Respond from Perch where supported, or open the agent’s app.', 'Inspect the completed change and run the checks appropriate to the task.'] },
+      { title: 'Know what each integration can answer', paragraphs: ['With answering enabled, Claude Code supports tools, questions, plans and replies. Codex supports allow, deny and replies. Cursor supports replies after a turn finishes; its passive hooks do not expose awaiting-permission status. Answering is off by default, and every answer has two seconds to undo.'], links: [{ label: 'Read the compatibility guide', href: '/guides/agent-compatibility/' }] },
+      { title: 'Keep the next thought nearby', paragraphs: ['Leave a review reminder or the next prompt in one of Perch’s ten local sticky notes. Copy it when you are ready. Perch does not automatically dispatch notes or turn them into a task queue.'] },
+    ],
+    faqs: [{ q: 'Does Perch write code?', a: 'No. Your agents do the work. Perch displays activity and passes along the answers you choose.' }, { q: 'Which Macs are supported?', a: 'The current offer is for Apple silicon Macs running macOS 14 or later.' }],
+    related: ['/guides/getting-started/', '/use-cases/parallel-agents/', '/blog/monitor-multiple-coding-agents/'],
+  },
+  {
+    category: 'use-cases', slug: 'founders', title: 'Keep agents moving while you run the business',
+    description: 'See when a coding agent needs a decision while you work on product, customers and the rest of your business. A local workflow with Perch for Mac.',
+    lead: 'A small product team often means one person moving between implementation, customer feedback and product decisions. Perch keeps the state of your local coding sessions visible while you do the work around the code.',
+    sections: [
+      { title: 'Notice the decision, then make it deliberately', paragraphs: ['An agent waiting for permission and an agent still working need different responses from you. Perch’s screen-edge tab helps you tell them apart. Open the shelf when something needs attention and read the request before deciding.', 'You might ask Claude Code to update onboarding, then move to a customer email. If Claude needs a choice about the flow, you can review its numbered question in Perch when answering is enabled. You still make the product decision.'] },
+      { title: 'Build a handoff you can evaluate', steps: ['Give the agent one small change with a clear outcome.', 'Write your acceptance criteria in a working document or local note.', 'Respond to questions and approvals after checking their scope.', 'Review the finished work in the project before shipping.'] },
+      { title: 'A companion for your Mac', paragraphs: ['Perch does not host agents or supply a shared company dashboard. It works alongside sessions on your Mac. Your agent subscriptions and usage are separate.', 'Actions vary by provider. Cursor supports activity and replies after a turn, rather than in-card tool approvals. Codex supports approvals and replies, while Claude Code also supports questions and plans. Use the compatibility guide to check your workflow.'] },
+    ],
+    faqs: [{ q: 'Can I use Perch from my phone?', a: 'Perch does not provide phone or remote access. It works on your Mac.' }, { q: 'Does Perch approve requests automatically?', a: 'No. Answering is opt-in, and Perch sends only the answer you choose.' }],
+    related: ['/guides/agent-compatibility/', '/guides/sticky-notes/', '/blog/human-in-the-loop-coding/'],
+  },
+  {
+    category: 'use-cases', slug: 'agencies', title: 'Keep client coding sessions in view on your Mac',
+    description: 'Track local coding sessions across client projects with Perch. Check project context before reviewing an agent request or a completed handoff.',
+    lead: 'Client work can leave you with several projects and several agents open at once. Perch gives the sessions on your Mac a shared place to show their status, so you can choose the right one before responding.',
+    sections: [
+      { title: 'Check the project before the request', paragraphs: ['When sessions belong to different clients, the first question is which project is asking. Perch keeps status alongside project context and lets you rename sessions locally. Clear names make it easier to spot a familiar command in the wrong project.', 'The shelf groups attention by state. Start a review in Needs you, leave running tasks in Working, and find completed turns in Recent.'] },
+      { title: 'A review routine for parallel client work', steps: ['Give each session a distinct project and a bounded task. Use separate working copies when changes might overlap.', 'Name sessions so the client and purpose are easy to recognize.', 'Before approving, check the project, the command or change, and the agent’s reason.', 'Inspect the resulting diff and use your existing client delivery checks.'] },
+      { title: 'Local visibility is a personal work surface', paragraphs: ['Perch makes no network requests and keeps its status and notes on your Mac. It does not create a client portal or share transcripts with coworkers. Your agents remain separate services with their own data handling.', 'Perch’s local behavior does not change a provider’s terms or establish a confidentiality certification. Decide which tools may handle each client’s material in your existing process.'] },
+    ],
+    faqs: [{ q: 'Can my agency share one live shelf?', a: 'Perch has no shared team dashboard. Each shelf is local to its Mac.' }, { q: 'Does Perch resolve overlapping edits?', a: 'No. Use task boundaries and separate working copies. Perch reports activity; it does not merge code.' }],
+    related: ['/use-cases/parallel-agents/', '/guides/privacy-and-permissions/', '/alternatives/agent-dashboards/'],
+  },
+  {
+    category: 'use-cases', slug: 'parallel-agents', title: 'Monitor multiple coding agents from one place',
+    description: 'See parallel Claude Code, Codex and Cursor sessions in one local view. Find what is working, finished or waiting for your next decision.',
+    lead: 'Running agents in parallel creates a second job: noticing when each one needs you. Perch gathers supported sessions into a screen-edge shelf while keeping each project in its own app.',
+    sections: [
+      { title: 'Separate running work from waiting work', paragraphs: ['A busy terminal does not tell you what the other sessions are doing. Perch makes the distinction visible: Needs you, Working and Recent. A blue ring means work is running, amber means attention is needed, and a green check marks a finished turn.', 'Status depends on the events each provider exposes. Cursor passive hooks do not report awaiting-permission status. The absence of an amber mark cannot prove that every provider is able to continue.'] },
+      { title: 'Give each agent independent work', steps: ['Split the work into tasks with clear ownership and verification criteria.', 'Avoid simultaneous edits to the same working copy.', 'Review waiting requests in their own project context.', 'Inspect and validate finished changes before combining the results.'] },
+      { title: 'Clear requests without losing context', paragraphs: ['With opt-in answering, Claude Code supports tools, questions, plans and replies. Codex supports approvals and replies; Cursor supports replies after a turn. Every answer has two seconds to undo.', 'Recent steps show kinds of activity and their timing, built from status rather than a transcript. Open the agent when you need its full output.'] },
+      { title: 'Keep orchestration in your existing workflow', paragraphs: ['Perch does not assign tasks, create branches, schedule agents or resolve conflicts. It keeps activity visible while you remain responsible for task boundaries and integration.'] },
+    ],
+    faqs: [{ q: 'Can I mix agents in the same shelf?', a: 'Yes. Supported Claude Code, Codex and Cursor sessions appear together, with different available actions.' }, { q: 'Is a completed turn a verified result?', a: 'No. Review the changes and check the result in the project.' }],
+    related: ['/blog/monitor-multiple-coding-agents/', '/guides/agent-compatibility/', '/glossary/agent-session/'],
+  },
+  {
+    category: 'use-cases', slug: 'claude-code', title: 'Monitor and answer Claude Code from your screen edge',
+    description: 'See Claude Code activity in Perch. With answering enabled, review tool requests, answer questions, approve plans and reply when a turn ends.',
+    lead: 'Claude Code can make progress until it reaches a decision you need to make. Perch keeps that handoff nearby: watch the session, read what Claude is asking, and choose your answer without finding its terminal first.',
+    sections: [
+      { title: 'Review the request in context', paragraphs: ['A tool request shows the command or change and Claude’s reason. You can allow or deny it, or return to the terminal. Questions appear as numbered choices. Plan review lets you approve a plan or send feedback so Claude keeps planning.', 'After a turn, the card can show its last message and a field for your next instruction. Every answer waits two seconds before sending; Esc or Undo takes it back. Perch never chooses the answer.'] },
+      { title: 'Connect deliberately', steps: ['Review the proposed Claude Code hook changes in Perch’s setup or agent settings.', 'Connect the integration. Perch backs up the settings before adding its entries.', 'Start a new Claude Code session and confirm its activity appears.', 'Leave answering off to monitor, or enable it when you want supported requests in Perch.'] },
+      { title: 'The agent’s own app remains available', paragraphs: ['Perch steps aside when you are already in the session’s app. Switching back and staying also returns the request to the agent. A handoff wait between 2 and 30 minutes controls how long Perch holds a request.', 'Ordinary Claude chats are not supported. Claude desktop Code sessions can open their conversation; terminal sessions bring the terminal host forward.'] },
+      { title: 'Requests stay in memory', paragraphs: ['Pending requests travel over a private local socket and are discarded once answered. Saved session status is separate and does not include commands, diffs or transcripts.'] },
+    ],
+    faqs: [{ q: 'Is answering on by default?', a: 'No. Enable it in Settings if you want to respond from Perch.' }, { q: 'Does Perch support ordinary Claude chats?', a: 'No. The integration is for the Claude Code workflow.' }],
+    related: ['/guides/answering-agents/', '/guides/getting-started/', '/glossary/tool-approval/'],
+  },
+  {
+    category: 'use-cases', slug: 'codex', title: 'Keep Codex CLI activity and requests in view on Mac',
+    description: 'Use Perch beside Codex CLI to see activity and, with answering enabled, allow or deny supported requests and reply after a turn.',
+    lead: 'Keep Codex CLI in its terminal while its state stays visible at your screen edge. Perch supports Codex activity, allow and deny actions, and replies, with a two-second undo for the answers you choose.',
+    sections: [
+      { title: 'Codex beside your other sessions', paragraphs: ['A Codex session can appear beside Claude Code and Cursor. Check which project is running and which supported request needs attention without moving code or starting sessions inside Perch.', 'Codex CLI answering has been checked live in the current product record. The Codex desktop app has not been verified. CLI support and desktop support are separate questions when evaluating your setup.'] },
+      { title: 'Review before sending', paragraphs: ['Turn on answering if you want to allow or deny supported requests or reply after a turn ends. Check the request and its project context before choosing. Each answer has a two-second undo window.', 'Claude Code’s numbered question forms and plan-review actions are not listed as Codex features. The compatibility guide makes the supported boundary explicit.'] },
+      { title: 'Start with one session', steps: ['Review and connect the Codex hooks in Perch.', 'Start a new Codex CLI session after connecting.', 'Confirm that activity and the end of a turn appear.', 'Enable answering only if you want supported requests in Perch. Keep the terminal for everything else.'] },
+      { title: 'Provider access stays separate', paragraphs: ['Perch does not supply Codex access or pay for provider usage. Its local monitoring does not change what your coding agent sends to its own service.'] },
+    ],
+    faqs: [{ q: 'Is the Codex desktop app supported?', a: 'It has not been verified in the current product record. The live answering check is for Codex CLI.' }, { q: 'Does Codex have Claude Code’s plan controls?', a: 'The documented Codex actions are allow, deny and replies.' }],
+    related: ['/guides/agent-compatibility/', '/guides/answering-agents/', '/use-cases/parallel-agents/'],
+  },
+  {
+    category: 'use-cases', slug: 'cursor', title: 'See Cursor Agent activity from the edge of your Mac',
+    description: 'Monitor Cursor local Agent activity in Perch and reply after a turn finishes. Understand Cursor status limits and session navigation.',
+    lead: 'Keep Cursor’s local Agent in your editor and put its activity beside your other sessions. Perch shows supported Cursor events and lets you reply after a turn finishes, if you enable answering.',
+    sections: [
+      { title: 'A nearby view of Cursor activity', paragraphs: ['Cursor local Agent activity has been checked live in the current product record. Perch uses integration events to keep its session visible while you work in another app.', 'Cursor passive hooks do not expose awaiting-permission status. Perch cannot fill in that missing event by scanning your screen or reading a conversation. Check Cursor itself when you need to inspect a permission prompt or understand why work stopped.'] },
+      { title: 'Reply after a completed turn', paragraphs: ['With answering enabled, Cursor supports a reply when a turn finishes. Your reply becomes the next instruction and has two seconds to undo.', 'Tool approval, numbered questions and plan review are not documented Cursor actions in Perch. Use Cursor’s own interface for those interactions. Selecting a session opens the app rather than a specific chat.'] },
+      { title: 'Confirm the connection', steps: ['Review Perch’s proposed Cursor hook changes before connecting.', 'Start a new local Agent session after connecting.', 'Run a small task and confirm its activity and completed turn appear.', 'Use the editor for requests outside the supported actions.'] },
+      { title: 'Park the next instruction in a note', paragraphs: ['A local sticky note can hold a test case or follow-up while Cursor works. Copy it when needed. Notes do not automatically dispatch instructions, and Perch does not coordinate Cursor’s edits with another agent’s work.'] },
+    ],
+    faqs: [{ q: 'Will Perch show Cursor waiting for permission?', a: 'That status is not exposed by Cursor passive hooks.' }, { q: 'Does Perch open a specific Cursor chat?', a: 'No. It opens the Cursor app.' }],
+    related: ['/guides/agent-compatibility/', '/guides/agent-status-not-updating/', '/guides/sticky-notes/'],
+  },
+];

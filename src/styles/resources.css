@@ -1,0 +1,42 @@
+/* Page layout only. Existing store tokens, typography, buttons, FAQ and policy primitives are reused. */
+.resource-breadcrumb{display:flex;flex-wrap:wrap;gap:8px;font-size:12px;line-height:1.6;color:var(--muted);margin-bottom:34px}
+.resource-breadcrumb [aria-current]{max-width:100%;overflow-wrap:anywhere}
+.resource-breadcrumb a{color:var(--muted)}
+.resource-heading{max-width:820px}
+.resource-heading .lead{margin-top:24px;max-width:680px}
+.resource-collection{max-width:1120px}
+.resource-article .resource-lead{font-size:19px;line-height:1.65;margin-top:28px;color:var(--ink)}
+.resource-section{margin-top:46px;scroll-margin-top:110px}
+.resource-section h2{font-size:23px;line-height:1.25;letter-spacing:-.03em;margin-bottom:14px}
+.resource-section p{margin:12px 0;color:rgba(245,245,242,.66);line-height:1.75}
+.resource-section ul,.resource-section ol,.resource-toc ol{padding-left:22px;display:grid;gap:12px;color:rgba(245,245,242,.72);line-height:1.7}
+.resource-toc ol{margin:12px 0 0;gap:8px;font-size:14px}
+.resource-toc a{color:var(--muted)}
+.resource-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:38px 0}
+.resource-tabs a{padding:7px 13px;border:1px solid var(--line);border-radius:99px;color:var(--muted);font-size:13px;text-decoration:none}
+.resource-tabs a[aria-current]{background:rgba(255,255,255,.08);color:var(--ink)}
+.resource-grid{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.resource-grid li{min-width:0}
+.resource-card{display:flex;flex-direction:column;height:100%;padding:28px;border-radius:24px;background:rgba(255,255,255,.035);box-shadow:inset 0 0 0 1px rgba(255,255,255,.08);text-decoration:none!important;transition:background .2s}
+.resource-card:hover{background:rgba(255,255,255,.06)}
+.resource-card h2{margin:10px 0 12px;font-size:23px;line-height:1.25;letter-spacing:-.03em;color:var(--ink)}
+.resource-card p{font-size:15px;line-height:1.65;color:var(--muted)}
+.resource-card p.fine{margin:0;font-size:12px}
+.resource-card-link{display:flex;justify-content:space-between;gap:16px;padding-top:28px;margin-top:auto;font-size:14px;color:#FAC961}
+.resource-start p,.resource-cta p{margin:10px 0 18px;color:var(--muted)}
+.resource-start .actions a,.resource-cta .actions a{font-size:14px}
+.resource-start .button,.resource-cta .button{color:#0b0c0c;text-decoration:none}
+.resource-cta .fine{margin:18px 0 0;font-size:12px}
+.resource-collection .short>p{color:var(--muted);font-size:15px}
+.resource-table{overflow:auto;margin:22px 0;border:1px solid var(--line);border-radius:18px}
+.resource-table:focus-visible{outline:2px solid #FAC961;outline-offset:4px}
+.resource-table table{border-collapse:collapse;width:100%;font-size:14px;line-height:1.6;text-align:left}
+.resource-table caption{padding:16px 18px;text-align:left;font-size:13px;color:var(--muted);background:rgba(255,255,255,.035)}
+.resource-table th,.resource-table td{padding:14px 18px;border-top:1px solid var(--line);vertical-align:top;min-width:145px}
+.resource-table th{color:var(--ink);font-weight:550}
+.resource-table td{color:var(--muted)}
+.resource-table thead{background:rgba(255,255,255,.035)}
+.resource-article .resource-formats,.resource-collection .resource-formats{margin-top:40px;font-size:12px;line-height:2}
+.resource-related{border-top:1px solid var(--line);padding-top:30px}
+.resource-section .faq summary{font-size:17px}
+@media(max-width:760px){.resource-grid{grid-template-columns:1fr}.resource-card{padding:24px}.resource-breadcrumb{margin-bottom:28px}.resource-article .resource-lead{font-size:18px}.resource-heading h1{font-size:clamp(36px,9vw,56px)}.resource-tabs{margin-block:28px}.resource-toc{padding:20px}.resource-start .actions{align-items:flex-start;flex-direction:column}}

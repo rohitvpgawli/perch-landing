@@ -1,0 +1,15 @@
+---
+import ContentArticle from '../components/ContentArticle.astro';
+import ResourceCollection from '../components/ResourceCollection.astro';
+import { pages, collections, pagePath } from '../content/registry';
+import type { ContentPage, Category } from '../content/types';
+export function getStaticPaths() {
+  return [
+    { params: { path: 'resources' }, props: {} },
+    ...collections.map(c => ({ params: { path: c.category }, props: { category: c.category } })),
+    ...pages.map(page => ({ params: { path: pagePath(page).slice(1, -1) }, props: { page } })),
+  ];
+}
+const { page, category } = Astro.props as { page?: ContentPage; category?: Category };
+---
+{page ? <ContentArticle page={page}/> : <ResourceCollection category={category}/>}

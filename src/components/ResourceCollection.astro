@@ -1,0 +1,31 @@
+---
+import Store from '../layouts/Store.astro';
+import { pages, collections, resourceHub, pagePath, markdownPath } from '../content/registry';
+import { perch } from '../data/perch';
+import type { Category } from '../content/types';
+import '../styles/resources.css';
+const { category } = Astro.props as { category?: Category };
+const hub = category ? collections.find(c => c.category === category)! : resourceHub;
+const metaTitles = { 'use-cases': 'Perch use cases for developers and coding agents', guides: 'Perch guides: setup, compatibility and troubleshooting', alternatives: 'Compare Perch: terminal tabs, notifications and dashboards', blog: 'Perch blog: practical coding-agent workflows', glossary: 'Coding-agent glossary: hooks, sessions and approvals' };
+const path = category ? `/${category}/` : '/resources/';
+const items = category ? pages.filter(page => page.category === category).map(page => ({ title: page.title, description: page.description, path: pagePath(page), label: page.category === 'blog' ? 'October 23, 2026 · Perch team' : undefined })) : collections.map(c => ({ title: c.title, description: c.description, path: `/${c.category}/`, label: `${pages.filter(p => p.category === c.category).length} ${c.category === 'use-cases' ? 'workflows' : c.category === 'glossary' ? 'definitions' : c.category === 'blog' ? 'articles' : c.category === 'alternatives' ? 'comparisons' : 'guides'}` }));
+const schema = {
+  '@context': 'https://schema.org', '@graph': [
+    { '@type': category === 'blog' ? 'Blog' : 'CollectionPage', '@id': perch.origin + path, name: hub.title, description: hub.description, url: perch.origin + path, inLanguage: 'en', mainEntity: { '@type': 'ItemList', itemListElement: items.map((item, i) => ({ '@type': 'ListItem', position: i + 1, name: item.title, url: perch.origin + item.path })) } },
+    { '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Home', item: perch.origin + '/' }, { '@type': 'ListItem', position: 2, name: hub.title, item: perch.origin + path }] },
+    ...(category === 'glossary' ? [{ '@type': 'DefinedTermSet', '@id': `${perch.origin}/glossary/#terms`, name: 'Perch glossary', url: `${perch.origin}/glossary/`, hasDefinedTerm: items.map(item => ({ '@type': 'DefinedTerm', name: item.title, url: perch.origin + item.path })) }] : []),
+  ],
+};
+---
+<Store title={category ? metaTitles[category] : 'Perch resources: guides, use cases, blog and comparisons'} description={hub.description}>
+  <Fragment slot="head"><link rel="alternate" type="text/markdown" href={markdownPath(path)} title="Read this collection as Markdown"/><link rel="alternate" type="application/rss+xml" href="/blog/rss.xml" title="Perch blog"/><script type="application/ld+json" set:html={JSON.stringify(schema).replace(/</g, '\\u003c')}/></Fragment>
+  <div class="shell policy resource-collection">
+    <nav class="resource-breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span aria-current="page">{hub.title}</span></nav>
+    <header class="resource-heading"><p class="eyebrow">{hub.title}</p><h1>{hub.heading}</h1><p class="lead">{hub.lead}</p></header>
+    <nav class="resource-tabs" aria-label="Resource collections"><a href="/resources/" aria-current={!category ? 'page' : undefined}>All resources</a>{collections.map(c => <a href={`/${c.category}/`} aria-current={c.category === category ? 'page' : undefined}>{c.title}</a>)}</nav>
+    {!category && <section class="short resource-start" aria-labelledby="start-title"><h2 id="start-title">New to Perch? Start here.</h2><p>Check the supported actions, then connect one session.</p><div class="actions"><a class="button small" href="/guides/getting-started/">Getting started ↗</a><a href="/guides/agent-compatibility/">Agent compatibility ↗</a></div></section>}
+    <section aria-label={`${hub.title} directory`}><ul class="resource-grid">{items.map(item => <li><a class="resource-card" href={item.path}>{item.label && <p class="fine">{item.label}</p>}<h2>{item.title}</h2><p>{item.description}</p><span class="resource-card-link">{category === 'glossary' ? 'Read the definition' : category === 'blog' ? 'Read the article' : category === 'guides' ? 'Open the guide' : 'Explore'} <span aria-hidden="true">↗</span></span></a></li>)}</ul></section>
+    {category === 'alternatives' && <div class="short"><h2>About these comparisons</h2><p>These pages compare workflows. They do not publish unverified competitor pricing or treat Perch as a replacement for a coding agent. Each comparison explains where the other approach is useful.</p></div>}
+    <p class="fine resource-formats">{category === 'blog' && <><a href="/blog/rss.xml">Subscribe with RSS</a> · </>}<a href={markdownPath(path)}>Read as Markdown</a> · <a href="/llms.txt">Product summary</a> · <a href="/llms-full.txt">Full text</a> · <a href="/resources/content.json">Content index</a></p>
+  </div>
+</Store>
